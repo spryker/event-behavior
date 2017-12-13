@@ -29,4 +29,11 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
     public function queryLatestEntityChange(DateTime $date);
+
+    /**
+     * @api
+     *
+     * @return bool
+     */
+    public function isEventBehaviorTableExists();
 }
