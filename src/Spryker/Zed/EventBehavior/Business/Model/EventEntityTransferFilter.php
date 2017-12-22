@@ -38,6 +38,10 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
         $foreignKeys = [];
         foreach ($eventTransfers as $eventTransfer) {
+            if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {
+                continue;
+            }
+
             $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
             if ($value !== null) {
                 $foreignKeys[] = $value;
