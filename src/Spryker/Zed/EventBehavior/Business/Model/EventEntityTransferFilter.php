@@ -21,7 +21,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
             $ids[] = $eventTransfer->getId();
         }
 
-        return $ids;
+        return array_unique($ids);
     }
 
     /**
@@ -48,7 +48,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
             }
         }
 
-        return $foreignKeys;
+        return array_unique($foreignKeys);
     }
 
     /**
