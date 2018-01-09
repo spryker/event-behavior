@@ -8,6 +8,8 @@
 namespace Spryker\Zed\EventBehavior\Persistence\Propel;
 
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChange as BaseSpyEventBehaviorEntityChange;
+use Propel\Runtime\Connection\ConnectionInterface;
+use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 
 /**
  * Skeleton subclass for representing a row from the 'spy_event_behavior_entity_change' table.
@@ -21,4 +23,25 @@ use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChange as BaseS
  */
 abstract class AbstractSpyEventBehaviorEntityChange extends BaseSpyEventBehaviorEntityChange
 {
+    /**
+     * @param ConnectionInterface|null $con
+     *
+     * @return void
+     */
+    public function save(ConnectionInterface $con = null)
+    {
+        if ($this->isEventDisabled()) {
+            return;
+        }
+
+        parent::save($con);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isEventDisabled()
+    {
+        return EventBehaviorConfig::isEventBehaviorDisabled();
+    }
 }
