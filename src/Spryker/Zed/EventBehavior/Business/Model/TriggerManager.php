@@ -10,15 +10,12 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
-use Spryker\Shared\ErrorHandler\ErrorLogger;
-use Spryker\Zed\EventBehavior\Business\Exception\EventBehaviorDatabaseException;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
-use Throwable;
 
 class TriggerManager implements TriggerManagerInterface
 {
@@ -43,6 +40,11 @@ class TriggerManager implements TriggerManagerInterface
     protected $config;
 
     /**
+     * @var bool|null
+     */
+    protected static $eventBehaviorTableExists;
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
      * @param \Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface $utilEncodingService
      * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface $queryContainer
@@ -63,23 +65,24 @@ class TriggerManager implements TriggerManagerInterface
      */
     public function triggerRuntimeEvents()
     {
-        try {
-            if (!$this->config->getEventBehaviorTriggeringStatus()) {
-                return;
-            }
+        if (static::$eventBehaviorTableExists === null) {
+            static::$eventBehaviorTableExists = $this->queryContainer->isEventBehaviorTableExists();
+        }
 
-            $processId = RequestIdentifier::getRequestId();
-            $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
-            $triggeredRows = $this->triggerEvents($events);
+        if (!static::$eventBehaviorTableExists) {
+            return;
+        }
 
-            if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-                $this->queryContainer->queryEntityChange($processId)->delete();
-            }
-        } catch (Throwable $t) {
-            ErrorLogger::getInstance()->log($t);
-            throw new EventBehaviorDatabaseException('
-                EventBehavior requires Database tables and connection to trigger events, you can fix this by installing Database or if you want to run console commands, 
-                please add `--no-post` as an option to skip this error', $t->getCode(), $t);
+        if (!$this->config->getEventBehaviorTriggeringStatus()) {
+            return;
+        }
+
+        $processId = RequestIdentifier::getRequestId();
+        $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+        $triggeredRows = $this->triggerEvents($events);
+
+        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
+            $this->queryContainer->queryEntityChange($processId)->delete();
         }
     }
 

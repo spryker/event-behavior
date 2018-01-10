@@ -15,6 +15,11 @@ class EventBehaviorConfig extends AbstractBundleConfig
     const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
 
     /**
+     * @var bool
+     */
+    protected static $isEventDisabled = false;
+
+    /**
      * @return int
      */
     public function getEventEntityChangeTimeout()
@@ -28,5 +33,29 @@ class EventBehaviorConfig extends AbstractBundleConfig
     public function getEventBehaviorTriggeringStatus()
     {
         return $this->get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function disableEvent()
+    {
+        return static::$isEventDisabled = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function enableEvent()
+    {
+        return static::$isEventDisabled = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isEventBehaviorDisabled()
+    {
+        return static::$isEventDisabled;
     }
 }

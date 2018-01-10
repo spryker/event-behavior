@@ -21,7 +21,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
             $ids[] = $eventTransfer->getId();
         }
 
-        return $ids;
+        return array_unique($ids);
     }
 
     /**
@@ -38,13 +38,17 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
         $foreignKeys = [];
         foreach ($eventTransfers as $eventTransfer) {
+            if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {
+                continue;
+            }
+
             $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
             if ($value !== null) {
                 $foreignKeys[] = $value;
             }
         }
 
-        return $foreignKeys;
+        return array_unique($foreignKeys);
     }
 
     /**
