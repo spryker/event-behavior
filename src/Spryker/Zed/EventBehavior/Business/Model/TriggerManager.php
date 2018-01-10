@@ -40,7 +40,7 @@ class TriggerManager implements TriggerManagerInterface
     protected $config;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     protected static $eventBehaviorTableExists;
 
@@ -65,7 +65,7 @@ class TriggerManager implements TriggerManagerInterface
      */
     public function triggerRuntimeEvents()
     {
-        if (!static::$eventBehaviorTableExists) {
+        if (static::$eventBehaviorTableExists === null) {
             static::$eventBehaviorTableExists = $this->queryContainer->isEventBehaviorTableExists();
         }
 
