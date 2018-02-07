@@ -8,7 +8,6 @@
 namespace Spryker\Zed\EventBehavior\Persistence;
 
 use DateTime;
-use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
@@ -61,10 +60,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function isEventBehaviorTableExists()
     {
-        if (
-            !class_exists(SpyEventBehaviorEntityChangeQuery::class) ||
-            !class_exists(SpyEventBehaviorEntityChange::class)
-        ) {
+        if (!class_exists(SpyEventBehaviorEntityChangeQuery::class)) {
             return false;
         }
 
