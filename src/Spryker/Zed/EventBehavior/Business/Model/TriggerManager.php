@@ -66,7 +66,7 @@ class TriggerManager implements TriggerManagerInterface
     public function triggerRuntimeEvents()
     {
         if (static::$eventBehaviorTableExists === null) {
-            static::$eventBehaviorTableExists = $this->queryContainer->isEventBehaviorTableExists();
+            static::$eventBehaviorTableExists = $this->queryContainer->eventBehaviorTableExists();
         }
 
         if (!static::$eventBehaviorTableExists) {

@@ -35,5 +35,5 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
      *
      * @return bool
      */
-    public function isEventBehaviorTableExists();
+    public function eventBehaviorTableExists();
 }
