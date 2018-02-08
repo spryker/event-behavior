@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Persistence;
 
 use DateTime;
+use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria;
@@ -59,6 +60,10 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function isEventBehaviorTableExists()
     {
+        if (!class_exists(SpyEventBehaviorEntityChangeQuery::class)) {
+            return false;
+        }
+
         try {
             $con = Propel::getConnection();
             $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change';";
