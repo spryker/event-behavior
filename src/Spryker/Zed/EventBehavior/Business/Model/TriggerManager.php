@@ -59,8 +59,6 @@ class TriggerManager implements TriggerManagerInterface
     }
 
     /**
-     * @throws \Spryker\Zed\EventBehavior\Business\Exception\EventBehaviorDatabaseException
-     *
      * @return void
      */
     public function triggerRuntimeEvents()

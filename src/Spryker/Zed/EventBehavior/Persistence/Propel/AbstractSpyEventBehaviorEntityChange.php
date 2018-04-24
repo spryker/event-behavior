@@ -24,7 +24,7 @@ use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 abstract class AbstractSpyEventBehaviorEntityChange extends BaseSpyEventBehaviorEntityChange
 {
     /**
-     * @param ConnectionInterface|null $con
+     * @param \Propel\Runtime\Connection\ConnectionInterface|null $con
      *
      * @return void
      */

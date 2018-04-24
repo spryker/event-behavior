@@ -13,13 +13,13 @@ use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria;
+use Throwable;
 
 /**
  * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorPersistenceFactory getFactory()
  */
 class EventBehaviorQueryContainer extends AbstractQueryContainer implements EventBehaviorQueryContainerInterface
 {
-
     const TABLE_EXISTS = 'exists';
 
     /**
@@ -57,12 +57,13 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public function eventBehaviorTableExists()
     {
-        if (
-            !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class) ||
+        if (!class_exists(BaseSpyEventBehaviorEntityChangeQuery::class) ||
             !class_exists(SpyEventBehaviorEntityChangeQuery::class)
         ) {
             return false;
@@ -82,7 +83,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
             }
 
             return true;
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             /*
              *  Any error or exception shows the database
              *  is not ready for transactions.
