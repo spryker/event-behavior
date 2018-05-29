@@ -20,6 +20,9 @@
     "spryker/silex": "^2.0.0",
     "spryker/testify": "*"
   },
+  "support": {
+    "source": "https://github.com/spryker/event-behavior"
+  },
   "suggest": {
     "spryker/console": "*",
     "spryker/silex": "^2.0.0",
@@ -46,5 +49,10 @@
   },
   "config": {
     "sort-packages": true
-  }
+  },
+  "scripts": {
+    "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
+    "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./"
+  },
+  "include-path":  ["src/"]
 }
