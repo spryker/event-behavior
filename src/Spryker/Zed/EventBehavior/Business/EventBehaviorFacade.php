@@ -81,4 +81,19 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     {
         return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersByModifiedColumns($eventTransfers, $columns);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @param array $resources
+     * @param array $ids
+     *
+     * @return void
+     */
+    public function triggerResourceEvents(array $resources, array $ids = [])
+    {
+        $this->getFactory()->createEventResourceManager()->triggerResourceEvents($resources, $ids);
+    }
 }

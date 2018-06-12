@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Business;
 
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourceManager;
 use Spryker\Zed\EventBehavior\Business\Model\TriggerManager;
 use Spryker\Zed\EventBehavior\EventBehaviorDependencyProvider;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
@@ -28,6 +29,17 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getUtilEncodingService(),
             $this->getQueryContainer(),
             $this->getConfig()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceManagerInterface
+     */
+    public function createEventResourceManager()
+    {
+        return new EventResourceManager(
+            $this->getEventFacade(),
+            $this->getEventResourcePlugins()
         );
     }
 
@@ -53,5 +65,13 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     public function createEventEntityTransferFilter()
     {
         return new EventEntityTransferFilter();
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     */
+    protected function getEventResourcePlugins()
+    {
+        return $this->getProvidedDependency(EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE);
     }
 }
