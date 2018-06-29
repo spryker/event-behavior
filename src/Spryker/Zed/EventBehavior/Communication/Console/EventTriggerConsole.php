@@ -47,6 +47,6 @@ class EventTriggerConsole extends Console
             $resources = explode(',', $resourceString);
         }
 
-        $this->getFacade()->triggerResourceEvents($resources);
+        $this->getFacade()->executeResolvedPluginsBySources($resources);
     }
 }
