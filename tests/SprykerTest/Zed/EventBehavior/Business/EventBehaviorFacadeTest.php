@@ -10,11 +10,14 @@ namespace SprykerTest\Zed\EventBehavior\Business;
 use Codeception\Test\Unit;
 use DateInterval;
 use DateTime;
+use Generated\Shared\Transfer\EventEntityTransfer;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Shared\Config\Config;
 use Spryker\Shared\EventBehavior\EventBehaviorConstants;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
+use Spryker\Zed\AvailabilityStorage\Communication\Plugin\Event\AvailabilityEventResourcePlugin;
+use Spryker\Zed\CategoryStorage\Communication\Plugin\Event\CategoryTreeEventResourcePlugin;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorBusinessFactory;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacade;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
@@ -117,6 +120,122 @@ class EventBehaviorFacadeTest extends Unit
     }
 
     /**
+     * @return void
+     */
+    public function testExecuteResolvedPluginsBySources()
+    {
+        $behaviorStatus = Config::get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
+        if (!$behaviorStatus) {
+            return;
+        }
+
+        $this->createEntityChangeEvent();
+
+        $container = new Container();
+        $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function () {
+            $storageMock = $this->createEventFacadeMockBridge();
+            if (count($this->getEventTriggerResourcePlugins())) {
+                $storageMock->expects($this->any())->method('trigger')->will(
+                    $this->returnCallback(
+                        function ($eventName) {
+                            $this->assertTriggeredResourceEvent($eventName);
+                        }
+                    )
+                );
+
+                return $storageMock;
+            }
+            $storageMock->expects($this->never())->method('trigger');
+
+            return $storageMock;
+        };
+
+        $container[EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE] = function () {
+            return $this->getEventTriggerResourcePlugins();
+        };
+
+        $container = $this->generateUtilEncodingServiceMock($container);
+        $this->prepareFacade($container);
+        $this->eventBehaviorFacade->executeResolvedPluginsBySources([],[]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetEventTransferIds()
+    {
+        $container = new Container();
+        $this->prepareFacade($container);
+
+        $eventEntityTransfers = [];
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(1);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(2);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(1);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventTransferIds = $this->eventBehaviorFacade->getEventTransferIds($eventEntityTransfers);
+        $this->assertEquals($eventTransferIds, [1,2]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetEventTransferForeignKeys()
+    {
+        $container = new Container();
+        $this->prepareFacade($container);
+
+        $eventEntityTransfers = [];
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setForeignKeys(['testForeignKey' => 'keyValue1']);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setForeignKeys(['testForeignKey' => 'keyValue2']);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setForeignKeys(['testForeignKey' => 'keyValue1']);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventTransferForeignKeys = $this->eventBehaviorFacade->getEventTransferForeignKeys($eventEntityTransfers, 'testForeignKey');
+        $this->assertEquals($eventTransferForeignKeys, ['keyValue1','keyValue2']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetEventTransfersByModifiedColumns()
+    {
+        $container = new Container();
+        $this->prepareFacade($container);
+
+        $eventEntityTransfers = [];
+
+        $modifiedColumns = ['column1', 'column2', 'column3'];
+        $eventEntityModifiedTransfer = new EventEntityTransfer();
+        $eventEntityModifiedTransfer->setModifiedColumns($modifiedColumns);
+        $eventEntityTransfers[] = $eventEntityModifiedTransfer;
+
+        $notModifiedColumns = ['testColumn1','testColumn2','testColumn3'];
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setModifiedColumns($notModifiedColumns);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+
+        $eventTransfersWithModifiedColumns = $this->eventBehaviorFacade->getEventTransfersByModifiedColumns($eventEntityTransfers, $modifiedColumns);
+        $this->assertEquals($eventTransfersWithModifiedColumns, [$eventEntityModifiedTransfer]);
+    }
+
+    /**
      * @param string $eventName
      * @param \Spryker\Shared\Kernel\Transfer\TransferInterface $eventTransfer
      *
@@ -134,6 +253,33 @@ class EventBehaviorFacadeTest extends Unit
         unset($actualArray[self::MODIFIED_COLUMNS]);
 
         $this->assertEquals($actualArray, $this->createEventData());
+    }
+
+    /**
+     * @param string $eventName
+     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface $eventTransfer
+     *
+     * @return void
+     */
+    public function assertTriggeredResourceEvent($eventName)
+    {
+        $resources = [];
+        foreach ($this->getEventTriggerResourcePlugins() as $resourcePlugin) {
+            $resources[] = $resourcePlugin->getEventName();
+        }
+
+        $this->assertContains($eventName, $resources);
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     */
+    protected function getEventTriggerResourcePlugins()
+    {
+        return [
+            new AvailabilityEventResourcePlugin(),
+            new CategoryTreeEventResourcePlugin(),
+        ];
     }
 
     /**
