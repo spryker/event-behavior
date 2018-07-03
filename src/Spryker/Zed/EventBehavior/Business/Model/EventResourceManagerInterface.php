@@ -10,10 +10,10 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 interface EventResourceManagerInterface
 {
     /**
-     * @param array $plugins
+     * @param array $resources
      * @param array $ids
      *
      * @return void
      */
-    public function triggerResourceEvents(array $plugins, array $ids = []);
+    public function triggerResourceEvents(array $resources, array $ids = []);
 }

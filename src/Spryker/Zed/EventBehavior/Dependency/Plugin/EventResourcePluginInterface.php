@@ -21,6 +21,17 @@ interface EventResourcePluginInterface
 
     /**
      * Specification:
+     *  - Returns query of resource entity, provided $ids parameter
+     *    will apply to query to limit the result
+     *
+     * @api
+     *
+     * @return \Propel\Runtime\ActiveQuery\ModelCriteria|null
+     */
+    public function queryData();
+
+    /**
+     * Specification:
      *  - Returns the event name of resource entity
      *
      * @api
