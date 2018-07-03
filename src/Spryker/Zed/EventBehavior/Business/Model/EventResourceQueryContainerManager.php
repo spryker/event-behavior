@@ -73,7 +73,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
             return;
         }
 
-        if (!$plugin->queryData()) {
+        if (!$plugin->queryData($ids)) {
             $this->trigger($plugin, [static::ID_NULL]);
 
             return;

@@ -47,14 +47,15 @@ class EventResourcePluginResolver
 
     /**
      * @param string[] $resources
+     * @param int[] $ids
      *
      * @return void
      */
-    public function executeResolvedPluginsBySources(array $resources)
+    public function executeResolvedPluginsBySources(array $resources, array $ids)
     {
         $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
-        $this->eventResourceQueryContainerManager->triggerResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS]);
-        $this->eventResourceRepositoryManager->triggerResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS]);
+        $this->eventResourceQueryContainerManager->triggerResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
+        $this->eventResourceRepositoryManager->triggerResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
     }
 
     /**
