@@ -20,5 +20,5 @@ interface EventResourceQueryContainerPluginInterface extends EventResourcePlugin
      *
      * @return \Propel\Runtime\ActiveQuery\ModelCriteria|null
      */
-    public function queryData($ids = []);
+    public function queryData(array $ids = []);
 }

@@ -122,7 +122,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testExecuteResolvedPluginsBySources()
+    public function testExecuteResolvedPluginsBySources(): void
     {
         $behaviorStatus = Config::get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
         if (!$behaviorStatus) {
@@ -162,7 +162,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testGetEventTransferIds()
+    public function testGetEventTransferIds(): void
     {
         $container = new Container();
         $this->prepareFacade($container);
@@ -188,7 +188,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testGetEventTransferForeignKeys()
+    public function testGetEventTransferForeignKeys(): void
     {
         $container = new Container();
         $this->prepareFacade($container);
@@ -214,7 +214,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testGetEventTransfersByModifiedColumns()
+    public function testGetEventTransfersByModifiedColumns(): void
     {
         $container = new Container();
         $this->prepareFacade($container);
@@ -257,11 +257,10 @@ class EventBehaviorFacadeTest extends Unit
 
     /**
      * @param string $eventName
-     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface $eventTransfer
      *
      * @return void
      */
-    public function assertTriggeredResourceEvent($eventName)
+    public function assertTriggeredResourceEvent(string $eventName): void
     {
         $resources = [];
         foreach ($this->getEventTriggerResourcePlugins() as $resourcePlugin) {
@@ -274,7 +273,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
-    protected function getEventTriggerResourcePlugins()
+    protected function getEventTriggerResourcePlugins(): array
     {
         return [
             new AvailabilityEventResourcePlugin(),
