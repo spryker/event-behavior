@@ -131,30 +131,7 @@ class EventBehaviorFacadeTest extends Unit
 
         $this->createEntityChangeEvent();
 
-        $container = new Container();
-        $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function () {
-            $storageMock = $this->createEventFacadeMockBridge();
-            if (count($this->getEventTriggerResourcePlugins())) {
-                $storageMock->expects($this->any())->method('trigger')->will(
-                    $this->returnCallback(
-                        function ($eventName) {
-                            $this->assertTriggeredResourceEvent($eventName);
-                        }
-                    )
-                );
-
-                return $storageMock;
-            }
-            $storageMock->expects($this->never())->method('trigger');
-
-            return $storageMock;
-        };
-
-        $container[EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE] = function () {
-            return $this->getEventTriggerResourcePlugins();
-        };
-
-        $container = $this->generateUtilEncodingServiceMock($container);
+        $container = $this->prepareContainerForExecuteResolvedPluginsBySourcesTest();
         $this->prepareFacade($container);
         $this->eventBehaviorFacade->executeResolvedPluginsBySources([],[]);
     }
@@ -260,7 +237,7 @@ class EventBehaviorFacadeTest extends Unit
      *
      * @return void
      */
-    public function assertTriggeredResourceEvent(string $eventName): void
+    protected function assertTriggeredResourceEvent(string $eventName): void
     {
         $resources = [];
         foreach ($this->getEventTriggerResourcePlugins() as $resourcePlugin) {
@@ -270,6 +247,35 @@ class EventBehaviorFacadeTest extends Unit
         $this->assertContains($eventName, $resources);
     }
 
+    protected function prepareContainerForExecuteResolvedPluginsBySourcesTest()
+    {
+        $container = new Container();
+        $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function () {
+            $storageMock = $this->createEventFacadeMockBridge();
+            if (count($this->getEventTriggerResourcePlugins())) {
+                $storageMock->expects($this->any())->method('trigger')->will(
+                    $this->returnCallback(
+                        function ($eventName) {
+                            $this->assertTriggeredResourceEvent($eventName);
+                        }
+                    )
+                );
+
+                return $storageMock;
+            }
+            $storageMock->expects($this->never())->method('trigger');
+
+            return $storageMock;
+        };
+
+        $container[EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE] = function () {
+            return $this->getEventTriggerResourcePlugins();
+        };
+
+        $container = $this->generateUtilEncodingServiceMock($container);
+
+        return $container;
+    }
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
