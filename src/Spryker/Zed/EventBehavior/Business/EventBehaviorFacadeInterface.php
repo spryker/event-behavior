@@ -82,5 +82,5 @@ interface EventBehaviorFacadeInterface
      *
      * @return void
      */
-    public function executeResolvedPluginsBySources(array $resources, array $ids = []);
+    public function executeResolvedPluginsBySources(array $resources, array $ids = []): void;
 }

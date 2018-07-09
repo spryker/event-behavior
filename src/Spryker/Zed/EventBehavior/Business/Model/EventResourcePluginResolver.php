@@ -51,7 +51,7 @@ class EventResourcePluginResolver
      *
      * @return void
      */
-    public function executeResolvedPluginsBySources(array $resources, array $ids)
+    public function executeResolvedPluginsBySources(array $resources, array $ids): void
     {
         $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
         $this->eventResourceQueryContainerManager->triggerResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
@@ -63,7 +63,7 @@ class EventResourcePluginResolver
      *
      * @return \Spryker\Zed\SynchronizationExtension\Dependency\Plugin\SynchronizationDataPluginInterface[]
      */
-    protected function getResolvedPluginsByResources(array $resources)
+    protected function getResolvedPluginsByResources(array $resources): array
     {
         $this->mapPluginsByResourceName();
         $effectivePlugins = $this->getEffectivePlugins($resources);
