@@ -247,7 +247,10 @@ class EventBehaviorFacadeTest extends Unit
         $this->assertContains($eventName, $resources);
     }
 
-    protected function prepareContainerForExecuteResolvedPluginsBySourcesTest()
+    /**
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function prepareContainerForExecuteResolvedPluginsBySourcesTest(): Container
     {
         $container = new Container();
         $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function () {
@@ -276,6 +279,7 @@ class EventBehaviorFacadeTest extends Unit
 
         return $container;
     }
+
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
