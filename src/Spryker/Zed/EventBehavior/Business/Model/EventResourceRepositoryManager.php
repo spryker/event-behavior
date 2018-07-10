@@ -74,7 +74,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        if (!$plugin->getData()) {
+        if (!$plugin->getData($ids)) {
             $this->trigger($plugin, [static::ID_NULL]);
 
             return;
