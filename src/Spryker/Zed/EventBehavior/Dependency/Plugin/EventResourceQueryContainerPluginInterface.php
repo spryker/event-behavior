@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Dependency\Plugin;
 
+use Propel\Runtime\ActiveQuery\ModelCriteria;
+
 interface EventResourceQueryContainerPluginInterface extends EventResourcePluginInterface
 {
     /**
@@ -20,5 +22,5 @@ interface EventResourceQueryContainerPluginInterface extends EventResourcePlugin
      *
      * @return \Propel\Runtime\ActiveQuery\ModelCriteria|null
      */
-    public function queryData(array $ids = []);
+    public function queryData(array $ids = []): ?ModelCriteria;
 }
