@@ -17,7 +17,7 @@ interface EventResourcePluginInterface
      *
      * @return string
      */
-    public function getResourceName();
+    public function getResourceName(): string;
 
     /**
      * Specification:
@@ -27,7 +27,7 @@ interface EventResourcePluginInterface
      *
      * @return string
      */
-    public function getEventName();
+    public function getEventName(): string;
 
     /**
      * Specification:
@@ -37,5 +37,5 @@ interface EventResourcePluginInterface
      *
      * @return string|null
      */
-    public function getIdColumnName();
+    public function getIdColumnName(): ?string;
 }
