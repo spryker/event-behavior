@@ -116,7 +116,6 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function trigger(EventResourcePluginInterface $plugin, array $ids): void
     {
-        //TODO replace this with triggerBulk as soon this method is available in Event module
         foreach ($ids as $id) {
             $eventEntityTransfer = (new EventEntityTransfer())->setId($id);
             $this->eventFacade->trigger($plugin->getEventName(), $eventEntityTransfer);
