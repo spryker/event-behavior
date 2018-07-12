@@ -9,6 +9,9 @@ namespace Spryker\Zed\EventBehavior\Business;
 
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceManager;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager;
 use Spryker\Zed\EventBehavior\Business\Model\TriggerManager;
 use Spryker\Zed\EventBehavior\EventBehaviorDependencyProvider;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
@@ -33,12 +36,35 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceManagerInterface
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager
      */
-    public function createEventResourceManager()
+    public function createEventResourceQueryContainerManager(): EventResourceQueryContainerManager
     {
-        return new EventResourceManager(
+        return new EventResourceQueryContainerManager(
             $this->getEventFacade(),
+            $this->getEventResourcePlugins()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager
+     */
+    public function createEventResourceRepositoryManager(): EventResourceRepositoryManager
+    {
+        return new EventResourceRepositoryManager(
+            $this->getEventFacade(),
+            $this->getEventResourcePlugins()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver
+     */
+    public function createEventResourcePluginResolver(): EventResourcePluginResolver
+    {
+        return new EventResourcePluginResolver(
+            $this->createEventResourceRepositoryManager(),
+            $this->createEventResourceQueryContainerManager(),
             $this->getEventResourcePlugins()
         );
     }

@@ -14,6 +14,7 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInt
 
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
+    protected const DEFAULT_CHUNK_SIZE = 100;
     protected const ID_NULL = null;
     protected const DELIMITER = '.';
 
@@ -40,20 +41,20 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         array $eventResourcePlugins,
-        $chunkSize = 100
+        ?int $chunkSize = null
     ) {
         $this->eventFacade = $eventFacade;
         $this->eventResourcePlugins = $eventResourcePlugins;
-        $this->chunkSize = $chunkSize;
+        $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
     }
 
     /**
      * @param array $plugins
-     * @param array $ids
+     * @param int[] $ids
      *
      * @return void
      */
-    public function triggerResourceEvents(array $plugins, array $ids = [])
+    public function triggerResourceEvents(array $plugins, array $ids = []): void
     {
         foreach ($plugins as $plugin) {
             $this->triggerEvents($plugin, $ids);
@@ -66,7 +67,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function triggerEvents(EventResourceRepositoryPluginInterface $plugin, array $ids = [])
+    protected function triggerEvents(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
         if ($ids) {
             $this->trigger($plugin, $ids);
@@ -109,7 +110,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return array
      */
-    protected function getEventEntitiesIds($plugin, $chunkOfEventEntitiesTransfers)
+    protected function getEventEntitiesIds($plugin, $chunkOfEventEntitiesTransfers): array
     {
         $eventEntitiesIds = [];
 
@@ -127,7 +128,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return null|string
      */
-    protected function getIdColumnName($plugin)
+    protected function getIdColumnName($plugin): ?string
     {
         $idColumnName = explode(static::DELIMITER, $plugin->getIdColumnName());
         return $idColumnName[1] ?? null;
