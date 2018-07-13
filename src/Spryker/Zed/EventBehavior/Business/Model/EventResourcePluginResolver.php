@@ -61,7 +61,7 @@ class EventResourcePluginResolver
     /**
      * @param string[] $resources
      *
-     * @return \Spryker\Zed\SynchronizationExtension\Dependency\Plugin\SynchronizationDataPluginInterface[]
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
     protected function getResolvedPluginsByResources(array $resources): array
     {
