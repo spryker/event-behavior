@@ -66,19 +66,14 @@ class EventResourcePluginResolver
     protected function getResolvedPluginsByResources(array $resources): array
     {
         $this->mapPluginsByResourceName();
-        $effectivePlugins = $this->getEffectivePlugins($resources);
+        $effectivePluginsByResource = $this->getEffectivePlugins($resources);
         $pluginsPerExporter = [
             static::REPOSITORY_EVENT_RESOURCE_PLUGINS => [],
             static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS => [],
         ];
 
-        foreach ($effectivePlugins as $effectivePlugin) {
-            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface) {
-                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
-            }
-            if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {
-                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
-            }
+        foreach ($effectivePluginsByResource as $effectivePlugins) {
+            $pluginsPerExporter = $this->extractEffectivePlugins($effectivePlugins, $pluginsPerExporter);
         }
 
         return $pluginsPerExporter;
@@ -91,14 +86,14 @@ class EventResourcePluginResolver
     {
         $mappedDataPlugins = [];
         foreach ($this->eventResourcePlugins as $plugin) {
-            $mappedDataPlugins[$plugin->getResourceName()] = $plugin;
+            $mappedDataPlugins[$plugin->getResourceName()][] = $plugin;
         }
 
         $this->eventResourcePlugins = $mappedDataPlugins;
     }
 
     /**
-     * @param array $resources
+     * @param string[] $resources
      *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
@@ -116,5 +111,25 @@ class EventResourcePluginResolver
         }
 
         return $effectivePlugins;
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $effectivePlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $pluginsPerExporter
+     *
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     */
+    protected function extractEffectivePlugins($effectivePlugins, $pluginsPerExporter): array
+    {
+        foreach ($effectivePlugins as $effectivePlugin) {
+            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface) {
+                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+            }
+            if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {
+                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+            }
+        }
+
+        return $pluginsPerExporter;
     }
 }
