@@ -29,7 +29,7 @@ class EventTriggerConsole extends Console
      */
     protected function configure()
     {
-        $this->addOption(static::RESOURCE_OPTION, static::RESOURCE_OPTION_SHORTCUT,InputArgument::OPTIONAL, 'Defines events of which resource(s) should be triggered, if there is more than one, use comma to separate them. 
+        $this->addOption(static::RESOURCE_OPTION, static::RESOURCE_OPTION_SHORTCUT, InputArgument::OPTIONAL, 'Defines events of which resource(s) should be triggered, if there is more than one, use comma to separate them. 
         If not, full event triggering will be executed.');
 
         $this->addOption(static::RESOURCE_IDS_OPTION, static::RESOURCE_IDS_OPTION_SHORTCUT, InputArgument::OPTIONAL, 'Defines ids of entities which should be triggered, if there is more than one, use comma to separate them. 

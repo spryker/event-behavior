@@ -8,7 +8,6 @@
 namespace Spryker\Zed\EventBehavior\Business;
 
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
-use Spryker\Zed\EventBehavior\Business\Model\EventResourceManager;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager;

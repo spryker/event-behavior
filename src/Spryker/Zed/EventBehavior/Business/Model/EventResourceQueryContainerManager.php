@@ -36,7 +36,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
-     * @param int $chunkSize
+     * @param int|null $chunkSize
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,

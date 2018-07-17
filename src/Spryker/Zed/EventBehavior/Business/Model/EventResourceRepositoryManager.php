@@ -36,7 +36,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
      * @param array $eventResourcePlugins
-     * @param int $chunkSize
+     * @param int|null $chunkSize
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
@@ -114,7 +114,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     {
         $eventEntitiesIds = [];
 
-        foreach($chunkOfEventEntitiesTransfers as $entitiesTransfer) {
+        foreach ($chunkOfEventEntitiesTransfers as $entitiesTransfer) {
             $entitiesTransferArray = $entitiesTransfer->modifiedToArray();
             $idColumnName = $this->getIdColumnName($plugin);
             $eventEntitiesIds[] = $entitiesTransferArray[$idColumnName];

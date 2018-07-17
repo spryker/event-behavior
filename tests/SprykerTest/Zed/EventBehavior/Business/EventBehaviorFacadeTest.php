@@ -133,7 +133,7 @@ class EventBehaviorFacadeTest extends Unit
 
         $container = $this->prepareContainerForExecuteResolvedPluginsBySourcesTest();
         $this->prepareFacade($container);
-        $this->eventBehaviorFacade->executeResolvedPluginsBySources([],[]);
+        $this->eventBehaviorFacade->executeResolvedPluginsBySources([], []);
     }
 
     /**
@@ -159,7 +159,7 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfers[] = $eventEntityTransfer;
 
         $eventTransferIds = $this->eventBehaviorFacade->getEventTransferIds($eventEntityTransfers);
-        $this->assertEquals($eventTransferIds, [1,2]);
+        $this->assertEquals($eventTransferIds, [1, 2]);
     }
 
     /**
@@ -185,7 +185,7 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfers[] = $eventEntityTransfer;
 
         $eventTransferForeignKeys = $this->eventBehaviorFacade->getEventTransferForeignKeys($eventEntityTransfers, 'testForeignKey');
-        $this->assertEquals($eventTransferForeignKeys, ['keyValue1','keyValue2']);
+        $this->assertEquals($eventTransferForeignKeys, ['keyValue1', 'keyValue2']);
     }
 
     /**
@@ -203,7 +203,7 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityModifiedTransfer->setModifiedColumns($modifiedColumns);
         $eventEntityTransfers[] = $eventEntityModifiedTransfer;
 
-        $notModifiedColumns = ['testColumn1','testColumn2','testColumn3'];
+        $notModifiedColumns = ['testColumn1', 'testColumn2', 'testColumn3'];
         $eventEntityTransfer = new EventEntityTransfer();
         $eventEntityTransfer->setModifiedColumns($notModifiedColumns);
         $eventEntityTransfers[] = $eventEntityTransfer;
