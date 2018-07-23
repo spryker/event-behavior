@@ -8,6 +8,9 @@
 namespace Spryker\Zed\EventBehavior\Business;
 
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager;
 use Spryker\Zed\EventBehavior\Business\Model\TriggerManager;
 use Spryker\Zed\EventBehavior\EventBehaviorDependencyProvider;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
@@ -28,6 +31,40 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getUtilEncodingService(),
             $this->getQueryContainer(),
             $this->getConfig()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager
+     */
+    public function createEventResourceQueryContainerManager(): EventResourceQueryContainerManager
+    {
+        return new EventResourceQueryContainerManager(
+            $this->getEventFacade(),
+            $this->getEventResourcePlugins()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager
+     */
+    public function createEventResourceRepositoryManager(): EventResourceRepositoryManager
+    {
+        return new EventResourceRepositoryManager(
+            $this->getEventFacade(),
+            $this->getEventResourcePlugins()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver
+     */
+    public function createEventResourcePluginResolver(): EventResourcePluginResolver
+    {
+        return new EventResourcePluginResolver(
+            $this->createEventResourceRepositoryManager(),
+            $this->createEventResourceQueryContainerManager(),
+            $this->getEventResourcePlugins()
         );
     }
 
@@ -53,5 +90,13 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     public function createEventEntityTransferFilter()
     {
         return new EventEntityTransferFilter();
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     */
+    protected function getEventResourcePlugins()
+    {
+        return $this->getProvidedDependency(EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE);
     }
 }

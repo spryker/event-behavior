@@ -70,4 +70,17 @@ interface EventBehaviorFacadeInterface
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
      */
     public function getEventTransfersByModifiedColumns(array $eventTransfers, array $columns);
+
+    /**
+     * Specification:
+     *  - Triggers events for specified resources
+     *
+     * @api
+     *
+     * @param array $resources
+     * @param array $ids
+     *
+     * @return void
+     */
+    public function executeResolvedPluginsBySources(array $resources, array $ids = []): void;
 }
