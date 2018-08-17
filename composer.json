@@ -4,6 +4,7 @@
   "description": "EventBehavior module",
   "license": "proprietary",
   "require": {
+    "php": ">=7.1",
     "spryker/error-handler": "^2.1.2",
     "spryker/event": "^2.1.0",
     "spryker/kernel": "^3.20.0",

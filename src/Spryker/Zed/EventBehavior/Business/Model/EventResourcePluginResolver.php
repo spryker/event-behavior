@@ -16,7 +16,7 @@ class EventResourcePluginResolver
     protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
 
     /**
-     * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @var array
      */
     protected $eventResourcePlugins;
 
