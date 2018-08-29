@@ -17,8 +17,6 @@ class EventBehaviorToEventBridge implements EventBehaviorToEventInterface
     protected $eventFacade;
 
     /**
-     * EventBehaviorToEventBehavior constructor.
-     *
      * @param \Spryker\Zed\Event\Business\EventFacadeInterface $eventFacade
      */
     public function __construct($eventFacade)
