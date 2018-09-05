@@ -126,7 +126,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      *
-     * @return null|string
+     * @return string|null
      */
     protected function getIdColumnName($plugin): ?string
     {
