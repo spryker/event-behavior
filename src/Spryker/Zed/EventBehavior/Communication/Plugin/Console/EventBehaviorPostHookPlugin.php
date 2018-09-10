@@ -22,6 +22,8 @@ class EventBehaviorPostHookPlugin extends AbstractPlugin implements ConsolePostR
     const CODE_ERROR = 1;
 
     /**
+     * @api
+     *
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
