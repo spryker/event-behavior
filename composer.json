@@ -39,9 +39,6 @@
       "SprykerTest\\": "tests/SprykerTest/"
     }
   },
-  "replace": {
-    "spryker/event-behavior": "self.version"
-  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
