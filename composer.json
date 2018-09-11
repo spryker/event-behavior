@@ -5,7 +5,6 @@
   "license": "proprietary",
   "require": {
     "php": ">=7.1",
-    "spryker/error-handler": "^2.1.2",
     "spryker/event": "^2.1.0",
     "spryker/kernel": "^3.20.0",
     "spryker/propel-orm": "^1.6.0",
@@ -14,6 +13,8 @@
     "spryker/zend": "^2.1.0"
   },
   "require-dev": {
+    "spryker/availability-storage": "*",
+    "spryker/category-storage": "*",
     "spryker/code-sniffer": "*",
     "spryker/config": "^3.1.0",
     "spryker/console": "^3.1.0 || ^4.0.0",
@@ -26,8 +27,7 @@
   },
   "suggest": {
     "spryker/console": "*",
-    "spryker/silex": "^2.0.0",
-    "spryker/symfony": "^3.0.0"
+    "spryker/silex": "^2.0.0"
   },
   "autoload": {
     "psr-4": {
@@ -55,5 +55,7 @@
     "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
     "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./"
   },
-  "include-path":  ["src/"]
+  "include-path": [
+    "src/"
+  ]
 }
