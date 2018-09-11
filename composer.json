@@ -15,6 +15,7 @@
   "require-dev": {
     "spryker/availability-storage": "*",
     "spryker/category-storage": "*",
+    "spryker/code-sniffer": "*",
     "spryker/config": "^3.1.0",
     "spryker/console": "^3.1.0 || ^4.0.0",
     "spryker/propel": "^3.0.0",
