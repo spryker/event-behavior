@@ -1,6 +1,6 @@
 {
   "name": "spryker/event-behavior",
-  "type": "propel-behavior",
+  "type": "library",
   "description": "EventBehavior module",
   "license": "proprietary",
   "require": {
@@ -22,9 +22,6 @@
     "spryker/silex": "^2.0.0",
     "spryker/testify": "*"
   },
-  "support": {
-    "source": "https://github.com/spryker/event-behavior"
-  },
   "suggest": {
     "spryker/console": "*",
     "spryker/silex": "^2.0.0"
@@ -41,6 +38,10 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "scripts": {
+    "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
+    "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./"
+  },
   "extra": {
     "name": "event",
     "class": "\\Spryker\\Zed\\EventBehavior\\Persistence\\Propel\\Behavior\\EventBehavior",
@@ -51,9 +52,8 @@
   "config": {
     "sort-packages": true
   },
-  "scripts": {
-    "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
-    "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./"
+  "support": {
+    "source": "https://github.com/spryker/event-behavior"
   },
   "include-path": [
     "src/"
