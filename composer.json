@@ -1,6 +1,6 @@
 {
   "name": "spryker/event-behavior",
-  "type": "library",
+  "type": "propel-behavior",
   "description": "EventBehavior module",
   "license": "proprietary",
   "require": {
