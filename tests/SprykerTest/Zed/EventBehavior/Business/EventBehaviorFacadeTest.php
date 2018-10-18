@@ -16,8 +16,6 @@ use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Shared\Config\Config;
 use Spryker\Shared\EventBehavior\EventBehaviorConstants;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
-use Spryker\Zed\AvailabilityStorage\Communication\Plugin\Event\AvailabilityEventResourcePlugin;
-use Spryker\Zed\CategoryStorage\Communication\Plugin\Event\CategoryTreeEventResourcePlugin;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorBusinessFactory;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacade;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
@@ -40,8 +38,8 @@ use Spryker\Zed\Kernel\RequestIdentifier;
  */
 class EventBehaviorFacadeTest extends Unit
 {
-    const FOREIGN_KEYS = 'foreign_keys';
-    const MODIFIED_COLUMNS = 'modified_columns';
+    public const FOREIGN_KEYS = 'foreign_keys';
+    public const MODIFIED_COLUMNS = 'modified_columns';
 
     /**
      * @var \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface
@@ -285,10 +283,7 @@ class EventBehaviorFacadeTest extends Unit
      */
     protected function getEventTriggerResourcePlugins(): array
     {
-        return [
-            new AvailabilityEventResourcePlugin(),
-            new CategoryTreeEventResourcePlugin(),
-        ];
+        return [];
     }
 
     /**
