@@ -12,7 +12,7 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class EventBehaviorConfig extends AbstractBundleConfig
 {
-    const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
+    public const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
 
     /**
      * @var bool

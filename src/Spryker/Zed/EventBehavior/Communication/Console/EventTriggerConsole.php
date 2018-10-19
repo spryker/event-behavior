@@ -17,12 +17,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EventTriggerConsole extends Console
 {
-    const COMMAND_NAME = 'event:trigger';
-    const DESCRIPTION = 'Triggers events for publishing the resources';
-    const RESOURCE_OPTION = 'resource';
-    const RESOURCE_OPTION_SHORTCUT = 'r';
-    const RESOURCE_IDS_OPTION = 'ids';
-    const RESOURCE_IDS_OPTION_SHORTCUT = 'i';
+    public const COMMAND_NAME = 'event:trigger';
+    public const DESCRIPTION = 'Triggers events for publishing the resources';
+    public const RESOURCE_OPTION = 'resource';
+    public const RESOURCE_OPTION_SHORTCUT = 'r';
+    public const RESOURCE_IDS_OPTION = 'ids';
+    public const RESOURCE_IDS_OPTION_SHORTCUT = 'i';
 
     /**
      * @return void
