@@ -14,11 +14,11 @@ use Zend\Filter\Word\UnderscoreToCamelCase;
 
 class EventBehavior extends Behavior
 {
-    const EVENT_CHANGE_ENTITY_NAME = 'name';
-    const EVENT_CHANGE_ENTITY_ID = 'id';
-    const EVENT_CHANGE_ENTITY_FOREIGN_KEYS = 'foreignKeys';
-    const EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS = 'modifiedColumns';
-    const EVENT_CHANGE_NAME = 'event';
+    public const EVENT_CHANGE_ENTITY_NAME = 'name';
+    public const EVENT_CHANGE_ENTITY_ID = 'id';
+    public const EVENT_CHANGE_ENTITY_FOREIGN_KEYS = 'foreignKeys';
+    public const EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS = 'modifiedColumns';
+    public const EVENT_CHANGE_NAME = 'event';
 
     /**
      * @return string

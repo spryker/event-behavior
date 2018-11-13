@@ -20,7 +20,7 @@ use Throwable;
  */
 class EventBehaviorQueryContainer extends AbstractQueryContainer implements EventBehaviorQueryContainerInterface
 {
-    const TABLE_EXISTS = 'exists';
+    public const TABLE_EXISTS = 'exists';
 
     /**
      * @api

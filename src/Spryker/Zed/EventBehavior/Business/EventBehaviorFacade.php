@@ -96,4 +96,16 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     {
         $this->getFactory()->createEventResourcePluginResolver()->executeResolvedPluginsBySources($resources, $ids);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @return string[]
+     */
+    public function getAvailableResourceNames(): array
+    {
+        return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames();
+    }
 }
