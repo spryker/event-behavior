@@ -40,8 +40,8 @@ class EventTriggerConsole extends Console
 
         $availableResourceNames = $this->getFacade()->getAvailableResourceNames();
 
-        $this->setName(self::COMMAND_NAME)
-            ->setDescription(self::DESCRIPTION)
+        $this->setName(static::COMMAND_NAME)
+            ->setDescription(static::DESCRIPTION)
             ->addUsage(sprintf('-%s resource_name -%s 1,5', static::RESOURCE_OPTION_SHORTCUT, static::RESOURCE_IDS_OPTION_SHORTCUT))
             ->addUsage(sprintf(
                 '-%s resource_name [' . PHP_EOL . "\t%s" . PHP_EOL . ']',
