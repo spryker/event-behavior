@@ -18,5 +18,5 @@ interface EventBehaviorConstants
      *
      * @api
      */
-    const EVENT_BEHAVIOR_TRIGGERING_ACTIVE = 'EVENT_BEHAVIOR_TRIGGERING_ACTIVE';
+    public const EVENT_BEHAVIOR_TRIGGERING_ACTIVE = 'EVENT_BEHAVIOR_TRIGGERING_ACTIVE';
 }
