@@ -14,7 +14,7 @@ use Spryker\Zed\Kernel\Container;
 
 class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
 {
-    public const FACADE_EVENT = "FACADE_EVENT";
+    public const FACADE_EVENT = 'FACADE_EVENT';
     public const SERVICE_UTIL_ENCODING = 'UTIL_ENCODING_SERVICE';
     public const PLUGINS_EVENT_TRIGGER_RESOURCE = 'PLUGINS_EVENT_TRIGGER_RESOURCE';
 

@@ -46,7 +46,7 @@ class EventBehavior extends Behavior
     public function postDelete()
     {
         return "
-\$this->addDeleteEventToMemory();        
+\$this->addDeleteEventToMemory();
         ";
     }
 
