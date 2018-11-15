@@ -38,16 +38,10 @@ class EventTriggerConsole extends Console
         $this->addOption(static::RESOURCE_IDS_OPTION, static::RESOURCE_IDS_OPTION_SHORTCUT, InputArgument::OPTIONAL, 'Defines ids of entities which should be triggered, if there is more than one, use comma to separate them. 
         If not, all ids triggering will be executed.');
 
-        $availableResourceNames = $this->getFacade()->getAvailableResourceNames();
-
         $this->setName(static::COMMAND_NAME)
             ->setDescription(static::DESCRIPTION)
             ->addUsage(sprintf('-%s resource_name -%s 1,5', static::RESOURCE_OPTION_SHORTCUT, static::RESOURCE_IDS_OPTION_SHORTCUT))
-            ->addUsage(sprintf(
-                '-%s resource_name [' . PHP_EOL . "\t%s" . PHP_EOL . ']',
-                static::RESOURCE_OPTION_SHORTCUT,
-                implode(',' . PHP_EOL . "\t", $availableResourceNames))
-            );
+            ->addUsage($this->getResourcesUsageText());
     }
 
     /**
@@ -89,5 +83,19 @@ class EventTriggerConsole extends Console
         $io = new SymfonyStyle($input, $output);
 
         $io->warning(static::WARNING_MESSAGE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResourcesUsageText(): string
+    {
+        $availableResourceNames = $this->getFacade()->getAvailableResourceNames();
+
+        return sprintf(
+            "-%s [\n\t%s\n]",
+            static::RESOURCE_OPTION_SHORTCUT,
+            implode(",\n\t", $availableResourceNames)
+        );
     }
 }
