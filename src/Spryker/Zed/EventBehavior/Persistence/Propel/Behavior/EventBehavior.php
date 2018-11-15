@@ -36,7 +36,7 @@ class EventBehavior extends Behavior
     public function postSave()
     {
         return "
-\$this->addSaveEventToMemory();
+\$this->logSavedEventBehaviorEntityChange();
         ";
     }
 
@@ -46,7 +46,7 @@ class EventBehavior extends Behavior
     public function postDelete()
     {
         return "
-\$this->addDeleteEventToMemory();
+\$this->logDeletedEventBehaviorEntityChange();
         ";
     }
 
@@ -274,7 +274,7 @@ public function enableEvent()
 /**
  * @return void
  */
-protected function addSaveEventToMemory()
+protected function logSavedEventBehaviorEntityChange()
 {
     if (\$this->_isEventDisabled) {
         return;
@@ -323,7 +323,7 @@ protected function addSaveEventToMemory()
 /**
  * @return void
  */
-protected function addDeleteEventToMemory()
+protected function logDeletedEventBehaviorEntityChange()
 {
     if (\$this->_isEventDisabled) {
         return;
@@ -498,6 +498,7 @@ protected function isEventColumnsModified()
      */
     public function addGetPhpType()
     {
+        $tableMapPhpName = $this->getTable()->getPhpName() . 'TableMap';
         return "
 /**
  * @param string \$xmlValue
@@ -507,7 +508,7 @@ protected function isEventColumnsModified()
  */
 protected function getPhpType(\$xmlValue, \$column)
 {
-    \$columnType = SpyAvailabilityAbstractTableMap::getTableMap()->getColumn(\$column)->getType();
+    \$columnType = $tableMapPhpName::getTableMap()->getColumn(\$column)->getType();
     if (in_array(strtoupper(\$columnType), ['INTEGER', 'TINYINT', 'SMALLINT'])) {
         \$xmlValue = (int) \$xmlValue;
     } else if (in_array(strtoupper(\$columnType), ['REAL', 'FLOAT', 'DOUBLE', 'BINARY', 'VARBINARY', 'LONGVARBINARY'])) {
