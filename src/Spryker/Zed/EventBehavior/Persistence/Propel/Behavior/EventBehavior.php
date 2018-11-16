@@ -223,8 +223,8 @@ private \$_foreignKeys = [$implodedForeignKeys
      */
     protected function addPrepareSaveEventMethod()
     {
-        $createEvent = 'Entity.' . $this->getTable()->getName() . '.create';
-        $updateEvent = 'Entity.' . $this->getTable()->getName() . '.update';
+        $createEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'create');
+        $updateEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'update');
 
         return "
 /**
@@ -249,7 +249,7 @@ protected function prepareSaveEventName()
      */
     protected function addPrepareDeleteEventMethod()
     {
-        $deleteEvent = 'Entity.' . $this->getTable()->getName() . '.delete';
+        $deleteEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'delete');
 
         return "
 /**
@@ -495,7 +495,7 @@ protected function isEventColumnsModified()
      */
     public function addGetPhpType()
     {
-        $tableMapPhpName = $this->getTable()->getPhpName() . 'TableMap';
+        $tableMapPhpName = sprintf('%s%s', $this->getTable()->getPhpName(), 'TableMap');
         return "
 /**
  * @param string \$xmlValue
