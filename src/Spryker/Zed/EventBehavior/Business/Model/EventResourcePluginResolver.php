@@ -59,6 +59,21 @@ class EventResourcePluginResolver
     }
 
     /**
+     * @return string[]
+     */
+    public function getAvailableResourceNames(): array
+    {
+        $resourceNames = [];
+        foreach ($this->eventResourcePlugins as $plugin) {
+            $resourceNames[] = $plugin->getResourceName();
+        }
+
+        sort($resourceNames);
+
+        return $resourceNames;
+    }
+
+    /**
      * @param string[] $resources
      *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
