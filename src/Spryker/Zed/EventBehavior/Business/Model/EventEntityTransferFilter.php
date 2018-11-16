@@ -32,7 +32,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      */
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName)
     {
-        if ($foreignKeyColumnName === null) {
+        if (!$foreignKeyColumnName) {
             return [];
         }
 

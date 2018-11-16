@@ -12,8 +12,8 @@ interface EventBehaviorFacadeInterface
     /**
      * Specification
      *  - Will find all entity change events with current processId from
-     *  database and trigger them
-     *  - Deletes all triggered events from database
+     *  database and trigger them.
+     *  - Deletes all triggered events from database.
      *
      * @api
      *
@@ -24,8 +24,8 @@ interface EventBehaviorFacadeInterface
     /**
      * Specification
      *  - Will find all expired/non-triggered entity change events from
-     * database and trigger them
-     *  - Deletes all triggered events from database
+     * database and trigger them.
+     *  - Deletes all triggered events from database.
      *
      * @api
      *
@@ -35,7 +35,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Return Ids in eventTransfers
+     *  - Returns Ids in eventTransfers.
      *
      * @api
      *
@@ -47,7 +47,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Return ForeignKeys in eventTransfers
+     *  - Returns ForeignKeys in eventTransfers.
      *
      * @api
      *
@@ -60,7 +60,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Return eventTransfers with matched modifiedColumns
+     *  - Returns eventTransfers with matched modifiedColumns.
      *
      * @api
      *
@@ -73,7 +73,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Triggers events for specified resources
+     *  - Triggers events for specified resources.
      *
      * @api
      *
@@ -83,4 +83,14 @@ interface EventBehaviorFacadeInterface
      * @return void
      */
     public function executeResolvedPluginsBySources(array $resources, array $ids = []): void;
+
+    /**
+     * Specification:
+     *  - Returns sorted resource names list from plugins configured in EventBehaviorDependencyProvider::getEventTriggerResourcePlugins().
+     *
+     * @api
+     *
+     * @return string[]
+     */
+    public function getAvailableResourceNames(): array;
 }
