@@ -36,17 +36,7 @@ class EventBehavior extends Behavior
     public function postSave()
     {
         return "
-\$this->saveEventBehaviorEntityChange();
-        ";
-    }
-
-    /**
-     * @return string
-     */
-    public function preDelete()
-    {
-        return "
-\$this->prepareDeleteEventName();
+\$this->addSaveEventToMemory();
         ";
     }
 
@@ -56,7 +46,7 @@ class EventBehavior extends Behavior
     public function postDelete()
     {
         return "
-\$this->saveEventBehaviorEntityChange();
+\$this->addDeleteEventToMemory();
         ";
     }
 
@@ -128,10 +118,10 @@ class EventBehavior extends Behavior
     public function objectMethods()
     {
         $script = '';
-        $script .= $this->addPrepareSaveEventMethod();
-        $script .= $this->addPrepareDeleteEventMethod();
+        $script .= $this->addPrepareEventMethod();
         $script .= $this->addToggleEventMethod();
         $script .= $this->addSaveEventMethod();
+        $script .= $this->addDeleteEventMethod();
         $script .= $this->addGetForeignKeysMethod();
         $script .= $this->addSaveEventBehaviorEntityChangeMethod();
         $script .= $this->addIsEventColumnsModifiedMethod();
@@ -221,10 +211,10 @@ private \$_foreignKeys = [$implodedForeignKeys
     /**
      * @return string
      */
-    protected function addPrepareSaveEventMethod()
+    protected function addPrepareEventMethod()
     {
-        $createEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'create');
-        $updateEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'update');
+        $createEvent = 'Entity.' . $this->getTable()->getName() . '.create';
+        $updateEvent = 'Entity.' . $this->getTable()->getName() . '.update';
 
         return "
 /**
@@ -240,24 +230,6 @@ protected function prepareSaveEventName()
 
     \$this->_modifiedColumns = \$this->getModifiedColumns();
     \$this->_isModified = \$this->isModified();
-}
-        ";
-    }
-
-    /**
-     * @return string
-     */
-    protected function addPrepareDeleteEventMethod()
-    {
-        $deleteEvent = sprintf('%s.%s.%s', 'Entity', $this->getTable()->getName(), 'delete');
-
-        return "
-/**
- * @return void
- */
-protected function prepareDeleteEventName()
-{
-    \$this->_eventName = '$deleteEvent';
 }
         ";
     }
@@ -302,13 +274,13 @@ public function enableEvent()
 /**
  * @return void
  */
-protected function saveEventBehaviorEntityChange()
+protected function addSaveEventToMemory()
 {
     if (\$this->_isEventDisabled) {
         return;
     }
     
-    if (\$this->_eventName === 'Entity.$tableName.update') {       
+    if (\$this->_eventName !== 'Entity.$tableName.create') {       
         if (!\$this->_isModified) {
             return;
         }
@@ -323,17 +295,48 @@ protected function saveEventBehaviorEntityChange()
         '$dataEventEntityId' => \$this->getPrimaryKey(),
         '$dataEventName' => \$this->_eventName,
         '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
+        '$dataEventEntityModifiedColumns' => \$this->_modifiedColumns,
     ];
-    
-    if (!empty(\$this->_modifiedColumns)) {
-        \$data['$dataEventEntityModifiedColumns'] = \$this->_modifiedColumns;
-    }
 
-    \$this->saveEventBehaviorEntityChangeData(\$data);
+    \$this->saveEventBehaviorEntityChange(\$data);
 
     unset(\$this->_eventName);
     unset(\$this->_modifiedColumns);
     unset(\$this->_isModified);
+}
+        ";
+    }
+
+    /**
+     * @return string
+     */
+    protected function addDeleteEventMethod()
+    {
+        $tableName = $this->getTable()->getName();
+        $deleteEvent = 'Entity.' . $tableName . '.delete';
+        $dataEventEntityName = static::EVENT_CHANGE_ENTITY_NAME;
+        $dataEventEntityId = static::EVENT_CHANGE_ENTITY_ID;
+        $dataEventEntityForeignKeys = static::EVENT_CHANGE_ENTITY_FOREIGN_KEYS;
+        $dataEventName = static::EVENT_CHANGE_NAME;
+
+        return "
+/**
+ * @return void
+ */
+protected function addDeleteEventToMemory()
+{
+    if (\$this->_isEventDisabled) {
+        return;
+    }
+
+    \$data = [
+        '$dataEventEntityName' => '$tableName',
+        '$dataEventEntityId' => \$this->getPrimaryKey(),
+        '$dataEventName' => '$deleteEvent',
+        '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
+    ];
+
+    \$this->saveEventBehaviorEntityChange(\$data);
 }
         ";
     }
@@ -370,7 +373,7 @@ protected function getForeignKeys()
  *
  * @return void
  */
-protected function saveEventBehaviorEntityChangeData(array \$data)
+protected function saveEventBehaviorEntityChange(array \$data)
 {
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
     \$spyEventBehaviorEntityChange->setData(json_encode(\$data));
