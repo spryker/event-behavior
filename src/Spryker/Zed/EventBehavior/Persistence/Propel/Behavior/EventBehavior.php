@@ -498,6 +498,7 @@ protected function isEventColumnsModified()
      */
     public function addGetPhpType()
     {
+        $tableMapPhpName = sprintf('%s%s', $this->getTable()->getPhpName(), 'TableMap');
         return "
 /**
  * @param string \$xmlValue
@@ -507,7 +508,7 @@ protected function isEventColumnsModified()
  */
 protected function getPhpType(\$xmlValue, \$column)
 {
-    \$columnType = SpyAvailabilityAbstractTableMap::getTableMap()->getColumn(\$column)->getType();
+    \$columnType = $tableMapPhpName::getTableMap()->getColumn(\$column)->getType();
     if (in_array(strtoupper(\$columnType), ['INTEGER', 'TINYINT', 'SMALLINT'])) {
         \$xmlValue = (int) \$xmlValue;
     } else if (in_array(strtoupper(\$columnType), ['REAL', 'FLOAT', 'DOUBLE', 'BINARY', 'VARBINARY', 'LONGVARBINARY'])) {
