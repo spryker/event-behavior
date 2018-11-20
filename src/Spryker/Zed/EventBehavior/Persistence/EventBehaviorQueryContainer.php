@@ -11,6 +11,8 @@ use DateTime;
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
+use Spryker\Shared\Config\Config;
+use Spryker\Shared\Propel\PropelConstants;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria;
 use Throwable;
@@ -71,9 +73,15 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
 
         try {
             $con = Propel::getConnection();
-            $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change';";
+            $params = [];
+            $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change'";
+            if (Config::get(PropelConstants::ZED_DB_ENGINE) === Config::get(PropelConstants::ZED_DB_ENGINE_MYSQL)) {
+                $sql .= " AND `table_schema` = ?";
+                $params[] = Config::get(PropelConstants::ZED_DB_DATABASE);
+            }
+            $sql .= ';';
             $stmt = $con->prepare($sql);
-            $stmt->execute();
+            $stmt->execute($params);
             $result = $stmt->fetch();
             $stmt = null;
             $con = null;
