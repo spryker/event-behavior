@@ -10,6 +10,7 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Propel\Runtime\Connection\Exception\ConnectionException;
 use Propel\Runtime\Exception\PropelException;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
@@ -41,9 +42,9 @@ class TriggerManager implements TriggerManagerInterface
     protected $config;
 
     /**
-     * @var bool|null
+     * @var bool
      */
-    protected static $eventBehaviorTableExists;
+    protected static $eventBehaviorTableExists = true;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
@@ -75,7 +76,8 @@ class TriggerManager implements TriggerManagerInterface
         $processId = RequestIdentifier::getRequestId();
         try {
             $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
-        } catch (PropelException $e) {
+        } catch (PropelException | ConnectionException $e) {
+            static::$eventBehaviorTableExists = false;
             return;
         }
 
