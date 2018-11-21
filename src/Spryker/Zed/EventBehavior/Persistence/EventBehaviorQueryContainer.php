@@ -61,6 +61,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * @api
      *
+     * @deprecated This method is deprecated without replacement. It's not used by TriggerManager::triggerRuntimeEvents() anymore.
+     *
      * @return bool
      */
     public function eventBehaviorTableExists()
@@ -73,15 +75,9 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
 
         try {
             $con = Propel::getConnection();
-            $params = [];
-            $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change'";
-            if (Config::get(PropelConstants::ZED_DB_ENGINE) === Config::get(PropelConstants::ZED_DB_ENGINE_MYSQL)) {
-                $sql .= " AND `table_schema` = ?";
-                $params[] = Config::get(PropelConstants::ZED_DB_DATABASE);
-            }
-            $sql .= ';';
+            $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change';";
             $stmt = $con->prepare($sql);
-            $stmt->execute($params);
+            $stmt->execute();
             $result = $stmt->fetch();
             $stmt = null;
             $con = null;

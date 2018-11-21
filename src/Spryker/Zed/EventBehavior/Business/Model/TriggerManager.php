@@ -10,6 +10,7 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Propel\Runtime\Exception\PropelException;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
@@ -63,9 +64,9 @@ class TriggerManager implements TriggerManagerInterface
      */
     public function triggerRuntimeEvents()
     {
-        if (static::$eventBehaviorTableExists === null) {
+        /*if (static::$eventBehaviorTableExists === null) {
             static::$eventBehaviorTableExists = $this->queryContainer->eventBehaviorTableExists();
-        }
+        }*/
 
         if (!static::$eventBehaviorTableExists) {
             return;
@@ -76,7 +77,12 @@ class TriggerManager implements TriggerManagerInterface
         }
 
         $processId = RequestIdentifier::getRequestId();
-        $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+        try {
+            $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+        } catch (PropelException $e) {
+            return;
+        }
+
         $triggeredRows = $this->triggerEvents($events);
 
         if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
