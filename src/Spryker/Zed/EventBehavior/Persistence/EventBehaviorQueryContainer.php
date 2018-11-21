@@ -11,8 +11,6 @@ use DateTime;
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
-use Spryker\Shared\Config\Config;
-use Spryker\Shared\Propel\PropelConstants;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria;
 use Throwable;
