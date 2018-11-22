@@ -42,9 +42,9 @@ class TriggerManager implements TriggerManagerInterface
     protected $config;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    protected static $eventBehaviorTableExists = true;
+    protected static $eventBehaviorTableExists;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
@@ -65,7 +65,7 @@ class TriggerManager implements TriggerManagerInterface
      */
     public function triggerRuntimeEvents()
     {
-        if (!static::$eventBehaviorTableExists) {
+        if (static::$eventBehaviorTableExists === false) {
             return;
         }
 
@@ -76,6 +76,7 @@ class TriggerManager implements TriggerManagerInterface
         $processId = RequestIdentifier::getRequestId();
         try {
             $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+            static::$eventBehaviorTableExists = true;
         } catch (PropelException | ConnectionException $e) {
             static::$eventBehaviorTableExists = false;
             return;
