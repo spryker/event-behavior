@@ -9,8 +9,10 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
+use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
+use Spryker\Zed\SynchronizationExtension\Dependency\Plugin\SynchronizationDataBulkRepositoryPluginInterface;
 
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
@@ -42,7 +44,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         EventBehaviorToEventInterface $eventFacade,
         array $eventResourcePlugins,
         ?int $chunkSize = null
-    ) {
+    )
+    {
         $this->eventFacade = $eventFacade;
         $this->eventResourcePlugins = $eventResourcePlugins;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
@@ -57,7 +60,14 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     public function triggerResourceEvents(array $plugins, array $ids = []): void
     {
         foreach ($plugins as $plugin) {
-            $this->triggerEvents($plugin, $ids);
+            if ($plugin instanceof EventResourceRepositoryPluginInterface) {
+                $this->triggerEvents($plugin, $ids);
+                continue;
+            }
+
+            if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
+                $this->triggerEventsBulk($plugin, $ids);
+            }
         }
     }
 
@@ -85,6 +95,23 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
+     * @param EventResourceBulkRepositoryPluginInterface $plugin
+     * @param int[] $ids
+     *
+     * @return void
+     */
+    protected function triggerEventsBulk(EventResourceBulkRepositoryPluginInterface $plugin, array $ids = []): void
+    {
+        if ($ids) {
+            $this->trigger($plugin, $ids);
+
+            return;
+        }
+
+        $this->triggerEventsAllBulk($plugin);
+    }
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
      *
      * @return void
@@ -102,6 +129,29 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             $this->trigger($plugin, $eventEntitiesIds);
             $offset += $this->chunkSize;
         }
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
+     *
+     * @return void
+     */
+    protected function triggerEventsAllBulk(EventResourceBulkRepositoryPluginInterface $plugin): void
+    {
+        $offset = 0;
+
+        do {
+            $eventEntities = $plugin->getData($offset, $this->chunkSize);
+
+            if (empty($eventEntities)) {
+                $this->trigger($plugin, [static::ID_NULL]);
+                break;
+            }
+
+            $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
+            $this->trigger($plugin, $eventEntitiesIds);
+            $offset += $this->chunkSize;
+        } while (count($eventEntities) === $this->chunkSize);
     }
 
     /**
