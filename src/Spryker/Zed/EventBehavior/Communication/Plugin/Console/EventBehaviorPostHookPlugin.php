@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface getFacade()
+ * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface getQueryContainer()
  */
 class EventBehaviorPostHookPlugin extends AbstractPlugin implements ConsolePostRunHookPluginInterface
 {

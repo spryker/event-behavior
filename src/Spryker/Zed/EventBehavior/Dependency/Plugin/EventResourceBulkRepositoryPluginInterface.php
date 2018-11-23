@@ -15,7 +15,6 @@ interface EventResourceBulkRepositoryPluginInterface extends EventResourcePlugin
      *
      * @api
      *
-     * @param int[] $ids
      * @param int $offset
      * @param int $limit
      *

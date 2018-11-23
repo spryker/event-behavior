@@ -12,7 +12,6 @@ use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
-use Spryker\Zed\SynchronizationExtension\Dependency\Plugin\SynchronizationDataBulkRepositoryPluginInterface;
 
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
@@ -44,8 +43,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         EventBehaviorToEventInterface $eventFacade,
         array $eventResourcePlugins,
         ?int $chunkSize = null
-    )
-    {
+    ) {
         $this->eventFacade = $eventFacade;
         $this->eventResourcePlugins = $eventResourcePlugins;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
@@ -95,7 +93,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
-     * @param EventResourceBulkRepositoryPluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      * @param int[] $ids
      *
      * @return void

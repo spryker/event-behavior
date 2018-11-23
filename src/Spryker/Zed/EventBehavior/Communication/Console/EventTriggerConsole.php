@@ -15,6 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface getFacade()
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface getQueryContainer()
  */
 class EventTriggerConsole extends Console
 {
