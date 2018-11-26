@@ -59,6 +59,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * @api
      *
+     * @deprecated This method is deprecated without replacement. It's not used by TriggerManager::triggerRuntimeEvents() anymore.
+     *
      * @return bool
      */
     public function eventBehaviorTableExists()
