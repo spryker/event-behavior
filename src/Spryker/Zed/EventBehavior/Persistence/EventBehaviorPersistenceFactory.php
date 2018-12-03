@@ -7,8 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence;
 
-use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
+use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 
