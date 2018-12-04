@@ -7,9 +7,7 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence;
 
-use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
-use Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 
 /**
@@ -25,12 +23,6 @@ class EventBehaviorPersistenceFactory extends AbstractPersistenceFactory
      */
     public function createEventBehaviorEntityChangeQuery()
     {
-        if (!class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
-            || !class_exists(SpyEventBehaviorEntityChangeQuery::class)
-        ) {
-            throw new EventBehaviorQueryNotExistsException();
-        }
-
         return SpyEventBehaviorEntityChangeQuery::create();
     }
 }
