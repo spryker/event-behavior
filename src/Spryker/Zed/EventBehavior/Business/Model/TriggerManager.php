@@ -16,6 +16,7 @@ use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
+use Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
 
@@ -77,7 +78,7 @@ class TriggerManager implements TriggerManagerInterface
         try {
             $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
             static::$eventBehaviorTableExists = true;
-        } catch (PropelException | ConnectionException $e) {
+        } catch (PropelException | ConnectionException | EventBehaviorQueryNotExistsException $e) {
             static::$eventBehaviorTableExists = false;
             return;
         }

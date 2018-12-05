@@ -11,6 +11,7 @@ use DateTime;
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Propel;
+use Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException;
 use Spryker\Zed\Kernel\Persistence\AbstractQueryContainer;
 use Spryker\Zed\PropelOrm\Business\Runtime\ActiveQuery\Criteria;
 use Throwable;
@@ -27,10 +28,18 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      *
      * @param int $processId
      *
+     * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
+     *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
     public function queryEntityChange($processId)
     {
+        if (!class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
+            || !class_exists(SpyEventBehaviorEntityChangeQuery::class)
+        ) {
+            throw new EventBehaviorQueryNotExistsException();
+        }
+
         $query = $this->getFactory()
             ->createEventBehaviorEntityChangeQuery()
             ->filterByProcessId($processId)
