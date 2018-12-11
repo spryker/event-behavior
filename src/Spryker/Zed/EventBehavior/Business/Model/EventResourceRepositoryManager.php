@@ -58,13 +58,13 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     public function triggerResourceEvents(array $plugins, array $ids = []): void
     {
         foreach ($plugins as $plugin) {
-            if ($plugin instanceof EventResourceRepositoryPluginInterface) {
-                $this->triggerEvents($plugin, $ids);
+            if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
+                $this->triggerEventsBulk($plugin, $ids);
                 continue;
             }
 
-            if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
-                $this->triggerEventsBulk($plugin, $ids);
+            if ($plugin instanceof EventResourceRepositoryPluginInterface) {
+                $this->triggerEvents($plugin, $ids);
             }
         }
     }
@@ -100,7 +100,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function triggerEventsBulk(EventResourceBulkRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids) {
+        if (count($ids)) {
             $this->trigger($plugin, $ids);
 
             return;
