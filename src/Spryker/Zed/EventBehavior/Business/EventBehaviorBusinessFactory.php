@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
+use Spryker\Zed\EventBehavior\Business\ListenerTrigger\ListenerTrigger;
+use Spryker\Zed\EventBehavior\Business\ListenerTrigger\ListenerTriggerInterface;
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
@@ -31,6 +33,17 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getUtilEncodingService(),
             $this->getQueryContainer(),
             $this->getConfig()
+        );
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Business\ListenerTrigger\ListenerTriggerInterface
+     */
+    public function createListenerTrigger(): ListenerTriggerInterface
+    {
+        return new ListenerTrigger(
+            $this->getEventFacade(),
+            $this->getUtilEncodingService()
         );
     }
 

@@ -34,4 +34,15 @@ class EventBehaviorToEventBridge implements EventBehaviorToEventInterface
     {
         $this->eventFacade->trigger($eventName, $eventTransfer);
     }
+
+    /**
+     * @param string $listenerName
+     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface[] $transfers
+     *
+     * @return void
+     */
+    public function triggerByListenerName(string $listenerName, array $transfers): void
+    {
+        $this->eventFacade->triggerByListenerName($listenerName, $transfers);
+    }
 }

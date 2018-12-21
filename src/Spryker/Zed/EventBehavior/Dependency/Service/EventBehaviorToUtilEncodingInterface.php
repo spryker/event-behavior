@@ -27,4 +27,14 @@ interface EventBehaviorToUtilEncodingInterface
      * @return array
      */
     public function decodeJson($jsonValue, $assoc = false, $depth = null, $options = null);
+
+    /**
+     * @param string $data
+     * @param string $format
+     *
+     * @throws \Spryker\Service\UtilEncoding\Exception\FormatNotSupportedException
+     *
+     * @return array|null
+     */
+    public function decodeFromFormat(string $data, string $format): ?array;
 }
