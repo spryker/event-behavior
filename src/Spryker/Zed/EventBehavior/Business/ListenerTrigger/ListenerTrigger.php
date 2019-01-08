@@ -62,7 +62,7 @@ class ListenerTrigger implements ListenerTriggerInterface
     {
         $decodedTransferData = $this->utilEncodingService->decodeFromFormat($transferData, $format);
 
-        if ($decodedTransferData === null) {
+        if (!$decodedTransferData) {
             throw new InvalidArgumentException('Given transfer data is invalid.');
         }
 
