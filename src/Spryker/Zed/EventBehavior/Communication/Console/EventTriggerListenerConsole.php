@@ -48,15 +48,15 @@ class EventTriggerListenerConsole extends Console
                 static::OPTION_LONG_FORMAT,
                 static::OPTION_SHORT_FORMAT,
                 InputOption::VALUE_OPTIONAL,
-                'An event name that should be triggered.',
-                ''
+                'Input format data. Default is querystring. Json also supported.',
+                'querystring'
             )
             ->addOption(
                 static::OPTION_EVENT_NAME,
                 static::OPTION_SHORT_EVENT_NAME,
                 InputOption::VALUE_OPTIONAL,
-                '',
-                'querystring'
+                'An event name that should be triggered.',
+                ''
             );
     }
 
@@ -73,6 +73,6 @@ class EventTriggerListenerConsole extends Console
         $format = $input->getOption(static::OPTION_LONG_FORMAT);
         $eventName = $input->getOption(static::OPTION_EVENT_NAME);
 
-        $this->getFacade()->triggerEventListenerByName($listenerName, $eventName, $transferData, $format);
+        $this->getFacade()->triggerEventListenerByName($listenerName, $transferData, $format, $eventName);
     }
 }

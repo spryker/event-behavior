@@ -116,15 +116,15 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @param string $eventListenerName
      * @param string $transferData
-     * @param string $eventName
      * @param string $format
+     * @param string $eventName
      *
      * @return void
      */
-    public function triggerEventListenerByName(string $eventListenerName, string $eventName, string $transferData, string $format): void
+    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format, string $eventName): void
     {
         $this->getFactory()
             ->createListenerTrigger()
-            ->triggerEventListenerByName($eventListenerName, $eventName, $transferData, $format);
+            ->triggerEventListenerByName($eventListenerName, $transferData, $format, $eventName);
     }
 }

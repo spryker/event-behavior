@@ -103,11 +103,11 @@ interface EventBehaviorFacadeInterface
      * @api
      *
      * @param string $eventListenerName
-     * @param string $eventName
      * @param string $transferData
      * @param string $format
+     * @param string $eventName
      *
      * @return void
      */
-    public function triggerEventListenerByName(string $eventListenerName, string $eventName, string $transferData, string $format): void;
+    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format, string $eventName): void;
 }
