@@ -29,6 +29,9 @@ class EventTriggerListenerConsole extends Console
     protected const ARGUMENT_LISTENER_NAME = 'listenerName';
     protected const ARGUMENT_DATA = 'data';
 
+    protected const OPTION_EVENT_NAME = 'event';
+    protected const OPTION_SHORT_EVENT_NAME = 'e';
+
     /**
      * @return void
      */
@@ -45,7 +48,14 @@ class EventTriggerListenerConsole extends Console
                 static::OPTION_LONG_FORMAT,
                 static::OPTION_SHORT_FORMAT,
                 InputOption::VALUE_OPTIONAL,
-                'Input format data. Default is querystring. Json also supported.',
+                'An event name that should be triggered.',
+                ''
+            )
+            ->addOption(
+                static::OPTION_EVENT_NAME,
+                static::OPTION_SHORT_EVENT_NAME,
+                InputOption::VALUE_OPTIONAL,
+                '',
                 'querystring'
             );
     }
@@ -61,7 +71,8 @@ class EventTriggerListenerConsole extends Console
         $listenerName = $input->getArgument(static::ARGUMENT_LISTENER_NAME);
         $transferData = $input->getArgument(static::ARGUMENT_DATA);
         $format = $input->getOption(static::OPTION_LONG_FORMAT);
+        $eventName = $input->getOption(static::OPTION_EVENT_NAME);
 
-        $this->getFacade()->triggerEventListenerByName($listenerName, $transferData, $format);
+        $this->getFacade()->triggerEventListenerByName($listenerName, $eventName, $transferData, $format);
     }
 }

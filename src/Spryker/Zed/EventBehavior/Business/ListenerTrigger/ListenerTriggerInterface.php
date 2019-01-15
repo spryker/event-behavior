@@ -12,9 +12,10 @@ interface ListenerTriggerInterface
     /**
      * @param string $eventListenerName
      * @param string $transferData
+     * @param string $eventName
      * @param string $format
      *
      * @return void
      */
-    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format): void;
+    public function triggerEventListenerByName(string $eventListenerName, string $eventName, string $transferData, string $format): void;
 }

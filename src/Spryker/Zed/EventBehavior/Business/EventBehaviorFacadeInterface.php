@@ -96,17 +96,18 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Triggers events listener by it's name.
+     *  - Triggers events listener by it's name or|and event name.
      *  - The $transferData argument is used for filling up event entity transfer/transfers.
      *  - Format of $transferData should be defined in the third argument, like 'json'.
      *
      * @api
      *
      * @param string $eventListenerName
+     * @param string $eventName
      * @param string $transferData
      * @param string $format
      *
      * @return void
      */
-    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format): void;
+    public function triggerEventListenerByName(string $eventListenerName, string $eventName, string $transferData, string $format): void;
 }

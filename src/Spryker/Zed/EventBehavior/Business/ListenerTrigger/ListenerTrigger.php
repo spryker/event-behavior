@@ -38,16 +38,17 @@ class ListenerTrigger implements ListenerTriggerInterface
 
     /**
      * @param string $eventListenerName
+     * @param string $eventName
      * @param string $transferData
      * @param string $format
      *
      * @return void
      */
-    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format): void
+    public function triggerEventListenerByName(string $eventListenerName, string $eventName, string $transferData, string $format): void
     {
         $eventEntityTransfers = $this->getEventEntityTransfers($transferData, $format);
 
-        $this->eventFacade->triggerByListenerName($eventListenerName, $eventEntityTransfers);
+        $this->eventFacade->triggerByListenerName($eventListenerName, $eventName, $eventEntityTransfers);
     }
 
     /**
