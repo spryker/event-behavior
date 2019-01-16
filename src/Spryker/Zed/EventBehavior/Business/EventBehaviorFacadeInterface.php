@@ -93,4 +93,25 @@ interface EventBehaviorFacadeInterface
      * @return string[]
      */
     public function getAvailableResourceNames(): array;
+
+    /**
+     *
+     * Specification:
+     *  - Returns ForeignKeys together with relatedForeignKeys in the following format:
+     * - [
+     *     'foreignKey' => [
+     *       'relatedForeignKey1',
+     *       'relatedForeignKey2',
+     *     ]
+     *   ]
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     * @param string $relatedForeignKeyColumnName
+     *
+     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     */
+    public function getEventTransferForeignKeysRelated(array $eventTransfers, string $foreignKeyColumnName, string $relatedForeignKeyColumnName);
 }
