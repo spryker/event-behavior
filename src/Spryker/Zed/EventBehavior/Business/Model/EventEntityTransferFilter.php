@@ -81,7 +81,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
             if (array_key_exists($relatedForeignKeyColumnName, $eventTransfer->getForeignKeys())
                 && $eventTransfer->getForeignKeys()[$relatedForeignKeyColumnName] !== null) {
-                $foreignKeys[$key][] =  $eventTransfer->getForeignKeys()[$relatedForeignKeyColumnName];
+                $foreignKeys[$key][] = $eventTransfer->getForeignKeys()[$relatedForeignKeyColumnName];
             }
         }
 
