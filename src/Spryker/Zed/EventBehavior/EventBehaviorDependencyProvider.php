@@ -12,6 +12,9 @@ use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingBrid
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 
+/**
+ * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
+ */
 class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
 {
     public const FACADE_EVENT = 'FACADE_EVENT';
