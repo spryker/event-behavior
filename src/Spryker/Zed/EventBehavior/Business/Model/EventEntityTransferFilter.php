@@ -58,30 +58,31 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array
      */
-    public function getEventTransferForeignKeysRelated(array $eventTransfers, $foreignKeyColumnName, string $relatedForeignKeyColumnName)
+    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, $foreignKeyColumnName, string $relatedForeignKeyColumnName)
     {
         if (!$foreignKeyColumnName) {
             return [];
         }
 
         $foreignKeys = [];
+
         foreach ($eventTransfers as $eventTransfer) {
-            if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {
+            $eventTransferForeignKeys = $eventTransfer->getForeignKeys();
+
+            if (!isset($eventTransferForeignKeys[$foreignKeyColumnName])
+                || $eventTransferForeignKeys[$foreignKeyColumnName] === null
+            ) {
                 continue;
             }
+            $key = $eventTransferForeignKeys[$foreignKeyColumnName];
 
-            $key = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
-
-            if ($key === null) {
-                continue;
-            }
             if (!array_key_exists($key, $foreignKeys)) {
-                    $foreignKeys[$key] = [];
+                $foreignKeys[$key] = [];
             }
-
-            if (array_key_exists($relatedForeignKeyColumnName, $eventTransfer->getForeignKeys())
-                && $eventTransfer->getForeignKeys()[$relatedForeignKeyColumnName] !== null) {
-                $foreignKeys[$key][] = $eventTransfer->getForeignKeys()[$relatedForeignKeyColumnName];
+            if (array_key_exists($relatedForeignKeyColumnName, $eventTransferForeignKeys)
+                && $eventTransferForeignKeys[$relatedForeignKeyColumnName] !== null
+            ) {
+                $foreignKeys[$key][] = $eventTransferForeignKeys[$relatedForeignKeyColumnName];
             }
         }
 

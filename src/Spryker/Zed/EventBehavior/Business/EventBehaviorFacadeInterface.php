@@ -97,13 +97,7 @@ interface EventBehaviorFacadeInterface
     /**
      *
      * Specification:
-     *  - Returns ForeignKeys together with relatedForeignKeys in the following format:
-     * - [
-     *     'foreignKey' => [
-     *       'relatedForeignKey1',
-     *       'relatedForeignKey2',
-     *     ]
-     *   ]
+     * - Returns an array of related foreign keys, grouped by foreign keys in the following format:
      *
      * @api
      *
@@ -111,7 +105,7 @@ interface EventBehaviorFacadeInterface
      * @param string $foreignKeyColumnName
      * @param string $relatedForeignKeyColumnName
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array ['foreignKey' => ['relatedForeignKey1', 'relatedForeignKey2', ...]]
      */
-    public function getEventTransferForeignKeysRelated(array $eventTransfers, string $foreignKeyColumnName, string $relatedForeignKeyColumnName);
+    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, string $foreignKeyColumnName, string $relatedForeignKeyColumnName): array;
 }
