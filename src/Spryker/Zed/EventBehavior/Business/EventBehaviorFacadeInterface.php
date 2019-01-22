@@ -97,7 +97,7 @@ interface EventBehaviorFacadeInterface
     /**
      *
      * Specification:
-     * - Returns an array of related foreign keys, grouped by foreign keys in the following format:
+     * - Returns an array of related foreign keys, grouped by foreign keys.
      *
      * @api
      *
