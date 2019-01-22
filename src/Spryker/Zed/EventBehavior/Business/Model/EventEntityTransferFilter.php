@@ -58,7 +58,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array
      */
-    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, $foreignKeyColumnName, string $relatedForeignKeyColumnName)
+    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, string $foreignKeyColumnName, string $relatedForeignKeyColumnName)
     {
         if (!$foreignKeyColumnName) {
             return [];
