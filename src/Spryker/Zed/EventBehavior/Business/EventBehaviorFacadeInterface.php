@@ -97,7 +97,7 @@ interface EventBehaviorFacadeInterface
     /**
      *
      * Specification:
-     * - Returns an event transfer array of foreign keys grouped by column
+     * - Returns an event transfer array of foreign keys grouped by column.
      *
      * @api
      *
