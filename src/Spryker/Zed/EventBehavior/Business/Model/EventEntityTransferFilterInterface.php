@@ -38,5 +38,5 @@ interface EventEntityTransferFilterInterface
      *
      * @return array
      */
-    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, string $foreignKeyColumnName);
+    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName);
 }
