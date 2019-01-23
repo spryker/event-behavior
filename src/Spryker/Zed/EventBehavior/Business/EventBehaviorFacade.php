@@ -114,16 +114,15 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @return array ['foreignKey' => ['relatedForeignKey1', 'relatedForeignKey2', ...]]
+     * @return array ['foreignKey' => ['relatedForeignKeyName1' => relatedForeignKeyValue1, ...]]
      */
-    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, $foreignKeyColumnName, string $relatedForeignKeyColumnName): array
+    public function getGroupedEventTransferRelatedForeignKeys(array $eventTransfers, $foreignKeyColumnName): array
     {
         return $this->getFactory()
             ->createEventEntityTransferFilter()
             ->getGroupedEventTransferRelatedForeignKeys(
                 $eventTransfers,
-                $foreignKeyColumnName,
-                $relatedForeignKeyColumnName
+                $foreignKeyColumnName
             );
     }
 }
