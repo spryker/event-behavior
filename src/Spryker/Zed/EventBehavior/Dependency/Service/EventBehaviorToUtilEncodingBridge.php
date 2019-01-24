@@ -46,4 +46,15 @@ class EventBehaviorToUtilEncodingBridge implements EventBehaviorToUtilEncodingIn
     {
         return $this->utilEncodingService->decodeJson($jsonValue, $assoc, $depth, $options);
     }
+
+    /**
+     * @param string $data
+     * @param string $format
+     *
+     * @return array|null
+     */
+    public function decodeFromFormat(string $data, string $format): ?array
+    {
+        return $this->utilEncodingService->decodeFromFormat($data, $format);
+    }
 }

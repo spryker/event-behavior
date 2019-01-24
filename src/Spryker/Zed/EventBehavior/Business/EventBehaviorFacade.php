@@ -108,4 +108,23 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     {
         return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames();
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @param string $eventListenerName
+     * @param string $transferData
+     * @param string $format
+     * @param string $eventName
+     *
+     * @return void
+     */
+    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format, string $eventName): void
+    {
+        $this->getFactory()
+            ->createListenerTrigger()
+            ->triggerEventListenerByName($eventListenerName, $transferData, $format, $eventName);
+    }
 }
