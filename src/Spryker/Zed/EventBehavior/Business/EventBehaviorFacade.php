@@ -108,4 +108,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     {
         return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames();
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @return array ['foreignKey' => ['relatedForeignKeyName1' => relatedForeignKeyValue1, ...]]
+     */
+    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, $foreignKeyColumnName): array
+    {
+        return $this->getFactory()
+            ->createEventEntityTransferFilter()
+            ->getGroupedEventTransferForeignKeysByColumn(
+                $eventTransfers,
+                $foreignKeyColumnName
+            );
+    }
 }

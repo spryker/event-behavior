@@ -93,4 +93,18 @@ interface EventBehaviorFacadeInterface
      * @return string[]
      */
     public function getAvailableResourceNames(): array;
+
+    /**
+     *
+     * Specification:
+     * - Returns an array of foreign keys grouped by column.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array ['foreignKey' => ['relatedForeignKeyName1' => relatedForeignKeyValue1, ...]]
+     */
+    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName): array;
 }
