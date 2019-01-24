@@ -11,14 +11,14 @@ interface EventResourceBulkRepositoryPluginInterface extends EventResourcePlugin
 {
     /**
      * Specification:
-     *  - Returns array of entity transfers according to offset and limit specified.
+     *  - Returns array of transfers according to offset and limit specified.
      *
      * @api
      *
      * @param int $offset
      * @param int $limit
      *
-     * @return \Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer[]
+     * @return \Spryker\Shared\Kernel\Transfer\AbstractTransfer[]
      */
     public function getData(int $offset, int $limit): array;
 }
