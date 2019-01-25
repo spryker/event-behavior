@@ -107,4 +107,21 @@ interface EventBehaviorFacadeInterface
      * @return array ['foreignKey' => ['relatedForeignKeyName1' => relatedForeignKeyValue1, ...]]
      */
     public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName): array;
+
+    /**
+     * Specification:
+     *  - Triggers events listener by it's name or|and event name.
+     *  - The $transferData argument is used for filling up event entity transfer/transfers.
+     *  - Format of $transferData should be defined in the third argument, like 'json'.
+     *
+     * @api
+     *
+     * @param string $eventListenerName
+     * @param string $transferData
+     * @param string $format
+     * @param string $eventName
+     *
+     * @return void
+     */
+    public function triggerEventListenerByName(string $eventListenerName, string $transferData, string $format, string $eventName): void;
 }

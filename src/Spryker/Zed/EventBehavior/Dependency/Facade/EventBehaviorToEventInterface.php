@@ -18,4 +18,13 @@ interface EventBehaviorToEventInterface
      * @return void
      */
     public function trigger($eventName, TransferInterface $eventTransfer);
+
+    /**
+     * @param string $listenerName
+     * @param string $eventName
+     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface[] $transfers
+     *
+     * @return void
+     */
+    public function triggerByListenerName(string $listenerName, string $eventName, array $transfers): void;
 }
