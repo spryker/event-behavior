@@ -70,6 +70,30 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
     }
 
     /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array
+    {
+        if (!$columnName) {
+            return [];
+        }
+
+        $originalValues = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            if (!isset($eventTransfer->getOriginalValues()[$columnName])) {
+                continue;
+            }
+
+            $originalValues[] = $eventTransfer->getOriginalValues()[$columnName];
+        }
+
+        return array_unique($originalValues);
+    }
+
+    /**
      * @param array $columns
      * @param array $modifiedColumns
      *

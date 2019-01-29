@@ -31,4 +31,12 @@ interface EventEntityTransferFilterInterface
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
      */
     public function getEventTransfersByModifiedColumns(array $eventTransfers, array $columns);
+
+    /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array;
 }

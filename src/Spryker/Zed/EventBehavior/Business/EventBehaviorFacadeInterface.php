@@ -73,6 +73,19 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
+     *  - Returns original value of the specficed column in eventTransfers.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * Specification:
      *  - Triggers events for specified resources.
      *
      * @api
