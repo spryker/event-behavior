@@ -18,6 +18,7 @@ class EventBehavior extends Behavior
     public const EVENT_CHANGE_ENTITY_ID = 'id';
     public const EVENT_CHANGE_ENTITY_FOREIGN_KEYS = 'foreignKeys';
     public const EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS = 'modifiedColumns';
+    public const EVENT_CHANGE_ENTITY_ORIGINAL_VALUES = 'originalValues';
     public const EVENT_CHANGE_NAME = 'event';
 
     /**
@@ -106,6 +107,12 @@ class EventBehavior extends Behavior
         $eventColumns = $this->getParameters();
 
         foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*') {
+                $this->addSetInitialValueStatementToAll($parser);
+
+                break;
+            }
+
             $this->addSetInitialValueStatement($parser, $eventColumn['column']);
         }
 
@@ -125,6 +132,7 @@ class EventBehavior extends Behavior
         $script .= $this->addGetForeignKeysMethod();
         $script .= $this->addSaveEventBehaviorEntityChangeMethod();
         $script .= $this->addIsEventColumnsModifiedMethod();
+        $script .= $this->addGetOriginalValuesMethod();
         $script .= $this->addGetPhpType();
 
         return $script;
@@ -136,7 +144,7 @@ class EventBehavior extends Behavior
      *
      * @return void
      */
-    protected function addSetInitialValueStatement(PhpParser $parser, $column)
+    protected function addSetInitialValueStatement(PhpParser $parser, string $column)
     {
         $camelCaseFilter = new UnderscoreToCamelCase();
 
@@ -149,6 +157,18 @@ class EventBehavior extends Behavior
         }, $parser->findMethod($methodName));
 
         $parser->replaceMethod($methodName, $newMethodCode);
+    }
+
+    /**
+     * @param \Propel\Generator\Util\PhpParser $parser
+     *
+     * @return void
+     */
+    protected function addSetInitialValueStatementToAll(PhpParser $parser)
+    {
+        foreach ($this->getTable()->getColumns() as $columnObj) {
+            $this->addSetInitialValueStatement($parser, $columnObj->getName());
+        }
     }
 
     /**
@@ -268,6 +288,7 @@ public function enableEvent()
         $dataEventEntityId = static::EVENT_CHANGE_ENTITY_ID;
         $dataEventEntityForeignKeys = static::EVENT_CHANGE_ENTITY_FOREIGN_KEYS;
         $dataEventEntityModifiedColumns = static::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS;
+        $dataEventEntityOriginalValues = static::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES;
         $dataEventName = static::EVENT_CHANGE_NAME;
 
         return "
@@ -296,6 +317,7 @@ protected function addSaveEventToMemory()
         '$dataEventName' => \$this->_eventName,
         '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
         '$dataEventEntityModifiedColumns' => \$this->_modifiedColumns,
+        '$dataEventEntityOriginalValues' => \$this->getOriginalValues(),
     ];
 
     \$this->saveEventBehaviorEntityChange(\$data);
@@ -489,6 +511,49 @@ protected function isEventColumnsModified()
     }
 
     return false;
+}        
+        ";
+    }
+
+    /**
+     * @return string
+     */
+    protected function addGetOriginalValuesMethod()
+    {
+        $tableName = $this->getTable()->getName();
+
+        return "
+/**
+ * @return array
+ */
+protected function getOriginalValueColumns()
+{
+    return \$this->getForeignKeys();
+}
+
+/**
+ * @return array
+ */
+protected function getOriginalValues()
+{
+    \$originalValues = [];
+    \$originalValueColumns = \$this->getOriginalValueColumns();
+    
+    foreach (\$this->_modifiedColumns as \$modifiedColumn) {            
+        if (!isset(\$originalValueColumns[\$modifiedColumn])) {
+            continue;
+        }
+
+        \$before = \$this->_initialValues[\$modifiedColumn];
+        \$field = str_replace('$tableName.', '', \$modifiedColumn);
+        \$after = \$this->\$field;
+        
+        if (\$before !== null && \$before !== \$after) {
+            \$originalValues[\$modifiedColumn] = \$before;
+        }
+    }
+
+    return \$originalValues;
 }        
         ";
     }
