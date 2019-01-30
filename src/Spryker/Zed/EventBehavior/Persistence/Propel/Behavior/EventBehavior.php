@@ -104,18 +104,7 @@ class EventBehavior extends Behavior
     public function objectFilter(&$script)
     {
         $parser = new PhpParser($script, true);
-        $eventColumns = $this->getParameters();
-
-        foreach ($eventColumns as $eventColumn) {
-            if ($eventColumn['column'] === '*') {
-                $this->addSetInitialValueStatementToAll($parser);
-
-                break;
-            }
-
-            $this->addSetInitialValueStatement($parser, $eventColumn['column']);
-        }
-
+        $this->addSetInitialValueStatementToAll($parser);
         $script = $parser->getCode();
     }
 
@@ -423,7 +412,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
 protected function isEventColumnsModified()
 {            
     /* There is a wildcard(*) property for this event */
-    return true;
+    return \$this->isModified();
 }
             ";
             }
