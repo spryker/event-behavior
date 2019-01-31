@@ -537,7 +537,7 @@ protected function getOriginalValues()
         \$field = str_replace('$tableName.', '', \$modifiedColumn);
         \$after = \$this->\$field;
         
-        if (\$before !== null && \$before !== \$after) {
+        if (\$before !== \$after) {
             \$originalValues[\$modifiedColumn] = \$before;
         }
     }
