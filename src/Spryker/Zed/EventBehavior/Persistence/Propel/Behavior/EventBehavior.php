@@ -525,6 +525,10 @@ protected function getOriginalValueColumns()
  */
 protected function getOriginalValues()
 {
+    if (\$this->isNew()) {
+        return [];
+    }
+
     \$originalValues = [];
     \$originalValueColumns = \$this->getOriginalValueColumns();
     
