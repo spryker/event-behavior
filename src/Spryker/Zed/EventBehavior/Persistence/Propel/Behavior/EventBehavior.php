@@ -82,6 +82,10 @@ class EventBehavior extends Behavior
         if (isset($parameter['operator'])) {
             $this->parameters[$parameter['name']]['operator'] = $parameter['operator'];
         }
+
+        if (isset($parameter['keep-original'])) {
+            $this->parameters[$parameter['name']]['keep-original'] = $parameter['keep-original'];
+        }
     }
 
     /**
@@ -104,7 +108,15 @@ class EventBehavior extends Behavior
     public function objectFilter(&$script)
     {
         $parser = new PhpParser($script, true);
-        $this->addSetInitialValueStatementToAll($parser);
+        $eventColumns = $this->getParameters();
+
+        foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*') {
+                continue;
+            }
+            $this->addSetInitialValueStatement($parser, $eventColumn['column']);
+        }
+
         $script = $parser->getCode();
     }
 
@@ -146,18 +158,6 @@ class EventBehavior extends Behavior
         }, $parser->findMethod($methodName));
 
         $parser->replaceMethod($methodName, $newMethodCode);
-    }
-
-    /**
-     * @param \Propel\Generator\Util\PhpParser $parser
-     *
-     * @return void
-     */
-    protected function addSetInitialValueStatementToAll(PhpParser $parser)
-    {
-        foreach ($this->getTable()->getColumns() as $columnObj) {
-            $this->addSetInitialValueStatement($parser, $columnObj->getName());
-        }
     }
 
     /**
@@ -412,7 +412,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
 protected function isEventColumnsModified()
 {            
     /* There is a wildcard(*) property for this event */
-    return \$this->isModified();
+    return true;
 }
             ";
             }
@@ -511,13 +511,36 @@ protected function isEventColumnsModified()
     {
         $tableName = $this->getTable()->getName();
 
+        $originalValueColumns = [];
+        $eventColumns = $this->getParameters();
+        foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*') {
+                if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                    $originalValueColumns = array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
+                        $columns[] = sprintf("\t'%s.%s',", $tableName, $columnObj->getName());
+                        return $columns;
+                    }, []);
+
+                    break;
+                }
+            }
+
+            if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                $originalValueColumns[] = sprintf("\t'%s.%s',", $tableName, $eventColumn['column']);
+            }
+        }
+
+        $implodedOriginalValueColumns = implode("\n", $originalValueColumns);
+
         return "
 /**
  * @return array
  */
 protected function getOriginalValueColumns()
 {
-    return \$this->getForeignKeys();
+    return [
+    $implodedOriginalValueColumns
+    ];
 }
 
 /**
@@ -530,10 +553,8 @@ protected function getOriginalValues()
     }
 
     \$originalValues = [];
-    \$originalValueColumns = \$this->getOriginalValueColumns();
-    
     foreach (\$this->_modifiedColumns as \$modifiedColumn) {            
-        if (!isset(\$originalValueColumns[\$modifiedColumn])) {
+        if (!in_array(\$modifiedColumn, \$this->getOriginalValueColumns())) {
             continue;
         }
 
