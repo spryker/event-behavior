@@ -101,10 +101,12 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
+     * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
+     *
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
      * @param string $foreignKeyColumnName
      *
-     * @return array ['foreignKey' => ['relatedForeignKeyName1' => relatedForeignKeyValue1, ...]]
+     * @return array
      */
     public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName): array;
 
