@@ -53,6 +53,32 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
     /**
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array
+     */
+    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName)
+    {
+        if (!$foreignKeyColumnName) {
+            return [];
+        }
+
+        $foreignKeys = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $eventTransferForeignKeys = $eventTransfer->getForeignKeys();
+
+            if (!isset($eventTransferForeignKeys[$foreignKeyColumnName])) {
+                continue;
+            }
+            $key = $eventTransferForeignKeys[$foreignKeyColumnName];
+            $foreignKeys[$key][] = $eventTransfer->getForeignKeys();
+        }
+
+        return $foreignKeys;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
      * @param array $columns
      *
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]

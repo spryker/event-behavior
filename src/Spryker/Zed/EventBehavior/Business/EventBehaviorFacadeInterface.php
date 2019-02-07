@@ -95,6 +95,22 @@ interface EventBehaviorFacadeInterface
     public function getAvailableResourceNames(): array;
 
     /**
+     *
+     * Specification:
+     * - Returns an array of foreign keys grouped by column.
+     *
+     * @api
+     *
+     * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array
+     */
+    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName): array;
+
+    /**
      * Specification:
      *  - Triggers events listener by it's name or|and event name.
      *  - The $transferData argument is used for filling up event entity transfer/transfers.
