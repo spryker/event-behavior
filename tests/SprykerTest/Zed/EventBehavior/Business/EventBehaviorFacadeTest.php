@@ -161,7 +161,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testGetGroupedEventTransferForeignKeysByColumn(): void
+    public function testGetGroupedEventTransferForeignKeysByForeignKey(): void
     {
         $container = new Container();
         $this->prepareFacade($container);
@@ -177,7 +177,7 @@ class EventBehaviorFacadeTest extends Unit
         ];
         $eventEntityTransfer->setForeignKeys($foreignKeys);
         $eventEntityTransfers[] = $eventEntityTransfer;
-        $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]] = [$foreignKeys];
+        $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]][] = $foreignKeys;
 
         $eventEntityTransfer = new EventEntityTransfer();
         $foreignKeys = [
@@ -187,7 +187,7 @@ class EventBehaviorFacadeTest extends Unit
         ];
         $eventEntityTransfer->setForeignKeys($foreignKeys);
         $eventEntityTransfers[] = $eventEntityTransfer;
-        $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]] = [$foreignKeys];
+        $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]][] = $foreignKeys;
 
         $eventEntityTransfer = new EventEntityTransfer();
         $foreignKeys = [
@@ -197,7 +197,17 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfer->setForeignKeys($foreignKeys);
         $eventEntityTransfers[] = $eventEntityTransfer;
 
-        $groupedEventTransferForeignKeys = $this->eventBehaviorFacade->getGroupedEventTransferForeignKeysByColumn($eventEntityTransfers, $selectedForeignKey);
+        $eventEntityTransfer = new EventEntityTransfer();
+        $foreignKeys = [
+            'foreign_key1' => 'value1',
+            'foreign_key4' => 'value4',
+            'foreign_key5' => 'value5',
+        ];
+        $eventEntityTransfer->setForeignKeys($foreignKeys);
+        $eventEntityTransfers[] = $eventEntityTransfer;
+        $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]][] = $foreignKeys;
+
+        $groupedEventTransferForeignKeys = $this->eventBehaviorFacade->getGroupedEventTransferForeignKeysByForeignKey($eventEntityTransfers, $selectedForeignKey);
 
         $this->assertEquals(2, count($groupedEventTransferForeignKeys));
         $this->assertEquals($expectedGroupedEventTransferForeignKeys, $groupedEventTransferForeignKeys);

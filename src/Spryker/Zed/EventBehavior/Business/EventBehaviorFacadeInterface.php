@@ -108,7 +108,7 @@ interface EventBehaviorFacadeInterface
      *
      * @return array
      */
-    public function getGroupedEventTransferForeignKeysByColumn(array $eventTransfers, string $foreignKeyColumnName): array;
+    public function getGroupedEventTransferForeignKeysByForeignKey(array $eventTransfers, string $foreignKeyColumnName): array;
 
     /**
      * Specification:
