@@ -13,6 +13,8 @@ use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
+use Spryker\Shared\Config\Config;
+use Spryker\Shared\EventBehavior\EventBehaviorConstants;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorBusinessFactory;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacade;
