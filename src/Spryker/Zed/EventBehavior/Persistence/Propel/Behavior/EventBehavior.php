@@ -510,33 +510,16 @@ protected function isEventColumnsModified()
     protected function addGetOriginalValuesMethod()
     {
         $tableName = $this->getTable()->getName();
-
-        $originalValueColumns = [];
-        $eventColumns = $this->getParameters();
-        foreach ($eventColumns as $eventColumn) {
-            if ($eventColumn['column'] === '*') {
-                if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
-                    $originalValueColumns = array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
-                        $columns[] = sprintf("\t'%s.%s',", $tableName, $columnObj->getName());
-                        return $columns;
-                    }, []);
-
-                    break;
-                }
-            }
-
-            if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
-                $originalValueColumns[] = sprintf("\t'%s.%s',", $tableName, $eventColumn['column']);
-            }
-        }
-
-        $implodedOriginalValueColumns = implode("\n", $originalValueColumns);
+        $originalValueColumns = $this->getKeepOriginalValueColumns();
+        $implodedOriginalValueColumns = implode("\n", array_map(function ($columnName) {
+            return sprintf("\t'%s',", $columnName);
+        }, $originalValueColumns));
 
         return "
 /**
  * @return array
  */
-protected function getOriginalValueColumns()
+protected function getOriginalValueColumns(): array
 {
     return [
     $implodedOriginalValueColumns
@@ -546,7 +529,7 @@ protected function getOriginalValueColumns()
 /**
  * @return array
  */
-protected function getOriginalValues()
+protected function getOriginalValues(): array
 {
     if (\$this->isNew()) {
         return [];
@@ -570,6 +553,51 @@ protected function getOriginalValues()
     return \$originalValues;
 }        
         ";
+    }
+
+    /**
+     * @return array
+     */
+    protected function getKeepOriginalValueColumns(): array
+    {
+        $originalValueColumns = [];
+        $tableName = $this->getTable()->getName();
+        $eventColumns = $this->getParameters();
+        foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*' && isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                return $this->getTableFullColumnNames();
+            }
+
+            if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                $originalValueColumns[] = $this->formatFullColumnName($tableName, $eventColumn['column']);
+            }
+        }
+
+        return $originalValueColumns;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTableFullColumnNames(): array
+    {
+        $tableName = $this->getTable()->getName();
+
+        return array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
+            $columns[] = $this->formatFullColumnName($tableName, $columnObj->getName());
+            return $columns;
+        }, []);
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $columnName
+     *
+     * @return string
+     */
+    protected function formatFullColumnName(string $tableName, string $columnName): string
+    {
+        return sprintf('%s.%s', $tableName, $columnName);
     }
 
     /**
