@@ -510,8 +510,8 @@ protected function isEventColumnsModified()
     protected function addGetOriginalValuesMethod()
     {
         $tableName = $this->getTable()->getName();
-        $originalValueColumns = $this->getKeepOriginalValueColumns();
-        $implodedOriginalValueColumns = implode("\n", array_map(function ($columnName) {
+        $originalValueColumns = $this->getKeepOriginalValueColumnNames();
+        $implodedOriginalValueColumnNames = implode("\n", array_map(function ($columnName) {
             return sprintf("\t'%s',", $columnName);
         }, $originalValueColumns));
 
@@ -519,10 +519,10 @@ protected function isEventColumnsModified()
 /**
  * @return array
  */
-protected function getOriginalValueColumns(): array
+protected function getOriginalValueColumnNames(): array
 {
     return [
-    $implodedOriginalValueColumns
+    $implodedOriginalValueColumnNames
     ];
 }
 
@@ -537,7 +537,7 @@ protected function getOriginalValues(): array
 
     \$originalValues = [];
     foreach (\$this->_modifiedColumns as \$modifiedColumn) {            
-        if (!in_array(\$modifiedColumn, \$this->getOriginalValueColumns())) {
+        if (!in_array(\$modifiedColumn, \$this->getOriginalValueColumnNames())) {
             continue;
         }
 
@@ -558,7 +558,7 @@ protected function getOriginalValues(): array
     /**
      * @return array
      */
-    protected function getKeepOriginalValueColumns(): array
+    protected function getKeepOriginalValueColumnNames(): array
     {
         $originalValueColumns = [];
         $tableName = $this->getTable()->getName();
