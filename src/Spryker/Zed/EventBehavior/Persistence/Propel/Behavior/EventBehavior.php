@@ -18,6 +18,7 @@ class EventBehavior extends Behavior
     public const EVENT_CHANGE_ENTITY_ID = 'id';
     public const EVENT_CHANGE_ENTITY_FOREIGN_KEYS = 'foreignKeys';
     public const EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS = 'modifiedColumns';
+    public const EVENT_CHANGE_ENTITY_ORIGINAL_VALUES = 'originalValues';
     public const EVENT_CHANGE_NAME = 'event';
 
     /**
@@ -81,6 +82,10 @@ class EventBehavior extends Behavior
         if (isset($parameter['operator'])) {
             $this->parameters[$parameter['name']]['operator'] = $parameter['operator'];
         }
+
+        if (isset($parameter['keep-original'])) {
+            $this->parameters[$parameter['name']]['keep-original'] = $parameter['keep-original'];
+        }
     }
 
     /**
@@ -106,6 +111,9 @@ class EventBehavior extends Behavior
         $eventColumns = $this->getParameters();
 
         foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*') {
+                continue;
+            }
             $this->addSetInitialValueStatement($parser, $eventColumn['column']);
         }
 
@@ -125,6 +133,7 @@ class EventBehavior extends Behavior
         $script .= $this->addGetForeignKeysMethod();
         $script .= $this->addSaveEventBehaviorEntityChangeMethod();
         $script .= $this->addIsEventColumnsModifiedMethod();
+        $script .= $this->addGetOriginalValuesMethod();
         $script .= $this->addGetPhpType();
 
         return $script;
@@ -136,7 +145,7 @@ class EventBehavior extends Behavior
      *
      * @return void
      */
-    protected function addSetInitialValueStatement(PhpParser $parser, $column)
+    protected function addSetInitialValueStatement(PhpParser $parser, string $column)
     {
         $camelCaseFilter = new UnderscoreToCamelCase();
 
@@ -268,6 +277,7 @@ public function enableEvent()
         $dataEventEntityId = static::EVENT_CHANGE_ENTITY_ID;
         $dataEventEntityForeignKeys = static::EVENT_CHANGE_ENTITY_FOREIGN_KEYS;
         $dataEventEntityModifiedColumns = static::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS;
+        $dataEventEntityOriginalValues = static::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES;
         $dataEventName = static::EVENT_CHANGE_NAME;
 
         return "
@@ -296,6 +306,7 @@ protected function addSaveEventToMemory()
         '$dataEventName' => \$this->_eventName,
         '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
         '$dataEventEntityModifiedColumns' => \$this->_modifiedColumns,
+        '$dataEventEntityOriginalValues' => \$this->getOriginalValues(),
     ];
 
     \$this->saveEventBehaviorEntityChange(\$data);
@@ -491,6 +502,102 @@ protected function isEventColumnsModified()
     return false;
 }        
         ";
+    }
+
+    /**
+     * @return string
+     */
+    protected function addGetOriginalValuesMethod()
+    {
+        $tableName = $this->getTable()->getName();
+        $originalValueColumns = $this->getKeepOriginalValueColumnNames();
+        $implodedOriginalValueColumnNames = implode("\n", array_map(function ($columnName) {
+            return sprintf("\t'%s',", $columnName);
+        }, $originalValueColumns));
+
+        return "
+/**
+ * @return array
+ */
+protected function getOriginalValueColumnNames(): array
+{
+    return [
+    $implodedOriginalValueColumnNames
+    ];
+}
+
+/**
+ * @return array
+ */
+protected function getOriginalValues(): array
+{
+    if (\$this->isNew()) {
+        return [];
+    }
+
+    \$originalValues = [];
+    foreach (\$this->_modifiedColumns as \$modifiedColumn) {            
+        if (!in_array(\$modifiedColumn, \$this->getOriginalValueColumnNames())) {
+            continue;
+        }
+
+        \$before = \$this->_initialValues[\$modifiedColumn];
+        \$field = str_replace('$tableName.', '', \$modifiedColumn);
+        \$after = \$this->\$field;
+        
+        if (\$before !== \$after) {
+            \$originalValues[\$modifiedColumn] = \$before;
+        }
+    }
+
+    return \$originalValues;
+}        
+        ";
+    }
+
+    /**
+     * @return array
+     */
+    protected function getKeepOriginalValueColumnNames(): array
+    {
+        $originalValueColumns = [];
+        $tableName = $this->getTable()->getName();
+        $eventColumns = $this->getParameters();
+        foreach ($eventColumns as $eventColumn) {
+            if ($eventColumn['column'] === '*' && isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                return $this->getTableFullColumnNames();
+            }
+
+            if (isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
+                $originalValueColumns[] = $this->formatFullColumnName($tableName, $eventColumn['column']);
+            }
+        }
+
+        return $originalValueColumns;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTableFullColumnNames(): array
+    {
+        $tableName = $this->getTable()->getName();
+
+        return array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
+            $columns[] = $this->formatFullColumnName($tableName, $columnObj->getName());
+            return $columns;
+        }, []);
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $columnName
+     *
+     * @return string
+     */
+    protected function formatFullColumnName(string $tableName, string $columnName): string
+    {
+        return sprintf('%s.%s', $tableName, $columnName);
     }
 
     /**

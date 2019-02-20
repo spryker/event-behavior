@@ -87,6 +87,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array
+    {
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersOriginalValues($eventTransfers, $columnName);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
      * @param array $resources
      * @param array $ids
      *
