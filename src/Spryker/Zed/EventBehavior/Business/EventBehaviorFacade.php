@@ -90,7 +90,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
      * @param string $columnName
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array
      */
     public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array
     {
