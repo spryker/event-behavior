@@ -109,11 +109,12 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
         $originalValues = [];
         foreach ($eventTransfers as $eventTransfer) {
-            if (!isset($eventTransfer->getOriginalValues()[$columnName])) {
+            $originalValuesOfEvent = $eventTransfer->getOriginalValues();
+            if (!isset($originalValuesOfEvent[$columnName])) {
                 continue;
             }
 
-            $originalValues[] = $eventTransfer->getOriginalValues()[$columnName];
+            $originalValues[] = $originalValuesOfEvent[$columnName];
         }
 
         return array_unique($originalValues);
