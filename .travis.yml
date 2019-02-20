@@ -31,7 +31,6 @@ script:
 
 cache:
   directories:
-    - vendor
     - $HOME/.composer/cache
 
 notifications:
