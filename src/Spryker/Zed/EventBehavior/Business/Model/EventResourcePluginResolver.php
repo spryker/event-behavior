@@ -78,8 +78,6 @@ class EventResourcePluginResolver
     /**
      * @param string[] $resources
      *
-     * @throws \Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException
-     *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
     protected function getResolvedPluginsByResources(array $resources): array
