@@ -116,7 +116,7 @@ class TriggerManager implements TriggerManagerInterface
      *
      * @return int
      */
-    protected function triggerEvents(array $events)
+    protected function triggerEvents(array $events): int
     {
         $triggeredRows = 0;
         foreach ($events as $event) {
