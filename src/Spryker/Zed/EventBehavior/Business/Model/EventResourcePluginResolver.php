@@ -127,7 +127,7 @@ class EventResourcePluginResolver
             if (!isset($this->eventResourcePlugins[$resource])) {
                 throw new EventResourceNotFoundException(
                     sprintf(
-                        'There is no resource with the name: %s. ',
+                        'There is no resource with the name: %s.',
                         $resource
                     )
                 );
