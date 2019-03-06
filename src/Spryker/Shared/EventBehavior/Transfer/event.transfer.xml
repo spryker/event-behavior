@@ -9,6 +9,7 @@
         <property name="id" type="int"/>
         <property name="foreignKeys" type="array"/>
         <property name="modifiedColumns" type="array"/>
+        <property name="originalValues" type="array"/>
     </transfer>
 
 </transfers>

@@ -73,6 +73,19 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
+     *  - Returns original value of the specficed column in eventTransfers.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * Specification:
      *  - Triggers events for specified resources.
      *
      * @api
@@ -93,6 +106,22 @@ interface EventBehaviorFacadeInterface
      * @return string[]
      */
     public function getAvailableResourceNames(): array;
+
+    /**
+     *
+     * Specification:
+     * - Returns an array of foreign keys grouped by foreign key.
+     *
+     * @api
+     *
+     * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array
+     */
+    public function getGroupedEventTransferForeignKeysByForeignKey(array $eventTransfers, string $foreignKeyColumnName): array;
 
     /**
      * Specification:

@@ -87,6 +87,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array
+    {
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersOriginalValues($eventTransfers, $columnName);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
      * @param array $resources
      * @param array $ids
      *
@@ -107,6 +122,28 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     public function getAvailableResourceNames(): array
     {
         return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     *
+     * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array
+     */
+    public function getGroupedEventTransferForeignKeysByForeignKey(array $eventTransfers, string $foreignKeyColumnName): array
+    {
+        return $this->getFactory()
+            ->createEventEntityTransferFilter()
+            ->getGroupedEventTransferForeignKeysByForeignKey(
+                $eventTransfers,
+                $foreignKeyColumnName
+            );
     }
 
     /**

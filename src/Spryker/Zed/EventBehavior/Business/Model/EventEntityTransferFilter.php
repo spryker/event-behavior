@@ -53,6 +53,32 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
     /**
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array
+     */
+    public function getGroupedEventTransferForeignKeysByForeignKey(array $eventTransfers, string $foreignKeyColumnName)
+    {
+        if (!$foreignKeyColumnName) {
+            return [];
+        }
+
+        $foreignKeys = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $eventTransferForeignKeys = $eventTransfer->getForeignKeys();
+
+            if (!isset($eventTransferForeignKeys[$foreignKeyColumnName])) {
+                continue;
+            }
+            $key = $eventTransferForeignKeys[$foreignKeyColumnName];
+            $foreignKeys[$key][] = $eventTransfer->getForeignKeys();
+        }
+
+        return $foreignKeys;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
      * @param array $columns
      *
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
@@ -67,6 +93,31 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
         }
 
         return $validEventTransfers;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array
+    {
+        if (!$columnName) {
+            return [];
+        }
+
+        $originalValues = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $originalValuesOfEvent = $eventTransfer->getOriginalValues();
+            if (!isset($originalValuesOfEvent[$columnName])) {
+                continue;
+            }
+
+            $originalValues[] = $originalValuesOfEvent[$columnName];
+        }
+
+        return array_unique($originalValues);
     }
 
     /**
