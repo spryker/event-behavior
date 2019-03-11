@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
@@ -64,6 +65,7 @@ class EventResourcePluginResolver
     public function getAvailableResourceNames(): array
     {
         $resourceNames = [];
+
         foreach ($this->eventResourcePlugins as $plugin) {
             $resourceNames[] = $plugin->getResourceName();
         }
@@ -110,6 +112,8 @@ class EventResourcePluginResolver
     /**
      * @param string[] $resources
      *
+     * @throws \Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException
+     *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
     protected function getEffectivePlugins(array $resources): array
@@ -120,9 +124,16 @@ class EventResourcePluginResolver
         }
 
         foreach ($resources as $resource) {
-            if (isset($this->eventResourcePlugins[$resource])) {
-                $effectivePlugins[$resource] = $this->eventResourcePlugins[$resource];
+            if (!isset($this->eventResourcePlugins[$resource])) {
+                throw new EventResourceNotFoundException(
+                    sprintf(
+                        'There is no resource with the name: %s.',
+                        $resource
+                    )
+                );
             }
+
+            $effectivePlugins[$resource] = $this->eventResourcePlugins[$resource];
         }
 
         return $effectivePlugins;
