@@ -11,7 +11,7 @@ interface EventResourceBulkRepositoryPluginInterface extends EventResourcePlugin
 {
     /**
      * Specification:
-     *  - Returns array of transfers according to offset and limit specified.
+     *  - Returns an array of transfers accordingly to specified offset and limit.
      *
      * @api
      *
