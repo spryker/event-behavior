@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException;
+use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
@@ -148,7 +149,7 @@ class EventResourcePluginResolver
     protected function extractEffectivePlugins($effectivePlugins, $pluginsPerExporter): array
     {
         foreach ($effectivePlugins as $effectivePlugin) {
-            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface) {
+            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface || $effectivePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
                 $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
             }
             if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {

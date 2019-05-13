@@ -87,6 +87,7 @@ interface EventBehaviorFacadeInterface
     /**
      * Specification:
      *  - Triggers events for specified resources.
+     *  - Accepts instances of EventResourceRepositoryPluginInterface and EventResourceBulkRepositoryPluginInterface as resources.
      *
      * @api
      *
