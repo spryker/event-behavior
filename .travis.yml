@@ -21,9 +21,9 @@ matrix:
 
 before_install:
   - composer global require hirak/prestissimo
-  - phpenv config-add ci/travis.php.ini
 
 before_script:
+  - phpenv config-add ci/travis.php.ini
   - composer install --prefer-dist --no-interaction
 
 script:
