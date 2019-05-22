@@ -58,6 +58,7 @@ class EventPluginIdsIterator implements Iterator
             ->limit($this->chunkSize)
             ->where($this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
             ->select([$this->plugin->getIdColumnName()])
+            ->orderBy($this->plugin->getIdColumnName())
             ->find()
             ->getData();
     }
