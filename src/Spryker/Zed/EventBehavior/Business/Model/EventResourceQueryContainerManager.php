@@ -8,7 +8,6 @@
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
@@ -91,22 +90,9 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
     {
-        $query = $plugin->queryData();
-        $count = $query->count();
-        $loops = $count / $this->chunkSize;
-        $offset = 0;
-
-        for ($i = 0; $i < $loops; $i++) {
-            $ids = $plugin->queryData()
-                ->offset($offset)
-                ->limit($this->chunkSize)
-                ->where($plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
-                ->select([$plugin->getIdColumnName()])
-                ->find()
-                ->getData();
-
+        $eventPluginIdsIterator = new EventPluginIdsIterator($plugin, static::DEFAULT_CHUNK_SIZE);
+        foreach ($eventPluginIdsIterator as $ids) {
             $this->trigger($plugin, $ids);
-            $offset += $this->chunkSize;
         }
     }
 
