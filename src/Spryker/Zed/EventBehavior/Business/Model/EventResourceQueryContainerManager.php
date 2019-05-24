@@ -90,7 +90,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
     {
-        $eventPluginIdsIterator = new EventPluginIdsIterator($plugin, static::DEFAULT_CHUNK_SIZE);
+        $eventPluginIdsIterator = new EventResourceQueryContainerPluginIterator($plugin, static::DEFAULT_CHUNK_SIZE);
         foreach ($eventPluginIdsIterator as $ids) {
             $this->trigger($plugin, $ids);
         }

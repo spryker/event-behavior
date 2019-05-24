@@ -11,7 +11,7 @@ use Iterator;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 
-class EventPluginIdsIterator implements Iterator
+class EventResourceQueryContainerPluginIterator implements Iterator
 {
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface
