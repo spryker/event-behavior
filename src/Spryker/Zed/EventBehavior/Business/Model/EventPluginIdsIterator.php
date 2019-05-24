@@ -92,7 +92,7 @@ class EventPluginIdsIterator implements Iterator
      */
     public function valid(): bool
     {
-        if ($this->plugin->queryData()->count() === 0) {
+        if ($this->plugin->queryData()->exists()) {
             return false;
         }
 
