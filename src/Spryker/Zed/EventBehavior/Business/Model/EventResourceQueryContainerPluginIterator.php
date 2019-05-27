@@ -16,27 +16,27 @@ class EventResourceQueryContainerPluginIterator implements Iterator
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface
      */
-    private $plugin;
+    protected $plugin;
 
     /**
      * @var int
      */
-    private $index = 0;
+    protected $index = 0;
 
     /**
      * @var array
      */
-    private $current = [];
+    protected $current = [];
 
     /**
      * @var int
      */
-    private $chunkSize;
+    protected $chunkSize;
 
     /**
      * @var int
      */
-    private $offset = 0;
+    protected $offset = 0;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
@@ -51,7 +51,7 @@ class EventResourceQueryContainerPluginIterator implements Iterator
     /**
      * @return void
      */
-    private function executeQuery(): void
+    protected function executeQuery(): void
     {
         $this->current = $this->plugin->queryData()
             ->offset($this->offset)
