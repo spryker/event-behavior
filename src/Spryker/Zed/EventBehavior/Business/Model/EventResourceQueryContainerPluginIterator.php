@@ -92,13 +92,13 @@ class EventResourceQueryContainerPluginIterator implements Iterator
      */
     public function valid(): bool
     {
-        if ($this->plugin->queryData()->exists()) {
+        if (!$this->plugin->queryData()->exists()) {
             return false;
         }
 
         $this->executeQuery();
 
-        return is_array($this->current) && count($this->current);
+        return is_array($this->current) && $this->current !== [];
     }
 
     /**
