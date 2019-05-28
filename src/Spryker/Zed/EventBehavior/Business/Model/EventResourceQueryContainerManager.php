@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
@@ -90,10 +91,17 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
     {
-        $eventPluginIdsIterator = new EventResourceQueryContainerPluginIterator($plugin, static::DEFAULT_CHUNK_SIZE);
-        foreach ($eventPluginIdsIterator as $ids) {
+        foreach ($this->createEventResourceQueryContainerPluginIterator() as $ids) {
             $this->trigger($plugin, $ids);
         }
+    }
+
+    /**
+     * @return \Iterator
+     */
+    protected function createEventResourceQueryContainerPluginIterator(): Iterator
+    {
+        return new EventResourceQueryContainerPluginIterator($plugin, static::DEFAULT_CHUNK_SIZE);
     }
 
     /**
