@@ -80,6 +80,7 @@ class TriggerManager implements TriggerManagerInterface
             static::$eventBehaviorTableExists = true;
         } catch (PropelException | ConnectionException | EventBehaviorQueryNotExistsException $e) {
             static::$eventBehaviorTableExists = false;
+
             return;
         }
 
