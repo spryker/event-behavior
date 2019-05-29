@@ -77,6 +77,8 @@ class EventResourceQueryContainerPluginIterator implements Iterator
     public function next(): void
     {
         $this->offset += $this->chunkSize;
+        $this->index += 1;
+        $this->executeQuery();
     }
 
     /**
@@ -92,12 +94,6 @@ class EventResourceQueryContainerPluginIterator implements Iterator
      */
     public function valid(): bool
     {
-        if (!$this->plugin->queryData()->exists()) {
-            return false;
-        }
-
-        $this->executeQuery();
-
         return is_array($this->current) && $this->current !== [];
     }
 
@@ -108,6 +104,6 @@ class EventResourceQueryContainerPluginIterator implements Iterator
     {
         $this->offset = 0;
         $this->index = 0;
-        $this->current = [];
+        $this->executeQuery();
     }
 }

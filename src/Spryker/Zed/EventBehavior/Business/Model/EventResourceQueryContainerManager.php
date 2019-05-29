@@ -15,7 +15,6 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPlugi
 
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
 {
-    protected const ID_NULL = null;
     protected const DEFAULT_CHUNK_SIZE = 100;
 
     /**
@@ -49,7 +48,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     }
 
     /**
-     * @param array $plugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface[] $plugins
      * @param array $ids
      *
      * @return void
@@ -75,8 +74,8 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
             return;
         }
 
-        if (!$plugin->queryData($ids)) {
-            $this->trigger($plugin, [static::ID_NULL]);
+        if ($plugin->queryData($ids) === null) {
+            $this->triggerPluginOnce($plugin);
 
             return;
         }
@@ -89,19 +88,31 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      *
      * @return void
      */
+    protected function triggerPluginOnce(EventResourceQueryContainerPluginInterface $plugin): void
+    {
+        $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
+     *
+     * @return void
+     */
     protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
     {
-        foreach ($this->createEventResourceQueryContainerPluginIterator() as $ids) {
+        foreach ($this->createEventResourceQueryContainerPluginIterator($plugin) as $ids) {
             $this->trigger($plugin, $ids);
         }
     }
 
     /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     *
      * @return \Iterator
      */
-    protected function createEventResourceQueryContainerPluginIterator(): Iterator
+    protected function createEventResourceQueryContainerPluginIterator(EventResourcePluginInterface $plugin): Iterator
     {
-        return new EventResourceQueryContainerPluginIterator($plugin, static::DEFAULT_CHUNK_SIZE);
+        return new EventResourceQueryContainerPluginIterator($plugin, $this->chunkSize);
     }
 
     /**

@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Dependency\Facade;
 
+use Spryker\Shared\Kernel\Transfer\TransferInterface;
+
 class EventBehaviorToEventBridge implements EventBehaviorToEventInterface
 {
     /**
@@ -24,13 +26,24 @@ class EventBehaviorToEventBridge implements EventBehaviorToEventInterface
 
     /**
      * @param string $eventName
-     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface[] $eventTransfers
+     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface $eventTransfer
      *
      * @return void
      */
-    public function triggerBulk($eventName, array $eventTransfers): void
+    public function trigger($eventName, TransferInterface $eventTransfer)
     {
-        $this->eventFacade->triggerBulk($eventName, $eventTransfers);
+        $this->eventFacade->trigger($eventName, $eventTransfer);
+    }
+
+    /**
+     * @param string $eventName
+     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface[] $transfers
+     *
+     * @return void
+     */
+    public function triggerBulk($eventName, array $transfers): void
+    {
+        $this->eventFacade->triggerBulk($eventName, $transfers);
     }
 
     /**

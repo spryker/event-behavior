@@ -16,7 +16,6 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInt
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
     protected const DEFAULT_CHUNK_SIZE = 100;
-    protected const ID_NULL = null;
     protected const DELIMITER = '.';
 
     /**
@@ -50,7 +49,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
-     * @param array $plugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $plugins
      * @param int[] $ids
      *
      * @return void
@@ -83,8 +82,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        if (!$plugin->getData($ids)) {
-            $this->trigger($plugin, [static::ID_NULL]);
+        if ($plugin->getData($ids) === []) {
+            $this->triggerPluginOnce($plugin);
 
             return;
         }
@@ -142,7 +141,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             $eventEntities = $plugin->getData($offset, $this->chunkSize);
 
             if (empty($eventEntities)) {
-                $this->trigger($plugin, [static::ID_NULL]);
+                $this->triggerPluginOnce($plugin);
                 break;
             }
 
@@ -185,6 +184,16 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     *
+     * @return void
+     */
+    protected function triggerPluginOnce(EventResourcePluginInterface $plugin): void
+    {
+        $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      * @param array $ids
      *
      * @return void
@@ -195,6 +204,6 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return (new EventEntityTransfer())->setId($id);
         }, $ids);
 
-        $this->eventFacade->triggerBulk($eventEntityTransfers);
+        $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
 }

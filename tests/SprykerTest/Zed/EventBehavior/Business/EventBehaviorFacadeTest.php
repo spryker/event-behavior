@@ -40,6 +40,7 @@ class EventBehaviorFacadeTest extends Unit
 {
     protected const FOREIGN_KEYS = 'foreign_keys';
     protected const MODIFIED_COLUMNS = 'modified_columns';
+    protected const ORIGINAL_VALUES = 'original_values';
 
     /**
      * @var \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface
@@ -69,16 +70,18 @@ class EventBehaviorFacadeTest extends Unit
 
         $container = new Container();
         $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function (Container $container) {
-            $storageMock = $this->createEventFacadeMockBridge();
-            $storageMock->expects($this->once())->method('trigger')->will(
+            $eventFacadeMock = $this->createEventFacadeMockBridge();
+            $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, TransferInterface $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
+                    function ($eventName, array $eventTransfers) {
+                        foreach ($eventTransfers as $eventTransfer) {
+                            $this->assertTriggeredEvent($eventName, $eventTransfer);
+                        }
                     }
                 )
             );
 
-            return $storageMock;
+            return $eventFacadeMock;
         };
 
         $container = $this->generateUtilEncodingServiceMock($container);
@@ -101,10 +104,12 @@ class EventBehaviorFacadeTest extends Unit
         $container = new Container();
         $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function (Container $container) {
             $storageMock = $this->createEventFacadeMockBridge();
-            $storageMock->expects($this->once())->method('trigger')->will(
+            $storageMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, TransferInterface $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
+                    function ($eventName, array $eventTransfers) {
+                        foreach ($eventTransfers as $eventTransfer) {
+                            $this->assertTriggeredEvent($eventName, $eventTransfer);
+                        }
                     }
                 )
             );
@@ -282,6 +287,9 @@ class EventBehaviorFacadeTest extends Unit
         $actualArray[EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS] = $actualArray[self::MODIFIED_COLUMNS];
         unset($actualArray[self::MODIFIED_COLUMNS]);
 
+        $actualArray[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES] = $actualArray[self::ORIGINAL_VALUES];
+        unset($actualArray[self::ORIGINAL_VALUES]);
+
         $this->assertEquals($actualArray, $this->createEventData());
     }
 
@@ -350,6 +358,8 @@ class EventBehaviorFacadeTest extends Unit
             ->disableOriginalConstructor()
             ->setMethods([
                 'trigger',
+                'triggerBulk',
+                'triggerByListenerName',
             ])
             ->getMock();
     }
@@ -364,6 +374,7 @@ class EventBehaviorFacadeTest extends Unit
             ->setMethods([
                 'encodeJson',
                 'decodeJson',
+                'decodeFromFormat',
             ])
             ->getMock();
     }
@@ -419,6 +430,7 @@ class EventBehaviorFacadeTest extends Unit
             EventBehavior::EVENT_CHANGE_ENTITY_FOREIGN_KEYS => [1, 2, 3],
             EventBehavior::EVENT_CHANGE_NAME => 'test',
             EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS => [],
+            EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES => [],
 
         ];
     }
