@@ -585,6 +585,7 @@ protected function getOriginalValues(): array
 
         return array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
             $columns[] = $this->formatFullColumnName($tableName, $columnObj->getName());
+
             return $columns;
         }, []);
     }
@@ -606,6 +607,7 @@ protected function getOriginalValues(): array
     public function addGetPhpType()
     {
         $tableMapPhpName = sprintf('%s%s', $this->getTable()->getPhpName(), 'TableMap');
+
         return "
 /**
  * @param string \$xmlValue

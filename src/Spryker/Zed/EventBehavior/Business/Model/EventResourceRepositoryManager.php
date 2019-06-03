@@ -179,6 +179,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function getIdColumnName($plugin): ?string
     {
         $idColumnName = explode(static::DELIMITER, $plugin->getIdColumnName());
+
         return $idColumnName[1] ?? null;
     }
 
