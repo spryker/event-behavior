@@ -54,7 +54,6 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new EventResourceQueryContainerManager(
             $this->getEventFacade(),
-            $this->getEventResourcePlugins(),
             $this->getConfig()->getChunkSize()
         );
     }
@@ -66,7 +65,6 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new EventResourceRepositoryManager(
             $this->getEventFacade(),
-            $this->getEventResourcePlugins(),
             $this->getConfig()->getChunkSize()
         );
     }

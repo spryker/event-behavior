@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
@@ -24,27 +25,19 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected $eventFacade;
 
     /**
-     * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
-     */
-    protected $eventResourcePlugins;
-
-    /**
      * @var int
      */
     protected $chunkSize;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
-     * @param array $eventResourcePlugins
      * @param int|null $chunkSize
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        array $eventResourcePlugins,
         ?int $chunkSize = null
     ) {
         $this->eventFacade = $eventFacade;
-        $this->eventResourcePlugins = $eventResourcePlugins;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
     }
 
@@ -58,12 +51,12 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     {
         foreach ($plugins as $plugin) {
             if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
-                $this->triggerEventsBulk($plugin, $ids);
+                $this->processEventsForBulkRepositoryPlugins($plugin, $ids);
                 continue;
             }
 
             if ($plugin instanceof EventResourceRepositoryPluginInterface) {
-                $this->triggerEvents($plugin, $ids);
+                $this->processEventsForRepositoryPlugins($plugin, $ids);
             }
         }
     }
@@ -74,21 +67,15 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function triggerEvents(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
+    protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids) {
-            $this->trigger($plugin, $ids);
+        if ($ids !== []) {
+            $this->triggerBulk($plugin, $ids);
 
             return;
         }
 
-        if ($plugin->getData($ids) === []) {
-            $this->triggerPluginOnce($plugin);
-
-            return;
-        }
-
-        $this->triggerEventsAll($plugin);
+        $this->processEventsForRepositoryPluginsAll($plugin);
     }
 
     /**
@@ -97,15 +84,15 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function triggerEventsBulk(EventResourceBulkRepositoryPluginInterface $plugin, array $ids = []): void
+    protected function processEventsForBulkRepositoryPlugins(EventResourceBulkRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if (count($ids)) {
-            $this->trigger($plugin, $ids);
+        if ($ids !== []) {
+            $this->triggerBulk($plugin, $ids);
 
             return;
         }
 
-        $this->triggerEventsAllBulk($plugin);
+        $this->processEventsForRepositoryPluginsAllBulk($plugin);
     }
 
     /**
@@ -113,19 +100,22 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function triggerEventsAll(EventResourceRepositoryPluginInterface $plugin): void
+    protected function processEventsForRepositoryPluginsAll(EventResourceRepositoryPluginInterface $plugin): void
     {
-        $eventEntities = $plugin->getData();
-        $count = count($eventEntities);
-        $loops = $count / $this->chunkSize;
-        $offset = 0;
-
-        for ($i = 0; $i < $loops; $i++) {
-            $chunkOfEventEntitiesTransfers = array_slice($eventEntities, $offset, $this->chunkSize);
-            $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $chunkOfEventEntitiesTransfers);
-            $this->trigger($plugin, $eventEntitiesIds);
-            $offset += $this->chunkSize;
+        foreach ($this->createEventResourceRepositoryPluginIterator($plugin) as $eventEntities) {
+            $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
+            $this->triggerBulk($plugin, $eventEntitiesIds);
         }
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
+     *
+     * @return \Iterator
+     */
+    protected function createEventResourceRepositoryPluginIterator(EventResourceRepositoryPluginInterface $plugin): Iterator
+    {
+        return new EventResourceRepositoryPluginIterator($plugin, $this->chunkSize);
     }
 
     /**
@@ -133,22 +123,22 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function triggerEventsAllBulk(EventResourceBulkRepositoryPluginInterface $plugin): void
+    protected function processEventsForRepositoryPluginsAllBulk(EventResourceBulkRepositoryPluginInterface $plugin): void
     {
-        $offset = 0;
-
-        do {
-            $eventEntities = $plugin->getData($offset, $this->chunkSize);
-
-            if (empty($eventEntities)) {
-                $this->triggerPluginOnce($plugin);
-                break;
-            }
-
+        foreach ($this->createEventResourceRepositoryBulkPluginIterator($plugin) as $eventEntities) {
             $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
-            $this->trigger($plugin, $eventEntitiesIds);
-            $offset += $this->chunkSize;
-        } while (count($eventEntities) === $this->chunkSize);
+            $this->triggerBulk($plugin, $eventEntitiesIds);
+        }
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
+     *
+     * @return \Iterator
+     */
+    protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin): Iterator
+    {
+        return new EventResourceRepositoryBulkPluginIterator($plugin, $this->chunkSize);
     }
 
     /**
@@ -184,21 +174,11 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     *
-     * @return void
-     */
-    protected function triggerPluginOnce(EventResourcePluginInterface $plugin): void
-    {
-        $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      * @param array $ids
      *
      * @return void
      */
-    protected function trigger(EventResourcePluginInterface $plugin, array $ids): void
+    protected function triggerBulk(EventResourcePluginInterface $plugin, array $ids): void
     {
         $eventEntityTransfers = array_map(function ($id) {
             return (new EventEntityTransfer())->setId($id);

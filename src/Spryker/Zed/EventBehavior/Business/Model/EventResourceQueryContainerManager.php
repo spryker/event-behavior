@@ -10,7 +10,6 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use Generated\Shared\Transfer\EventEntityTransfer;
 use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
-use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
@@ -23,27 +22,19 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected $eventFacade;
 
     /**
-     * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
-     */
-    protected $eventResourcePlugins;
-
-    /**
      * @var int
      */
     protected $chunkSize;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
      * @param int|null $chunkSize
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        array $eventResourcePlugins,
         ?int $chunkSize = null
     ) {
         $this->eventFacade = $eventFacade;
-        $this->eventResourcePlugins = $eventResourcePlugins;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
     }
 
@@ -69,18 +60,18 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected function triggerEvents(EventResourceQueryContainerPluginInterface $plugin, array $ids = []): void
     {
         if ($ids) {
-            $this->trigger($plugin, $ids);
+            $this->triggerBulk($plugin, $ids);
 
             return;
         }
 
         if ($plugin->queryData($ids) === null) {
-            $this->triggerPluginOnce($plugin);
+            $this->triggerEventWithEmptyId($plugin);
 
             return;
         }
 
-        $this->triggerEventsAll($plugin);
+        $this->processEventsByPluginItreator($plugin);
     }
 
     /**
@@ -88,7 +79,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      *
      * @return void
      */
-    protected function triggerPluginOnce(EventResourceQueryContainerPluginInterface $plugin): void
+    protected function triggerEventWithEmptyId(EventResourceQueryContainerPluginInterface $plugin): void
     {
         $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
     }
@@ -98,30 +89,30 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      *
      * @return void
      */
-    protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
+    protected function processEventsByPluginItreator(EventResourceQueryContainerPluginInterface $plugin): void
     {
         foreach ($this->createEventResourceQueryContainerPluginIterator($plugin) as $ids) {
-            $this->trigger($plugin, $ids);
+            $this->triggerBulk($plugin, $ids);
         }
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      *
      * @return \Iterator
      */
-    protected function createEventResourceQueryContainerPluginIterator(EventResourcePluginInterface $plugin): Iterator
+    protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin): Iterator
     {
         return new EventResourceQueryContainerPluginIterator($plugin, $this->chunkSize);
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      * @param array $ids
      *
      * @return void
      */
-    protected function trigger(EventResourcePluginInterface $plugin, array $ids): void
+    protected function triggerBulk(EventResourceQueryContainerPluginInterface $plugin, array $ids): void
     {
         $eventEntityTransfers = array_map(function ($id) {
             return (new EventEntityTransfer())->setId($id);

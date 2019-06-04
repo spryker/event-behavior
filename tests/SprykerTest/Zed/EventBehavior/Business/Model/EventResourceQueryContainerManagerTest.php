@@ -48,7 +48,6 @@ class EventResourceQueryContainerManagerTest extends Unit
     {
         return new EventResourceQueryContainerManager(
             $this->createEventFacadeMockBridge(),
-            [],
             1
         );
     }

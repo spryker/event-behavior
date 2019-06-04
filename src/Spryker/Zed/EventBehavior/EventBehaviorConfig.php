@@ -13,7 +13,7 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 class EventBehaviorConfig extends AbstractBundleConfig
 {
     public const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
-    protected const DEFAULT_CHUNK_SIZE = 100;
+    protected const DEFAULT_CHUNK_SIZE = 10000;
 
     /**
      * @var bool
