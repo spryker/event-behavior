@@ -12,7 +12,7 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPlugi
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
-class EventResourcePluginResolver
+class EventResourcePluginResolver implements EventResourcePluginResolverInterface
 {
     protected const REPOSITORY_EVENT_RESOURCE_PLUGINS = 'repository';
     protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
@@ -68,12 +68,12 @@ class EventResourcePluginResolver
         $resourceNames = [];
 
         foreach ($this->eventResourcePlugins as $plugin) {
-            $resourceNames[] = $plugin->getResourceName();
+            $resourceNames[$plugin->getResourceName()] = $plugin->getResourceName();
         }
 
         sort($resourceNames);
 
-        return $resourceNames;
+        return array_values($resourceNames);
     }
 
     /**
@@ -91,7 +91,7 @@ class EventResourcePluginResolver
         ];
 
         foreach ($effectivePluginsByResource as $effectivePlugins) {
-            $pluginsPerExporter = $this->extractEffectivePlugins($effectivePlugins, $pluginsPerExporter);
+            $pluginsPerExporter = $this->extractEffectiveUniquePlugins($effectivePlugins, $pluginsPerExporter);
         }
 
         return $pluginsPerExporter;
@@ -146,16 +146,20 @@ class EventResourcePluginResolver
      *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
-    protected function extractEffectivePlugins($effectivePlugins, $pluginsPerExporter): array
+    protected function extractEffectiveUniquePlugins($effectivePlugins, $pluginsPerExporter): array
     {
         foreach ($effectivePlugins as $effectivePlugin) {
             if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface || $effectivePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
-                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
             }
+
             if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {
-                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
             }
         }
+
+        $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS] = array_map('current', $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS]);
+        $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS] = array_map('current', $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS]);
 
         return $pluginsPerExporter;
     }

@@ -11,6 +11,7 @@ use Spryker\Zed\EventBehavior\Business\ListenerTrigger\ListenerTrigger;
 use Spryker\Zed\EventBehavior\Business\ListenerTrigger\ListenerTriggerInterface;
 use Spryker\Zed\EventBehavior\Business\Model\EventEntityTransferFilter;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver;
+use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolverInterface;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager;
 use Spryker\Zed\EventBehavior\Business\Model\TriggerManager;
@@ -70,9 +71,9 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolver
+     * @return \Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolverInterface
      */
-    public function createEventResourcePluginResolver(): EventResourcePluginResolver
+    public function createEventResourcePluginResolver(): EventResourcePluginResolverInterface
     {
         return new EventResourcePluginResolver(
             $this->createEventResourceRepositoryManager(),
