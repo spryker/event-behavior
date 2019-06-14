@@ -7,6 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Dependency\Plugin;
 
+/**
+ * @deprecated Use \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface instead.
+ */
 interface EventResourceRepositoryPluginInterface extends EventResourcePluginInterface
 {
     /**
