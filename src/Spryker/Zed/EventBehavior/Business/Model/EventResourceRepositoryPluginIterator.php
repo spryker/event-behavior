@@ -7,10 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
-class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginIterator implements Iterator
+class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginIterator
 {
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface
@@ -38,6 +37,6 @@ class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginI
      */
     protected function updateCurrent(): void
     {
-        $this->current = array_slice($offset, $this->offset, $this->chunkSize, true);
+        $this->current = array_slice($this->data, $this->offset, $this->chunkSize, true);
     }
 }

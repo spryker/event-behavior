@@ -15,5 +15,5 @@ interface EventResourceManagerInterface
      *
      * @return void
      */
-    public function triggerResourceEvents(array $plugins, array $ids = []): void;
+    public function processResourceEvents(array $plugins, array $ids = []): void;
 }

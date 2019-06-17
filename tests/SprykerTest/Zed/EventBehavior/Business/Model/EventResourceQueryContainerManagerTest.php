@@ -36,7 +36,7 @@ class EventResourceQueryContainerManagerTest extends Unit
             ->will($this->returnValue(null));
 
         $this->createEventResourceQueryContainerManager()
-            ->triggerResourceEvents([
+            ->processResourceEvents([
                 $eventResourceQueryContainerPlugin,
             ]);
     }

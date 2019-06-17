@@ -7,11 +7,10 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Iterator;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 
-class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePluginIterator implements Iterator
+class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePluginIterator
 {
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface

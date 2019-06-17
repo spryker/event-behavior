@@ -47,7 +47,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    public function triggerResourceEvents(array $plugins, array $ids = []): void
+    public function processResourceEvents(array $plugins, array $ids = []): void
     {
         foreach ($plugins as $plugin) {
             if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
@@ -75,7 +75,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        $this->processEventsForRepositoryPluginsAll($plugin);
+        $this->processEventsForRepositoryPlugin($plugin);
     }
 
     /**
@@ -92,7 +92,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        $this->processEventsForRepositoryPluginsAllBulk($plugin);
+        $this->processEventsForRepositoryBulkPlugins($plugin);
     }
 
     /**
@@ -100,7 +100,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function processEventsForRepositoryPluginsAll(EventResourceRepositoryPluginInterface $plugin): void
+    protected function processEventsForRepositoryPlugin(EventResourceRepositoryPluginInterface $plugin): void
     {
         foreach ($this->createEventResourceRepositoryPluginIterator($plugin) as $eventEntities) {
             $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
@@ -123,7 +123,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return void
      */
-    protected function processEventsForRepositoryPluginsAllBulk(EventResourceBulkRepositoryPluginInterface $plugin): void
+    protected function processEventsForRepositoryBulkPlugins(EventResourceBulkRepositoryPluginInterface $plugin): void
     {
         foreach ($this->createEventResourceRepositoryBulkPluginIterator($plugin) as $eventEntities) {
             $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);

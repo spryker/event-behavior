@@ -44,7 +44,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      *
      * @return void
      */
-    public function triggerResourceEvents(array $plugins, array $ids = []): void
+    public function processResourceEvents(array $plugins, array $ids = []): void
     {
         foreach ($plugins as $plugin) {
             $this->triggerEvents($plugin, $ids);

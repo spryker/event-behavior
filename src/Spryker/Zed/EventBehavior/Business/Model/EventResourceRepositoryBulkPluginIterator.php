@@ -7,10 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 
-class EventResourceRepositoryBulkPluginIterator extends AbstractEventResourcePluginIterator implements Iterator
+class EventResourceRepositoryBulkPluginIterator extends AbstractEventResourcePluginIterator
 {
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface
