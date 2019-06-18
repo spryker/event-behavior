@@ -68,12 +68,12 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
         $resourceNames = [];
 
         foreach ($this->eventResourcePlugins as $plugin) {
-            $resourceNames[$plugin->getResourceName()] = $plugin->getResourceName();
+            $resourceNames[] = $plugin->getResourceName();
         }
 
         sort($resourceNames);
 
-        return array_values($resourceNames);
+        return array_unique($resourceNames);
     }
 
     /**
