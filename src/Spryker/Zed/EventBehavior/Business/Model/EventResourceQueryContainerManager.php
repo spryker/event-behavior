@@ -75,12 +75,6 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
             return;
         }
 
-        if (!$plugin->queryData($ids)) {
-            $this->trigger($plugin, [static::ID_NULL]);
-
-            return;
-        }
-
         $this->triggerEventsAll($plugin);
     }
 
@@ -92,7 +86,19 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected function triggerEventsAll(EventResourceQueryContainerPluginInterface $plugin): void
     {
         $query = $plugin->queryData();
+        if ($query === null) {
+            $this->trigger($plugin, [static::ID_NULL]);
+
+            return;
+        }
+
         $count = $query->count();
+        if (!$count) {
+            $this->trigger($plugin, [static::ID_NULL]);
+
+            return;
+        }
+
         $loops = $count / $this->chunkSize;
         $offset = 0;
 
