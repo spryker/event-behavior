@@ -9,14 +9,12 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
+use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
 class EventResourcePluginResolver implements EventResourcePluginResolverInterface
 {
-    protected const REPOSITORY_EVENT_RESOURCE_PLUGINS = 'repository';
-    protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
-
     /**
      * @var array
      */
@@ -55,9 +53,11 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      */
     public function executeResolvedPluginsBySources(array $resources, array $ids): void
     {
-        $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
-        $this->eventResourceQueryContainerManager->triggerResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
-        $this->eventResourceRepositoryManager->triggerResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
+        $effectivePlugins = $this->getEffectivePlugins($resources);
+        $filteredEffectivePlugins = array_filter($effectivePlugins, [$this, 'uniqueResourceAndEventNamesCallback']);
+
+        $this->eventResourceQueryContainerManager->triggerResourceEvents(array_filter($filteredEffectivePlugins, [$this, 'isQueryContainerPlugin']), $ids);
+        $this->eventResourceRepositoryManager->triggerResourceEvents(array_filter($filteredEffectivePlugins, [$this, 'isRepositoryPlugin']), $ids);
     }
 
     /**
@@ -79,98 +79,68 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     /**
      * @param string[] $resources
      *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
-     */
-    protected function getResolvedPluginsByResources(array $resources): array
-    {
-        $this->mapPluginsByResourceName();
-        $effectivePluginsByResource = $this->getEffectivePlugins($resources);
-        $pluginsPerExporter = [
-            static::REPOSITORY_EVENT_RESOURCE_PLUGINS => [],
-            static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS => [],
-        ];
-
-        foreach ($effectivePluginsByResource as $effectivePlugins) {
-            $pluginsPerExporter = $this->extractEffectivePlugins($effectivePlugins, $pluginsPerExporter);
-        }
-
-        return $pluginsPerExporter;
-    }
-
-    /**
-     * @return void
-     */
-    protected function mapPluginsByResourceName(): void
-    {
-        $mappedDataPlugins = [];
-        foreach ($this->eventResourcePlugins as $plugin) {
-            $mappedDataPlugins[$plugin->getResourceName()][] = $plugin;
-        }
-
-        $this->eventResourcePlugins = $mappedDataPlugins;
-    }
-
-    /**
-     * @param string[] $resources
-     *
      * @throws \Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException
      *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
      */
     protected function getEffectivePlugins(array $resources): array
     {
-        $effectivePlugins = [];
         if (empty($resources)) {
             return $this->eventResourcePlugins;
         }
 
-        foreach ($resources as $resource) {
-            if (!isset($this->eventResourcePlugins[$resource])) {
-                throw new EventResourceNotFoundException(
-                    sprintf(
-                        'There is no resource with the name: %s.',
-                        $resource
-                    )
-                );
-            }
+        $filteredPlugins = array_filter($this->eventResourcePlugins, function (EventResourcePluginInterface $plugin) use ($resources) {
+            return in_array($plugin->getResourceName(), $resources);
+        });
 
-            $effectivePlugins[$resource] = $this->eventResourcePlugins[$resource];
+        if (!$filteredPlugins) {
+            throw new EventResourceNotFoundException(
+                sprintf(
+                    'There are no registered event resource plugins for resources: %s.',
+                    implode(', ', $resources)
+                )
+            );
         }
 
-        return $effectivePlugins;
+        return $filteredPlugins;
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $effectivePlugins
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $pluginsPerExporter
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return bool
      */
-    protected function extractEffectivePlugins($effectivePlugins, $pluginsPerExporter): array
+    protected function isRepositoryPlugin(EventResourcePluginInterface $plugin): bool
     {
-        foreach ($effectivePlugins as $effectivePlugin) {
-            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface || $effectivePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
-                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
-            }
-
-            if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {
-                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
-            }
-        }
-
-        $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS] = $this->resolveDuplicatePlugins($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS]);
-        $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS] = $this->resolveDuplicatePlugins($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS]);
-
-        return $pluginsPerExporter;
+        return ($plugin instanceof EventResourceRepositoryPluginInterface || $plugin instanceof EventResourceBulkRepositoryPluginInterface);
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return bool
      */
-    protected function resolveDuplicatePlugins(array $eventResourcePlugins): array
+    protected function isQueryContainerPlugin(EventResourcePluginInterface $plugin): bool
     {
-        return array_map('current', $eventResourcePlugins);
+        return ($plugin instanceof EventResourceQueryContainerPluginInterface);
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     *
+     * @return bool
+     */
+    protected function uniqueResourceAndEventNamesCallback(EventResourcePluginInterface $plugin): bool
+    {
+        static $eventList = [];
+        $key = $plugin->getResourceName() . $plugin->getEventName();
+
+        if (in_array($key, $eventList)) {
+            return false;
+        }
+
+        $eventList[] = $key;
+
+        return true;
     }
 }
