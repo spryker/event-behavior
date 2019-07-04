@@ -12,7 +12,7 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPlugi
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
-class EventResourcePluginResolver
+class EventResourcePluginResolver implements EventResourcePluginResolverInterface
 {
     protected const REPOSITORY_EVENT_RESOURCE_PLUGINS = 'repository';
     protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
@@ -73,7 +73,7 @@ class EventResourcePluginResolver
 
         sort($resourceNames);
 
-        return $resourceNames;
+        return array_unique($resourceNames);
     }
 
     /**
@@ -150,13 +150,27 @@ class EventResourcePluginResolver
     {
         foreach ($effectivePlugins as $effectivePlugin) {
             if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface || $effectivePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
-                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
             }
+
             if ($effectivePlugin instanceof EventResourceQueryContainerPluginInterface) {
-                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][$effectivePlugin->getResourceName()][$effectivePlugin->getEventName()] = $effectivePlugin;
             }
         }
 
+        $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS] = $this->resolveDuplicatePlugins($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS]);
+        $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS] = $this->resolveDuplicatePlugins($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS]);
+
         return $pluginsPerExporter;
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
+     *
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     */
+    protected function resolveDuplicatePlugins(array $eventResourcePlugins): array
+    {
+        return array_map('current', $eventResourcePlugins);
     }
 }
