@@ -116,7 +116,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      */
     protected function isRepositoryPlugin(EventResourcePluginInterface $eventResourcePlugin): bool
     {
-        return ($eventResourcePlugin instanceof EventResourceRepositoryPluginInterface || $eventResourcePlugin instanceof EventResourceBulkRepositoryPluginInterface);
+        return $eventResourcePlugin instanceof EventResourceRepositoryPluginInterface || $eventResourcePlugin instanceof EventResourceBulkRepositoryPluginInterface;
     }
 
     /**
@@ -126,7 +126,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      */
     protected function isQueryContainerPlugin(EventResourcePluginInterface $eventResourcePlugin): bool
     {
-        return ($eventResourcePlugin instanceof EventResourceQueryContainerPluginInterface);
+        return $eventResourcePlugin instanceof EventResourceQueryContainerPluginInterface;
     }
 
     /**
