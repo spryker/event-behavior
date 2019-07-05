@@ -93,7 +93,6 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     {
         $query = $plugin->queryData();
         $count = $query->count();
-
         $loops = $count / $this->chunkSize;
         $offset = 0;
 
