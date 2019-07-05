@@ -95,9 +95,9 @@ class EventTriggerConsole extends Console
         $availableResourceNames = $this->getFacade()->getAvailableResourceNames();
 
         return sprintf(
-            "-%s %s",
+            '-%s %s',
             static::RESOURCE_OPTION_SHORTCUT,
-            implode(",", $availableResourceNames)
+            implode(',', $availableResourceNames)
         );
     }
 }
