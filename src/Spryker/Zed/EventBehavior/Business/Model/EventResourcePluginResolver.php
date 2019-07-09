@@ -94,12 +94,14 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
         });
 
         foreach ($resources as $resource) {
-            if (!array_filter($filteredPlugins, function (EventResourcePluginInterface $eventResourcePlugin) use ($resource) {
+            $existsResourcePluginsForSpecificResource = (bool)array_filter($filteredPlugins, function (EventResourcePluginInterface $eventResourcePlugin) use ($resource) {
                 return $eventResourcePlugin->getResourceName() === $resource;
-            })) {
+            });
+
+            if (!$existsResourcePluginsForSpecificResource) {
                 throw new EventResourceNotFoundException(
                     sprintf(
-                        'There is no resource with the name: %s. ',
+                        'There is no resource with the name: %s.',
                         $resource
                     )
                 );
