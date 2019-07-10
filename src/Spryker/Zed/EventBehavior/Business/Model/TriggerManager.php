@@ -120,6 +120,7 @@ class TriggerManager implements TriggerManagerInterface
     protected function triggerEvents(array $events): int
     {
         $triggeredRows = 0;
+        $eventEntityTransfersByEvent = [];
         foreach ($events as $event) {
             $data = $this->utilEncodingService->decodeJson($event->getData(), true);
             $eventEntityTransfer = new EventEntityTransfer();
@@ -133,8 +134,12 @@ class TriggerManager implements TriggerManagerInterface
             if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS])) {
                 $eventEntityTransfer->setModifiedColumns($data[EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS]);
             }
-            $this->eventFacade->trigger($data[EventBehavior::EVENT_CHANGE_NAME], $eventEntityTransfer);
+            $eventEntityTransfersByEvent[$data[EventBehavior::EVENT_CHANGE_NAME]][] = $eventEntityTransfer;
             $triggeredRows++;
+        }
+
+        foreach ($eventEntityTransfersByEvent as $eventName => $eventEntityTransfers) {
+            $this->eventFacade->triggerBulk($eventName, $eventEntityTransfers);
         }
 
         return $triggeredRows;

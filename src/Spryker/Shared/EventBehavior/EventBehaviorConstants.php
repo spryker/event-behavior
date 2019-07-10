@@ -19,4 +19,12 @@ interface EventBehaviorConstants
      * @api
      */
     public const EVENT_BEHAVIOR_TRIGGERING_ACTIVE = 'EVENT_BEHAVIOR_TRIGGERING_ACTIVE';
+
+    /**
+     * Specification:
+     * - Chunck size for behavior events.
+     *
+     * @api
+     */
+    public const EVENT_BEHAVIOR_CHUNK_SIZE = 'EVENT_BEHAVIOR_CHUNK_SIZE';
 }

@@ -56,8 +56,8 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     public function executeResolvedPluginsBySources(array $resources, array $ids): void
     {
         $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
-        $this->eventResourceQueryContainerManager->triggerResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
-        $this->eventResourceRepositoryManager->triggerResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
+        $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
+        $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
     }
 
     /**

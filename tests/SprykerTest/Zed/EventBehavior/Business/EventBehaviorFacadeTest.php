@@ -70,16 +70,18 @@ class EventBehaviorFacadeTest extends Unit
 
         $container = new Container();
         $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function (Container $container) {
-            $storageMock = $this->createEventFacadeMockBridge();
-            $storageMock->expects($this->once())->method('trigger')->will(
+            $eventFacadeMock = $this->createEventFacadeMockBridge();
+            $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, TransferInterface $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
+                    function ($eventName, array $eventTransfers) {
+                        foreach ($eventTransfers as $eventTransfer) {
+                            $this->assertTriggeredEvent($eventName, $eventTransfer);
+                        }
                     }
                 )
             );
 
-            return $storageMock;
+            return $eventFacadeMock;
         };
 
         $container = $this->generateUtilEncodingServiceMock($container);
@@ -102,10 +104,12 @@ class EventBehaviorFacadeTest extends Unit
         $container = new Container();
         $container[EventBehaviorDependencyProvider::FACADE_EVENT] = function (Container $container) {
             $storageMock = $this->createEventFacadeMockBridge();
-            $storageMock->expects($this->once())->method('trigger')->will(
+            $storageMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, TransferInterface $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
+                    function ($eventName, array $eventTransfers) {
+                        foreach ($eventTransfers as $eventTransfer) {
+                            $this->assertTriggeredEvent($eventName, $eventTransfer);
+                        }
                     }
                 )
             );
@@ -354,6 +358,7 @@ class EventBehaviorFacadeTest extends Unit
             ->disableOriginalConstructor()
             ->setMethods([
                 'trigger',
+                'triggerBulk',
                 'triggerByListenerName',
             ])
             ->getMock();

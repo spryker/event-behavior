@@ -13,6 +13,7 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 class EventBehaviorConfig extends AbstractBundleConfig
 {
     public const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
+    protected const DEFAULT_CHUNK_SIZE = 10000;
 
     /**
      * @var bool
@@ -33,6 +34,14 @@ class EventBehaviorConfig extends AbstractBundleConfig
     public function getEventBehaviorTriggeringStatus()
     {
         return $this->get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
+    }
+
+    /**
+     * @return int
+     */
+    public function getChunkSize(): int
+    {
+        return $this->get(EventBehaviorConstants::EVENT_BEHAVIOR_CHUNK_SIZE, static::DEFAULT_CHUNK_SIZE);
     }
 
     /**
