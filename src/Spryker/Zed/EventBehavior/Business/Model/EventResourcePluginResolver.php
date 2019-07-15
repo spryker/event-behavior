@@ -152,7 +152,11 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
         foreach ($effectivePlugins as $effectiveEventPlugins) {
             $effectivePlugin = $this->resolveDuplicatePlugins($effectiveEventPlugins);
 
-            if ($effectivePlugin instanceof EventResourceRepositoryPluginInterface || $effectivePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
+            if ($effectivePlugin === null) {
+                continue;
+            }
+
+            if ($this->isEventResourceRepositoryPlugin($effectivePlugin)) {
                 $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
             }
 
@@ -176,11 +180,21 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
         }
 
         foreach ($eventResourcePlugins as $eventResourcePlugin) {
-            if ($eventResourcePlugin instanceof EventResourceRepositoryPluginInterface || $eventResourcePlugin instanceof EventResourceBulkRepositoryPluginInterface) {
+            if ($this->isEventResourceRepositoryPlugin($eventResourcePlugin)) {
                 return $eventResourcePlugin;
             }
         }
 
         return current($eventResourcePlugins);
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $eventResourcePlugin
+     *
+     * @return bool
+     */
+    protected function isEventResourceRepositoryPlugin(EventResourcePluginInterface $eventResourcePlugin): bool
+    {
+        return $eventResourcePlugin instanceof EventResourceRepositoryPluginInterface || $eventResourcePlugin instanceof EventResourceBulkRepositoryPluginInterface;
     }
 }
