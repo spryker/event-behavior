@@ -79,7 +79,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
     /**
      * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
-     * @param array $columns
+     * @param string[] $columns
      *
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
      */
@@ -121,8 +121,8 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
     }
 
     /**
-     * @param array $columns
-     * @param array $modifiedColumns
+     * @param string[] $columns
+     * @param string[] $modifiedColumns
      *
      * @return bool
      */
