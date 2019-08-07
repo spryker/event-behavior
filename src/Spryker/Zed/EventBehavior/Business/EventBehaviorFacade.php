@@ -73,7 +73,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      * @api
      *
      * @param array $eventTransfers
-     * @param array $columns
+     * @param string[] $columns
      *
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
      */
