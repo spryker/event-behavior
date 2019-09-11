@@ -6,6 +6,7 @@
   "require": {
     "php": ">=7.1",
     "spryker/event": "^2.4.0",
+    "spryker/event-dispatcher-extension": "^1.0.0",
     "spryker/kernel": "^3.30.0",
     "spryker/propel-orm": "^1.6.0",
     "spryker/symfony": "^3.1.0",
@@ -16,12 +17,16 @@
     "spryker/code-sniffer": "*",
     "spryker/config": "^3.1.0",
     "spryker/console": "^3.1.0 || ^4.0.0",
+    "spryker/container": "^1.4.0",
+    "spryker/event-dispatcher": "^1.0.0",
     "spryker/propel": "^3.0.0",
     "spryker/silex": "^2.0.0",
     "spryker/testify": "*"
   },
   "suggest": {
     "spryker/console": "*",
+    "spryker/container": "Install this module when you want to use the EventBehaviorEventDispatcherPlugin",
+    "spryker/event-dispatcher": "Install this module when you want to use the EventBehaviorEventDispatcherPlugin",
     "spryker/silex": "^2.0.0"
   },
   "autoload": {
