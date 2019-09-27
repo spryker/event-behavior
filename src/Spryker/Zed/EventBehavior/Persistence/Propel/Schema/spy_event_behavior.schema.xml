@@ -5,6 +5,11 @@
         <column name="id_event_behavior_entity_change" type="BIGINT" autoIncrement="true" primaryKey="true"/>
         <column name="data" type="LONGVARCHAR"/>
         <column name="process_id" type="VARCHAR"/>
+
+        <index name="spy_event_behavior_entity_change-process_id">
+            <index-column name="process_id"/>
+        </index>
+
         <behavior name="timestampable">
             <parameter name="disable_updated_at" value="true" />
         </behavior>
