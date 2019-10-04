@@ -10,11 +10,11 @@ namespace Spryker\Zed\EventBehavior\Dependency\Service;
 interface EventBehaviorToUtilEncodingInterface
 {
     /**
-     * @param string $value
+     * @param array $value
      * @param int|null $options
      * @param int|null $depth
      *
-     * @return string
+     * @return string|null
      */
     public function encodeJson($value, $options = null, $depth = null);
 

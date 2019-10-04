@@ -15,7 +15,7 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     /**
      * @api
      *
-     * @param int $processId
+     * @param string $processId
      *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */

@@ -57,6 +57,10 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     public function executeResolvedPluginsBySources(array $resources, array $ids): void
     {
         $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
+        /** @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface[] $eventResourceQueryContainerPlugins */
+        $eventResourceQueryContainerPlugins = $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS];
+        /** @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins */
+        $eventResourcePlugins = $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS];
         $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
         $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
     }
@@ -80,7 +84,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     /**
      * @param string[] $resources
      *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return array
      */
     protected function getResolvedPluginsByResources(array $resources): array
     {
@@ -99,7 +103,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][]
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][][]
      */
     protected function mapPluginsByResourceNameAndEvent(): array
     {
@@ -112,12 +116,12 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][][] $eventResourcePlugins
      * @param string[] $resources
      *
      * @throws \Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException
      *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][][]
      */
     protected function filterPluginsByResources(array $eventResourcePlugins, array $resources): array
     {
@@ -143,7 +147,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $effectivePlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][] $effectivePlugins
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $pluginsPerExporter
      *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
