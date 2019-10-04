@@ -1,2 +1,3 @@
 parameters:
     ignoreErrors:
+    - '#Return type \(void\) of method .+AbstractSpyEventBehaviorEntityChange::save\(\) should be compatible with return type \(int\) of method .+SpyEventBehaviorEntityChange::save\(\)#'

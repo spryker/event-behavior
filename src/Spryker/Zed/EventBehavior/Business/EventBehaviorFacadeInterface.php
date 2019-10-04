@@ -109,7 +109,6 @@ interface EventBehaviorFacadeInterface
     public function getAvailableResourceNames(): array;
 
     /**
-     *
      * Specification:
      * - Returns an array of foreign keys grouped by foreign key.
      *

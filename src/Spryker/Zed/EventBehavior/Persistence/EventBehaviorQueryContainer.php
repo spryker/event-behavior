@@ -26,7 +26,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * @api
      *
-     * @param int $processId
+     * @param string $processId
      *
      * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
      *
