@@ -14,6 +14,7 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPlugi
 
 /**
  * Auto-generated group annotations
+ *
  * @group SprykerTest
  * @group Zed
  * @group EventBehavior

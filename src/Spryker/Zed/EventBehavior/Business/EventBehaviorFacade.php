@@ -15,7 +15,7 @@ use Spryker\Zed\Kernel\Business\AbstractFacade;
 class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -27,7 +27,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -39,7 +39,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -53,7 +53,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -68,7 +68,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -83,7 +83,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -98,7 +98,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -113,7 +113,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -125,7 +125,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *
@@ -147,7 +147,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      *
      * @api
      *

@@ -28,6 +28,7 @@ use Spryker\Zed\Kernel\RequestIdentifier;
 
 /**
  * Auto-generated group annotations
+ *
  * @group SprykerTest
  * @group Zed
  * @group EventBehavior
