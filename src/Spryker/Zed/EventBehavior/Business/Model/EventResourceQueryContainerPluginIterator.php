@@ -32,6 +32,7 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
     protected function updateCurrent(): void
     {
         $this->current = $this->plugin->queryData()
+            ->distinct()
             ->offset($this->offset)
             ->limit($this->chunkSize)
             ->where($this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
