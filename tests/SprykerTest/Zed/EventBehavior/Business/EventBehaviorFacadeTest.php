@@ -42,6 +42,7 @@ class EventBehaviorFacadeTest extends Unit
     protected const FOREIGN_KEYS = 'foreign_keys';
     protected const MODIFIED_COLUMNS = 'modified_columns';
     protected const ORIGINAL_VALUES = 'original_values';
+    protected const FIELD_ADDITIONAL_VALUES = 'additional_values';
 
     /**
      * @var \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface
@@ -291,6 +292,9 @@ class EventBehaviorFacadeTest extends Unit
         $actualArray[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES] = $actualArray[static::ORIGINAL_VALUES];
         unset($actualArray[static::ORIGINAL_VALUES]);
 
+        $actualArray[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES] = $actualArray[static::FIELD_ADDITIONAL_VALUES];
+        unset($actualArray[static::FIELD_ADDITIONAL_VALUES]);
+
         $this->assertEquals($actualArray, $this->createEventData());
     }
 
@@ -432,6 +436,7 @@ class EventBehaviorFacadeTest extends Unit
             EventBehavior::EVENT_CHANGE_NAME => 'test',
             EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS => [],
             EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES => [],
+            EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES => [],
         ];
     }
 
