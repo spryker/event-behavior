@@ -520,7 +520,7 @@ protected function isEventColumnsModified()
     protected function addGetAdditionalValuesMethod()
     {
         $tableName = $this->getTable()->getName();
-        $additionalColumns = $this->getFieldColumnNames();
+        $additionalColumns = $this->getAdditionalColumnNames();
         $implodedAdditionalColumnNames = implode("\n", array_map(function ($columnName) {
             return sprintf("\t'%s',", $columnName);
         }, $additionalColumns));
@@ -606,7 +606,7 @@ protected function getOriginalValues(): array
     /**
      * @return array
      */
-    protected function getFieldColumnNames(): array
+    protected function getAdditionalColumnNames(): array
     {
         $additionalColumns = [];
         $tableName = $this->getTable()->getName();
