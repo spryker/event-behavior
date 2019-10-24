@@ -38,7 +38,9 @@ class EventBehavior extends Behavior
     public function postSave()
     {
         return "
-\$this->addSaveEventToMemory();
+if (\$affectedRows) {
+    \$this->addSaveEventToMemory();
+}
         ";
     }
 
