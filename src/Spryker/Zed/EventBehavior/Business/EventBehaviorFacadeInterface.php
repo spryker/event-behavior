@@ -86,6 +86,19 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
+     *  - Returns field value of the specficed column in eventTransfers.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * Specification:
      *  - Triggers events for specified resources.
      *  - Accepts instances of EventResourceRepositoryPluginInterface and EventResourceBulkRepositoryPluginInterface as resources.
      *

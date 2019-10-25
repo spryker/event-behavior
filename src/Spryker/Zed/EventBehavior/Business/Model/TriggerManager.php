@@ -134,6 +134,9 @@ class TriggerManager implements TriggerManagerInterface
             if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS])) {
                 $eventEntityTransfer->setModifiedColumns($data[EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS]);
             }
+            if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES])) {
+                $eventEntityTransfer->setAdditionalValues($data[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES]);
+            }
             $eventEntityTransfersByEvent[$data[EventBehavior::EVENT_CHANGE_NAME]][] = $eventEntityTransfer;
             $triggeredRows++;
         }

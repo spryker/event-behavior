@@ -121,6 +121,31 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
     }
 
     /**
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param string $columnName
+     *
+     * @return array
+     */
+    public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array
+    {
+        if (!$columnName) {
+            return [];
+        }
+
+        $additionalValues = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $additionalValuesOfEvent = $eventTransfer->getAdditionalValues();
+            if (!isset($additionalValuesOfEvent[$columnName])) {
+                continue;
+            }
+
+            $additionalValues[] = $additionalValuesOfEvent[$columnName];
+        }
+
+        return array_unique($additionalValues);
+    }
+
+    /**
      * @param string[] $columns
      * @param string[] $modifiedColumns
      *

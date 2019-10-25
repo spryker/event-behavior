@@ -10,6 +10,7 @@
         <property name="foreignKeys" type="array" singular="foreignKeys"/>
         <property name="modifiedColumns" type="array" singular="modifiedColumns"/>
         <property name="originalValues" type="array" singular="originalValues"/>
+        <property name="additionalValues" type="array" singular="additionalValue"/>
     </transfer>
 
 </transfers>
