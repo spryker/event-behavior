@@ -1,13 +1,17 @@
 parameters:
+    excludes_analyse:
+        - %rootDir%/../../../src/Generated/*
+        - %rootDir%/../../../src/Orm/*
     ignoreErrors:
-    - '#Return typehint of method .+ has invalid type .+Transfer#'
-    - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
-    - '#Call to method .+ on an unknown class .+Transfer#'
-    - '#Instantiated class .+Transfer not found#'
-    - '#Parameter \#[1-9] \$(transfers|eventTransfer) of method .+EventBehaviorToEventInterface::(triggerByListenerName|triggerBulk)\(\) expects array<.+TransferInterface>, array<.+EventEntityTransfer> given#'
-    - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
-    - '#Call to method (event|utilEncoding)\(\) on an unknown class .+AutoCompletion#'
-    - '#Return typehint of method .+ has invalid type .+Query#'
-    - '#Class .+\\Spy.+ not found and could not be autoloaded#'
-    - '#Parameter \#2 \$eventTransfer of method .+EventBehaviorToEventInterface::trigger\(\) expects .+TransferInterface, array.+EventEntityTransfer given#'
-    - '#Parameter .+ of method .+ has invalid typehint type .+\\Spy.+#'
+        - '#Return typehint of method .+ has invalid type .+Transfer#'
+        - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
+        - '#Call to method .+ on an unknown class .+Transfer#'
+        - '#Instantiated class .+Transfer not found#'
+        - '#Parameter \#[1-9] \$(transfers|eventTransfer) of method .+EventBehaviorToEventInterface::(triggerByListenerName|triggerBulk)\(\) expects array<.+TransferInterface>, array<.+EventEntityTransfer> given#'
+        - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
+        - '#Call to method (event|utilEncoding)\(\) on an unknown class .+AutoCompletion#'
+        - '#Return typehint of method .+ has invalid type .+Query#'
+        - '#Parameter \#2 \$eventTransfer of method .+EventBehaviorToEventInterface::trigger\(\) expects .+TransferInterface, .+EventEntityTransfer given#'
+        - '#Parameter .+ of method .+ has invalid typehint type .+\\Spy.+#'
+        - '#Class .+Query not found#'
+
