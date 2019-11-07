@@ -8,4 +8,4 @@ parameters:
     - '#Call to (static method|method) .+ on an unknown class .+Query#'
     - '#Call to method (event|utilEncoding)\(\) on an unknown class .+AutoCompletion#'
     - '#Return typehint of method .+ has invalid type .+Query#'
-    - '#Class .+\Spy.+ not found#'
+    - '#Class .+\\Spy.+ not found#'
