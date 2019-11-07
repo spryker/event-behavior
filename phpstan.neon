@@ -1,7 +1,6 @@
 parameters:
     excludes_analyse:
-        - %rootDir%/../../../src/Generated/*
-        - %rootDir%/../../../src/Orm/*
+        - %rootDir%/../../src/Orm/*
     ignoreErrors:
         - '#Return typehint of method .+ has invalid type .+Transfer#'
         - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
