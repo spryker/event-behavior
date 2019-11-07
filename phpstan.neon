@@ -1,3 +1,8 @@
 parameters:
     ignoreErrors:
     - '#Return type \(void\) of method .+AbstractSpyEventBehaviorEntityChange::save\(\) should be compatible with return type \(int\) of method .+SpyEventBehaviorEntityChange::save\(\)#'
+    - '#Return typehint of method .+ has invalid type .+Transfer#'
+    - '#Property .+ has unknown class .+Transfer as its type#'
+    - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
+    - '#Call to method .+ on an unknown class .+Transfer#'
+    - '#Instantiated class .+Transfer not found#'
