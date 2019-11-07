@@ -1,6 +1,6 @@
 parameters:
     excludes_analyse:
-        - %rootDir%/src/Spryker/Zed/EventBehavior/Persistence/Propel/*
+        - src/Spryker/Zed/EventBehavior/Persistence/Propel/*
     ignoreErrors:
         - '#Return typehint of method .+ has invalid type .+Transfer#'
         - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
