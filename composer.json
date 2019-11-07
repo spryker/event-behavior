@@ -44,7 +44,7 @@
   "scripts": {
     "cs-check": "phpcs --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
     "cs-fix": "phpcbf --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml -v --ignore=/event-behavior/vendor/,/templates/ ./",
-    "phpstan": "phpstan analyse -c tests/phpstan.neon -l 5 src/",
+    "phpstan": "phpstan analyse -c phpstan.neon -l 5 src/",
     "phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json"
   },
   "extra": {
