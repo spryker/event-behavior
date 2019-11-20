@@ -54,7 +54,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createEventFacadeMockBridge()
     {
@@ -69,7 +69,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createEventResourceQueryContainerMockPlugin()
     {

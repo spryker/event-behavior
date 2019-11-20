@@ -52,7 +52,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cleanupEventMemory();
         parent::setUp();
@@ -61,7 +61,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testEventBehaviorWillTriggerMemoryEventsData()
+    public function testEventBehaviorWillTriggerMemoryEventsData(): void
     {
         $behaviorStatus = Config::get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
         if (!$behaviorStatus) {
@@ -75,7 +75,7 @@ class EventBehaviorFacadeTest extends Unit
             $eventFacadeMock = $this->createEventFacadeMockBridge();
             $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, array $eventTransfers) {
+                    function ($eventName, array $eventTransfers): void {
                         foreach ($eventTransfers as $eventTransfer) {
                             $this->assertTriggeredEvent($eventName, $eventTransfer);
                         }
@@ -94,7 +94,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    public function testEventBehaviorWillTriggerLostEventsData()
+    public function testEventBehaviorWillTriggerLostEventsData(): void
     {
         $behaviorStatus = Config::get(EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE, false);
         if (!$behaviorStatus) {
@@ -108,7 +108,7 @@ class EventBehaviorFacadeTest extends Unit
             $storageMock = $this->createEventFacadeMockBridge();
             $storageMock->expects($this->once())->method('triggerBulk')->will(
                 $this->returnCallback(
-                    function ($eventName, array $eventTransfers) {
+                    function ($eventName, array $eventTransfers): void {
                         foreach ($eventTransfers as $eventTransfer) {
                             $this->assertTriggeredEvent($eventName, $eventTransfer);
                         }
@@ -278,7 +278,7 @@ class EventBehaviorFacadeTest extends Unit
      *
      * @return void
      */
-    public function assertTriggeredEvent($eventName, TransferInterface $eventTransfer)
+    public function assertTriggeredEvent(string $eventName, TransferInterface $eventTransfer): void
     {
         $this->assertEquals($eventName, 'test');
         $actualArray = $eventTransfer->toArray();
@@ -324,7 +324,7 @@ class EventBehaviorFacadeTest extends Unit
             if (count($this->getEventTriggerResourcePlugins())) {
                 $storageMock->expects($this->any())->method('trigger')->will(
                     $this->returnCallback(
-                        function ($eventName) {
+                        function ($eventName): void {
                             $this->assertTriggeredResourceEvent($eventName);
                         }
                     )
@@ -355,7 +355,7 @@ class EventBehaviorFacadeTest extends Unit
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createEventFacadeMockBridge()
     {
@@ -370,7 +370,7 @@ class EventBehaviorFacadeTest extends Unit
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createUtilEncodingServiceBridge()
     {
@@ -389,7 +389,7 @@ class EventBehaviorFacadeTest extends Unit
      *
      * @return void
      */
-    protected function prepareFacade(Container $container)
+    protected function prepareFacade(Container $container): void
     {
         $eventBehaviorBusinessFactory = new EventBehaviorBusinessFactory();
         $eventBehaviorBusinessFactory->setContainer($container);
@@ -401,7 +401,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    protected function createEntityChangeEvent()
+    protected function createEntityChangeEvent(): void
     {
         $spyEventEntityChange = new SpyEventBehaviorEntityChange();
         $spyEventEntityChange->setProcessId(RequestIdentifier::getRequestId());
@@ -412,7 +412,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    protected function createLostEntityChangeEvent()
+    protected function createLostEntityChangeEvent(): void
     {
         $spyEventEntityChange = new SpyEventBehaviorEntityChange();
         $spyEventEntityChange->setProcessId(RequestIdentifier::getRequestId());
@@ -427,7 +427,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return array
      */
-    protected function createEventData()
+    protected function createEventData(): array
     {
         return [
             EventBehavior::EVENT_CHANGE_ENTITY_NAME => 'name',
@@ -445,7 +445,7 @@ class EventBehaviorFacadeTest extends Unit
      *
      * @return \Spryker\Zed\Kernel\Container
      */
-    protected function generateUtilEncodingServiceMock(Container $container)
+    protected function generateUtilEncodingServiceMockContainer(Container $container): Container
     {
         $container[EventBehaviorDependencyProvider::SERVICE_UTIL_ENCODING] = function (Container $container) {
             $utilEncodingMock = $this->createUtilEncodingServiceBridge();
@@ -464,7 +464,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
-    protected function cleanupEventMemory()
+    protected function cleanupEventMemory(): void
     {
         SpyEventBehaviorEntityChangeQuery::create()->deleteAll();
     }
