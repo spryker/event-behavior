@@ -398,16 +398,14 @@ protected function getForeignKeys()
  */
 protected function saveEventBehaviorEntityChange(array \$data)
 {
-    \$disabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();
+    \\Propel\\Runtime\\Propel::disableInstancePooling();
     
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
     \$spyEventBehaviorEntityChange->setData(json_encode(\$data));
     \$spyEventBehaviorEntityChange->setProcessId(\\Spryker\\Zed\\Kernel\\RequestIdentifier::getRequestId());
     \$spyEventBehaviorEntityChange->save();
     
-    if (\$disabledSuccessfully) {
-        \\Propel\\Runtime\\Propel::enableInstancePooling();
-    }
+    \\Propel\\Runtime\\Propel::enableInstancePooling();
 }        
         ";
     }
