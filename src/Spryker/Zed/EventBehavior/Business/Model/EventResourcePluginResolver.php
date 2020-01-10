@@ -67,12 +67,8 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     public function executeResolvedPluginsBySources(array $resources, array $ids): void
     {
         $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
-        /** @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface[] $eventResourceQueryContainerPlugins */
-        $eventResourceQueryContainerPlugins = $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS];
-        /** @var \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins */
-        $eventResourcePlugins = $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS];
-        $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
-        $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
+
+        $this->processResourceEvents($pluginsPerExporter, $ids);
     }
 
     /**
