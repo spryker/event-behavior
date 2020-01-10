@@ -47,6 +47,14 @@ class EventBehaviorConfig extends AbstractBundleConfig
     /**
      * @return bool
      */
+    public function isInstancePoolingEnabled(): bool
+    {
+        return $this->get(EventBehaviorConstants::ENABLE_INSTANCE_POOlING, true);
+    }
+
+    /**
+     * @return bool
+     */
     public static function disableEvent()
     {
         return static::$isEventDisabled = true;

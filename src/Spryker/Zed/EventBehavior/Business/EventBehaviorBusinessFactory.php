@@ -78,7 +78,8 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
         return new EventResourcePluginResolver(
             $this->createEventResourceRepositoryManager(),
             $this->createEventResourceQueryContainerManager(),
-            $this->getEventResourcePlugins()
+            $this->getEventResourcePlugins(),
+            $this->getConfig()
         );
     }
 

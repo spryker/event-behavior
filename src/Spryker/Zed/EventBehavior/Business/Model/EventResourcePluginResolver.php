@@ -7,11 +7,13 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Propel\Runtime\Propel;
 use Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
+use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 
 class EventResourcePluginResolver implements EventResourcePluginResolverInterface
 {
@@ -34,18 +36,26 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     protected $eventResourceQueryContainerManager;
 
     /**
+     * @var \Spryker\Zed\EventBehavior\EventBehaviorConfig
+     */
+    protected $eventBehaviorConfig;
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager $eventResourceRepositoryManager
      * @param \Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager $eventResourceQueryContainerManager
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
+     * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $eventBehaviorConfig;
      */
     public function __construct(
         EventResourceRepositoryManager $eventResourceRepositoryManager,
         EventResourceQueryContainerManager $eventResourceQueryContainerManager,
-        array $eventResourcePlugins
+        array $eventResourcePlugins,
+        EventBehaviorConfig $eventBehaviorConfig
     ) {
         $this->eventResourceRepositoryManager = $eventResourceRepositoryManager;
         $this->eventResourceQueryContainerManager = $eventResourceQueryContainerManager;
         $this->eventResourcePlugins = $eventResourcePlugins;
+        $this->eventBehaviorConfig = $eventBehaviorConfig;
     }
 
     /**
@@ -100,6 +110,47 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
         }
 
         return $pluginsPerExporter;
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $pluginsPerExporter
+     * @param int[] $ids
+     *
+     * @return void
+     */
+    protected function processResourceEvents(array $pluginsPerExporter, array $ids): void
+    {
+        $instancePollingOriginalValue = $this->getInstancePoolingOriginalConfigValue();
+        $this->configureInstancePooling($this->eventBehaviorConfig->isInstancePoolingEnabled());
+
+        $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
+        $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
+
+        $this->configureInstancePooling($instancePollingOriginalValue);
+    }
+
+    /**
+     * @param bool $isInstancePoolingEnabled
+     *
+     * @return void
+     */
+    protected function configureInstancePooling(bool $isInstancePoolingEnabled): void
+    {
+        if ($isInstancePoolingEnabled) {
+            Propel::enableInstancePooling();
+
+            return;
+        }
+
+        Propel::disableInstancePooling();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function getInstancePoolingOriginalConfigValue(): bool
+    {
+        return Propel::isInstancePoolingEnabled();
     }
 
     /**
