@@ -34,5 +34,5 @@ interface EventBehaviorConstants
      *
      * @api
      */
-    public const ENABLE_INSTANCE_POOlING = 'EVENT_BEHAVIOR:ENABLE_INSTANCE_POOl';
+    public const ENABLE_INSTANCE_POOLING = 'EVENT_BEHAVIOR:ENABLE_INSTANCE_POOLING';
 }
