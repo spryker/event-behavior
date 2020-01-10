@@ -126,13 +126,13 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     }
 
     /**
-     * @param bool $isInstancePoolingEnabled
+     * @param bool $isInstancePoolingShouldBeEnabled
      *
      * @return void
      */
-    protected function configureInstancePooling(bool $isInstancePoolingEnabled): void
+    protected function configureInstancePooling(bool $isInstancePoolingShouldBeEnabled): void
     {
-        if ($isInstancePoolingEnabled) {
+        if ($isInstancePoolingShouldBeEnabled) {
             Propel::enableInstancePooling();
 
             return;
