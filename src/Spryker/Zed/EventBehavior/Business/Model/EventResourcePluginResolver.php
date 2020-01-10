@@ -116,23 +116,23 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      */
     protected function processResourceEvents(array $pluginsPerExporter, array $ids): void
     {
-        $instancePollingOriginalValue = $this->getInstancePoolingOriginalConfigValue();
+        $instancePoolingOriginalValue = $this->getInstancePoolingOriginalConfigValue();
         $this->configureInstancePooling($this->eventBehaviorConfig->isInstancePoolingEnabled());
 
         $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
         $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
 
-        $this->configureInstancePooling($instancePollingOriginalValue);
+        $this->configureInstancePooling($instancePoolingOriginalValue);
     }
 
     /**
-     * @param bool $isInstancePoolingShouldBeEnabled
+     * @param bool $instancePoolingShouldBeEnabled
      *
      * @return void
      */
-    protected function configureInstancePooling(bool $isInstancePoolingShouldBeEnabled): void
+    protected function configureInstancePooling(bool $instancePoolingShouldBeEnabled): void
     {
-        if ($isInstancePoolingShouldBeEnabled) {
+        if ($instancePoolingShouldBeEnabled) {
             Propel::enableInstancePooling();
 
             return;
