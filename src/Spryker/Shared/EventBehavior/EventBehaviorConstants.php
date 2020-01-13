@@ -27,4 +27,12 @@ interface EventBehaviorConstants
      * @api
      */
     public const EVENT_BEHAVIOR_CHUNK_SIZE = 'EVENT_BEHAVIOR_CHUNK_SIZE';
+
+    /**
+     * Specification:
+     * - Is instance pooling enabled for event triggering.
+     *
+     * @api
+     */
+    public const ENABLE_INSTANCE_POOLING = 'EVENT_BEHAVIOR:ENABLE_INSTANCE_POOLING';
 }
