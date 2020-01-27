@@ -61,20 +61,23 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     /**
      * @param string[] $resources
      * @param int[] $ids
+     * @param array $resourcePublisherPlugins
      *
      * @return void
      */
-    public function executeResolvedPluginsBySources(array $resources, array $ids): void
+    public function executeResolvedPluginsBySources(array $resources, array $ids = [], array $resourcePublisherPlugins = []): void
     {
-        $pluginsPerExporter = $this->getResolvedPluginsByResources($resources);
+        $pluginsPerExporter = $this->getResolvedPluginsByResources($resources, $resourcePublisherPlugins);
 
         $this->processResourceEvents($pluginsPerExporter, $ids);
     }
 
     /**
+     * @param array $resourcePublisherPlugins
+     *
      * @return string[]
      */
-    public function getAvailableResourceNames(): array
+    public function getAvailableResourceNames(array $resourcePublisherPlugins = []): array
     {
         $resourceNames = [];
 
@@ -89,12 +92,13 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
 
     /**
      * @param string[] $resources
+     * @param array $resourcePublisherPlugins
      *
      * @return array
      */
-    protected function getResolvedPluginsByResources(array $resources): array
+    protected function getResolvedPluginsByResources(array $resources, array $resourcePublisherPlugins = []): array
     {
-        $mappedEventResourcePlugin = $this->mapPluginsByResourceNameAndEvent();
+        $mappedEventResourcePlugin = $this->mapPluginsByResourceNameAndEvent($resourcePublisherPlugins);
         $effectivePluginsByResource = $this->filterPluginsByResources($mappedEventResourcePlugin, $resources);
         $pluginsPerExporter = [
             static::REPOSITORY_EVENT_RESOURCE_PLUGINS => [],
@@ -150,11 +154,18 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     }
 
     /**
+     * @param array $resourcePublisherPlugins
+     *
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[][][]
      */
-    protected function mapPluginsByResourceNameAndEvent(): array
+    protected function mapPluginsByResourceNameAndEvent(array $resourcePublisherPlugins = []): array
     {
         $mappedEventResourcePlugin = [];
+
+        if ($resourcePublisherPlugins) {
+            $this->eventResourcePlugins = array_merge($this->eventResourcePlugins, $resourcePublisherPlugins);
+        }
+
         foreach ($this->eventResourcePlugins as $plugin) {
             $mappedEventResourcePlugin[$plugin->getResourceName()][$plugin->getEventName()][] = $plugin;
         }
