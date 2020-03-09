@@ -357,7 +357,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createEventFacadeMockBridge()
+    protected function createEventFacadeMockBridge(): EventBehaviorToEventInterface
     {
         return $this->getMockBuilder(EventBehaviorToEventInterface::class)
             ->disableOriginalConstructor()
@@ -372,7 +372,7 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createUtilEncodingServiceBridge()
+    protected function createUtilEncodingServiceBridge(): EventBehaviorToUtilEncodingInterface
     {
         return $this->getMockBuilder(EventBehaviorToUtilEncodingInterface::class)
             ->disableOriginalConstructor()

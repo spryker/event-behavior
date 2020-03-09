@@ -119,12 +119,13 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @param array $resources
      * @param array $ids
+     * @param array $resourcePublisherPlugins
      *
      * @return void
      */
-    public function executeResolvedPluginsBySources(array $resources, array $ids = []): void
+    public function executeResolvedPluginsBySources(array $resources, array $ids = [], array $resourcePublisherPlugins = []): void
     {
-        $this->getFactory()->createEventResourcePluginResolver()->executeResolvedPluginsBySources($resources, $ids);
+        $this->getFactory()->createEventResourcePluginResolver()->executeResolvedPluginsBySources($resources, $ids, $resourcePublisherPlugins);
     }
 
     /**
@@ -132,11 +133,13 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
+     * @param array $resourcePublisherPlugins
+     *
      * @return string[]
      */
-    public function getAvailableResourceNames(): array
+    public function getAvailableResourceNames(array $resourcePublisherPlugins = []): array
     {
-        return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames();
+        return $this->getFactory()->createEventResourcePluginResolver()->getAvailableResourceNames($resourcePublisherPlugins);
     }
 
     /**

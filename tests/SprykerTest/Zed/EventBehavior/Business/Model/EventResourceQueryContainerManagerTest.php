@@ -56,7 +56,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createEventFacadeMockBridge()
+    protected function createEventFacadeMockBridge(): EventBehaviorToEventInterface
     {
         return $this->getMockBuilder(EventBehaviorToEventInterface::class)
             ->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     /**
      * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function createEventResourceQueryContainerMockPlugin()
+    protected function createEventResourceQueryContainerMockPlugin(): EventResourceQueryContainerPluginInterface
     {
         return $this->getMockBuilder(EventResourceQueryContainerPluginInterface::class)
             ->disableOriginalConstructor()
