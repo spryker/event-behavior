@@ -7,16 +7,18 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Propel\Runtime\Propel;
 use Spryker\Zed\EventBehavior\Business\Exception\EventResourceNotFoundException;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
+use Spryker\Zed\Kernel\Persistence\EntityManager\InstancePoolingTrait;
 
 class EventResourcePluginResolver implements EventResourcePluginResolverInterface
 {
+    use InstancePoolingTrait;
+
     protected const REPOSITORY_EVENT_RESOURCE_PLUGINS = 'repository';
     protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
 
@@ -120,37 +122,14 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      */
     protected function processResourceEvents(array $pluginsPerExporter, array $ids): void
     {
-        $instancePoolingOriginalValue = $this->getInstancePoolingOriginalConfigValue();
-        $this->configureInstancePooling($this->eventBehaviorConfig->isInstancePoolingEnabled());
+        $isPoolingStateChanged = $this->disableInstancePooling();
 
         $this->eventResourceQueryContainerManager->processResourceEvents($pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS], $ids);
         $this->eventResourceRepositoryManager->processResourceEvents($pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS], $ids);
 
-        $this->configureInstancePooling($instancePoolingOriginalValue);
-    }
-
-    /**
-     * @param bool $instancePoolingShouldBeEnabled
-     *
-     * @return void
-     */
-    protected function configureInstancePooling(bool $instancePoolingShouldBeEnabled): void
-    {
-        if ($instancePoolingShouldBeEnabled) {
-            Propel::enableInstancePooling();
-
-            return;
+        if ($isPoolingStateChanged) {
+            $this->enableInstancePooling();
         }
-
-        Propel::disableInstancePooling();
-    }
-
-    /**
-     * @return bool
-     */
-    protected function getInstancePoolingOriginalConfigValue(): bool
-    {
-        return Propel::isInstancePoolingEnabled();
     }
 
     /**
