@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * @deprecated Use `Spryker\Zed\Publisher\Communication\Console\PublisherTriggerEventsConsole` instead.
+ * @deprecated Use {@link \Spryker\Zed\Publisher\Communication\Console\PublisherTriggerEventsConsole} instead.
  *
  * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface getFacade()
  * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface getQueryContainer()
