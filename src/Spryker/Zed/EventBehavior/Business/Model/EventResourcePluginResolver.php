@@ -83,7 +83,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     {
         $resourceNames = [];
 
-        foreach ($this->eventResourcePlugins as $plugin) {
+        foreach (array_merge($this->eventResourcePlugins, $resourcePublisherPlugins) as $plugin) {
             $resourceNames[] = $plugin->getResourceName();
         }
 
