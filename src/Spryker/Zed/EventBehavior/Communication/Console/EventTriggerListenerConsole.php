@@ -64,9 +64,9 @@ class EventTriggerListenerConsole extends Console
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
-     * @return int|null|void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $listenerName = $input->getArgument(static::ARGUMENT_LISTENER_NAME);
         $transferData = $input->getArgument(static::ARGUMENT_DATA);
@@ -74,5 +74,7 @@ class EventTriggerListenerConsole extends Console
         $eventName = $input->getOption(static::OPTION_EVENT_NAME);
 
         $this->getFacade()->triggerEventListenerByName($listenerName, $transferData, $format, $eventName);
+
+        return static::CODE_SUCCESS;
     }
 }
