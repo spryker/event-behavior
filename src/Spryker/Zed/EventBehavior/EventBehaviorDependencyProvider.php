@@ -42,9 +42,11 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addEventFacade(Container $container): Container
     {
-        $container[static::FACADE_EVENT] = function (Container $container) {
-            return new EventBehaviorToEventBridge($container->getLocator()->event()->facade());
-        };
+        $container->set(static::FACADE_EVENT, function (Container $container) {
+            return  new EventBehaviorToEventBridge(
+                $container->getLocator()->event()->facade()
+            );
+        });
 
         return $container;
     }
@@ -56,9 +58,11 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addUtilEncodingService(Container $container): Container
     {
-        $container[self::SERVICE_UTIL_ENCODING] = function (Container $container) {
-            return new EventBehaviorToUtilEncodingBridge($container->getLocator()->utilEncoding()->service());
-        };
+        $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
+            return new EventBehaviorToUtilEncodingBridge(
+                $container->getLocator()->utilEncoding()->service()
+            );
+        });
 
         return $container;
     }
@@ -70,9 +74,9 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
      */
     protected function addEventTriggerResourcePlugins(Container $container)
     {
-        $container[self::PLUGINS_EVENT_TRIGGER_RESOURCE] = function (Container $container) {
+        $container->set(static::PLUGINS_EVENT_TRIGGER_RESOURCE, function (Container $container) {
             return $this->getEventTriggerResourcePlugins();
-        };
+        });
 
         return $container;
     }
