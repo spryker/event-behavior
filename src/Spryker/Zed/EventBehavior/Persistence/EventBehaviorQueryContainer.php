@@ -83,6 +83,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
         try {
             $con = Propel::getConnection();
             $sql = "SELECT 1 FROM information_schema.tables WHERE table_name = 'spy_event_behavior_entity_change';";
+
+            /** @var \PDOStatement $stmt */
             $stmt = $con->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetch();

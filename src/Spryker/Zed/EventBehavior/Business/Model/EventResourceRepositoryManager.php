@@ -43,7 +43,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $plugins
-     * @param int[] $ids
+     * @param (string|int)[] $ids
      *
      * @return void
      */
@@ -80,7 +80,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
-     * @param int[] $ids
+     * @param (string|int)[] $ids
      *
      * @return void
      */
@@ -111,7 +111,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
      *
-     * @return \Iterator
+     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
      */
     protected function createEventResourceRepositoryPluginIterator(EventResourceRepositoryPluginInterface $plugin): Iterator
     {
@@ -134,7 +134,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      *
-     * @return \Iterator
+     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
      */
     protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin): Iterator
     {
@@ -143,7 +143,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param array $chunkOfEventEntitiesTransfers
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $chunkOfEventEntitiesTransfers
      *
      * @return array
      */
@@ -167,6 +167,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function getIdColumnName($plugin): ?string
     {
+        /** @var array<int, string> $idColumnName */
         $idColumnName = explode(static::DELIMITER, $plugin->getIdColumnName());
 
         return $idColumnName[1] ?? null;

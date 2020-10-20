@@ -11,15 +11,15 @@ interface EventResourcePluginResolverInterface
 {
     /**
      * @param string[] $resources
-     * @param int[] $ids
-     * @param array $resourcePublisherPlugins
+     * @param (string|int)[] $ids
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
      *
      * @return void
      */
     public function executeResolvedPluginsBySources(array $resources, array $ids = [], array $resourcePublisherPlugins = []): void;
 
     /**
-     * @param array $resourcePublisherPlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
      *
      * @return string[]
      */

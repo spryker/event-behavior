@@ -72,7 +72,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param array $eventTransfers
+     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
      * @param string[] $columns
      *
      * @return \Generated\Shared\Transfer\EventEntityTransfer[]
@@ -117,9 +117,9 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param array $resources
-     * @param array $ids
-     * @param array $resourcePublisherPlugins
+     * @param string[] $resources
+     * @param (string|int)[] $ids
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
      *
      * @return void
      */
@@ -133,7 +133,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param array $resourcePublisherPlugins
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
      *
      * @return string[]
      */
