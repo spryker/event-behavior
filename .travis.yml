@@ -32,7 +32,7 @@ before_script:
 script:
   - if [[ $DEFAULT == 1 ]]; then vendor/bin/codecept run ; fi
   - if [[ $VALIDATION == 1 ]]; then composer cs-check ; fi
-  - if [[ $VALIDATION == 1 ]]; then composer phpstan-setup && composer phpstan ; fi
+  - if [[ $VALIDATION == 1 ]]; then composer stan-setup && composer stan ; fi
 
 cache:
   directories:

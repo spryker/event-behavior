@@ -141,6 +141,9 @@ class TriggerManager implements TriggerManagerInterface
             $triggeredRows++;
         }
 
+        /**
+         * @var string $eventName
+         */
         foreach ($eventEntityTransfersByEvent as $eventName => $eventEntityTransfers) {
             $this->eventFacade->triggerBulk($eventName, $eventEntityTransfers);
         }

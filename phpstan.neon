@@ -1,8 +1,13 @@
 parameters:
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
     excludes_analyse:
         - */Propel/*
     ignoreErrors:
-        - '#Return typehint of method .+ has invalid type .+Transfer#'
+        - '#Call to an undefined method .+LocatorLocatorInterface::.+\(\)#'
+        - '#Cannot cast array\<string\>\|.+\|null to string.#'
+        - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
         - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
         - '#Call to method .+ on an unknown class .+Transfer#'
         - '#Instantiated class .+Transfer not found#'

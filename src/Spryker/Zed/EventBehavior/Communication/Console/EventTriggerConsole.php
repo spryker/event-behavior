@@ -60,7 +60,7 @@ class EventTriggerConsole extends Console
         $resourcesIds = [];
 
         if ($input->getOption(static::RESOURCE_OPTION)) {
-            $resourceString = $input->getOption(static::RESOURCE_OPTION);
+            $resourceString = (string)$input->getOption(static::RESOURCE_OPTION);
             $resources = explode(',', $resourceString);
         }
 
@@ -69,11 +69,13 @@ class EventTriggerConsole extends Console
         }
 
         if ($input->getOption(static::RESOURCE_IDS_OPTION)) {
-            $idsString = $input->getOption(static::RESOURCE_IDS_OPTION);
+            $idsString = (string)$input->getOption(static::RESOURCE_IDS_OPTION);
             $resourcesIds = explode(',', $idsString);
         }
 
         $this->getFacade()->executeResolvedPluginsBySources($resources, $resourcesIds);
+
+        return static::CODE_SUCCESS;
     }
 
     /**
