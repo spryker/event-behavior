@@ -10,7 +10,6 @@ namespace SprykerTest\Zed\EventBehavior;
 use Codeception\Actor;
 
 /**
-
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -27,6 +26,4 @@ use Codeception\Actor;
 class EventBehaviorBusinessTester extends Actor
 {
     use _generated\EventBehaviorBusinessTesterActions;
-
-
 }

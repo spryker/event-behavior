@@ -22,6 +22,8 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class EventBehaviorEventDispatcherPlugin extends AbstractPlugin implements EventDispatcherPluginInterface
 {
     /**
+     * {@inheritDoc}
+     *
      * @api
      *
      * @param \Spryker\Shared\EventDispatcher\EventDispatcherInterface $eventDispatcher

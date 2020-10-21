@@ -21,6 +21,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     protected static $isEventDisabled = false;
 
     /**
+     * @api
+     *
      * @return int
      */
     public function getEventEntityChangeTimeout()
@@ -29,6 +31,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public function getEventBehaviorTriggeringStatus()
@@ -37,6 +41,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return int
      */
     public function getChunkSize(): int
@@ -45,6 +51,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public function isInstancePoolingEnabled(): bool
@@ -53,6 +61,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public static function disableEvent()
@@ -61,6 +71,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public static function enableEvent()
@@ -69,6 +81,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
     }
 
     /**
+     * @api
+     *
      * @return bool
      */
     public static function isEventBehaviorDisabled()

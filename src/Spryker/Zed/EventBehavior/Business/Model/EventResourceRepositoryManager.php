@@ -52,6 +52,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         foreach ($plugins as $plugin) {
             if ($plugin instanceof EventResourceBulkRepositoryPluginInterface) {
                 $this->processEventsForBulkRepositoryPlugins($plugin, $ids);
+
                 continue;
             }
 
@@ -167,7 +168,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function getIdColumnName($plugin): ?string
     {
-        /** @var array<int, string> $idColumnName */
+        /** @phpstan-var array<int, string> $idColumnName */
         $idColumnName = explode(static::DELIMITER, $plugin->getIdColumnName());
 
         return $idColumnName[1] ?? null;

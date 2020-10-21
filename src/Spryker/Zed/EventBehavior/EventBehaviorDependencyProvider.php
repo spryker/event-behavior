@@ -43,7 +43,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     protected function addEventFacade(Container $container): Container
     {
         $container->set(static::FACADE_EVENT, function (Container $container) {
-            return  new EventBehaviorToEventBridge(
+            return new EventBehaviorToEventBridge(
                 $container->getLocator()->event()->facade()
             );
         });

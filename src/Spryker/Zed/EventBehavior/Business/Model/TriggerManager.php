@@ -53,8 +53,12 @@ class TriggerManager implements TriggerManagerInterface
      * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface $queryContainer
      * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
      */
-    public function __construct(EventBehaviorToEventInterface $eventFacade, EventBehaviorToUtilEncodingInterface $utilEncodingService, EventBehaviorQueryContainerInterface $queryContainer, EventBehaviorConfig $config)
-    {
+    public function __construct(
+        EventBehaviorToEventInterface $eventFacade,
+        EventBehaviorToUtilEncodingInterface $utilEncodingService,
+        EventBehaviorQueryContainerInterface $queryContainer,
+        EventBehaviorConfig $config
+    ) {
         $this->eventFacade = $eventFacade;
         $this->utilEncodingService = $utilEncodingService;
         $this->queryContainer = $queryContainer;

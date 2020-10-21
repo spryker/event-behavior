@@ -24,6 +24,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     public const TABLE_EXISTS = 'exists';
 
     /**
+     * {@inheritDoc}
+     *
      * @api
      *
      * @param string $processId
@@ -34,7 +36,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function queryEntityChange($processId)
     {
-        if (!class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
+        if (
+            !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
             || !class_exists(SpyEventBehaviorEntityChangeQuery::class)
         ) {
             throw new EventBehaviorQueryNotExistsException();
@@ -49,6 +52,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @api
      *
      * @param \DateTime $date
@@ -66,6 +71,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @api
      *
      * @deprecated This method is deprecated without replacement. It's not used by TriggerManager::triggerRuntimeEvents() anymore.
@@ -74,7 +81,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function eventBehaviorTableExists()
     {
-        if (!class_exists(BaseSpyEventBehaviorEntityChangeQuery::class) ||
+        if (
+            !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class) ||
             !class_exists(SpyEventBehaviorEntityChangeQuery::class)
         ) {
             return false;

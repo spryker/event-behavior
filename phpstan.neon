@@ -5,6 +5,7 @@ parameters:
     excludes_analyse:
         - */Propel/*
     ignoreErrors:
+        - '#Return typehint of method .+ has invalid type .+Transfer#'
         - '#Call to an undefined method .+LocatorLocatorInterface::.+\(\)#'
         - '#Cannot cast array\<string\>\|.+\|null to string.#'
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
@@ -18,4 +19,3 @@ parameters:
         - '#Parameter \#2 \$eventTransfer of method .+EventBehaviorToEventInterface::trigger\(\) expects .+TransferInterface, .+EventEntityTransfer given#'
         - '#Parameter .+ of method .+ has invalid typehint type .+\\Spy.+#'
         - '#Class .+Query not found#'
-

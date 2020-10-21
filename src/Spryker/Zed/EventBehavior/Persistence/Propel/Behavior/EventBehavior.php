@@ -158,7 +158,7 @@ if (\$affectedRows) {
         $camelCaseFilter = new UnderscoreToCamelCase();
 
         $methodName = sprintf('set%s', $camelCaseFilter->filter($column));
-        $initialValueField = sprintf("[%sTableMap::COL_%s]", $this->getTable()->getPhpName(), strtoupper($column));
+        $initialValueField = sprintf('[%sTableMap::COL_%s]', $this->getTable()->getPhpName(), strtoupper($column));
 
         $methodNamePattern = '(' . $methodName . '\(\$v\)\n[ ]*{)';
         $newMethodCode = preg_replace_callback($methodNamePattern, function ($matches) use ($initialValueField, $column) {
@@ -211,7 +211,7 @@ private \$_isEventDisabled;
         $implodedForeignKeys = '';
 
         foreach ($foreignKeys as $foreignKey) {
-            $fullColumnName = sprintf("%s.%s", $tableName, $foreignKey->getLocalColumnName());
+            $fullColumnName = sprintf('%s.%s', $tableName, $foreignKey->getLocalColumnName());
             $implodedForeignKeys .= sprintf("
     '%s' => '%s',", $fullColumnName, $foreignKey->getLocalColumnName());
         }

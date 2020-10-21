@@ -46,7 +46,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
      * @param \Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager $eventResourceRepositoryManager
      * @param \Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager $eventResourceQueryContainerManager
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $eventResourcePlugins
-     * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $eventBehaviorConfig;
+     * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $eventBehaviorConfig
      */
     public function __construct(
         EventResourceRepositoryManager $eventResourceRepositoryManager,
