@@ -24,12 +24,23 @@ matrix:
 
 before_install:
   - phpenv config-add ci/travis.php.ini
+  # Chromedriver download and prepare
+  - curl -L "https://github.com/spryker/docker-chromedriver/archive/master.zip" -o $HOME/chromium-ecosystem/docker-chromedriver.zip
+  - rm -rf $HOME/chromium-ecosystem/docker-chromedriver-master
+  - unzip -o $HOME/chromium-ecosystem/docker-chromedriver.zip -d $HOME/chromium-ecosystem/
+  - rm -rf $HOME/chromium-ecosystem/*.zip
+  - export CHROMEDRIVER_REVISION=814168
+  - export COMPOSER_IGNORE_CHROMEDRIVER=1
+
+install:
+  - . $HOME/chromium-ecosystem/docker-chromedriver-master/chromium-installer $CHROMEDRIVER_REVISION $HOME/chromium-ecosystem false
 
 before_script:
   - phpenv config-rm xdebug.ini
   - composer install --prefer-dist --no-interaction
 
 script:
+  - if [[ $DEFAULT == 1 ]]; then timeout 45m bash -c "${CHROMEDRIVER_BINARY} --port=4444 --whitelisted-ips= --url-base=/wd/hub --log-path=/tmp/chromedriver.log --log-level=DEBUG">/dev/null & ; fi
   - if [[ $DEFAULT == 1 ]]; then vendor/bin/codecept run ; fi
   - if [[ $VALIDATION == 1 ]]; then composer cs-check ; fi
   - if [[ $VALIDATION == 1 ]]; then composer stan-setup && composer stan ; fi
@@ -37,6 +48,7 @@ script:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/chromium-ecosystem
 
 notifications:
   email: false
