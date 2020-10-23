@@ -30,6 +30,7 @@ before_install:
 
 install:
   - . $HOME/chromium-ecosystem/docker-chromedriver-master/chromium-installer $CHROMEDRIVER_REVISION $HOME/chromium-ecosystem false
+  - ln -sf $CHROMIUM_BINARY /usr/bin/local/chrome
 
 before_script:
   - phpenv config-rm xdebug.ini
