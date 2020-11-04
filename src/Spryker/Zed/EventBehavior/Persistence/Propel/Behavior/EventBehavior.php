@@ -7,10 +7,10 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence\Propel\Behavior;
 
+use Laminas\Filter\Word\UnderscoreToCamelCase;
 use Propel\Generator\Model\Behavior;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
-use Zend\Filter\Word\UnderscoreToCamelCase;
 
 class EventBehavior extends Behavior
 {
@@ -193,11 +193,11 @@ private \$_modifiedColumns;
  * @var array
  */
 private \$_initialValues;
-        
+
 /**
  * @var bool
  */
-private \$_isEventDisabled;        
+private \$_isEventDisabled;
         ";
     }
 
@@ -221,7 +221,7 @@ private \$_isEventDisabled;
  * @var array
  */
 private \$_foreignKeys = [$implodedForeignKeys
-];        
+];
         ";
     }
 
@@ -271,7 +271,7 @@ public function disableEvent()
 public function enableEvent()
 {
     \$this->_isEventDisabled = false;
-}        
+}
         ";
     }
 
@@ -298,17 +298,17 @@ protected function addSaveEventToMemory()
     if (\$this->_isEventDisabled) {
         return;
     }
-    
-    if (\$this->_eventName !== 'Entity.$tableName.create') {       
+
+    if (\$this->_eventName !== 'Entity.$tableName.create') {
         if (!\$this->_isModified) {
             return;
         }
-        
+
         if (!\$this->isEventColumnsModified()) {
             return;
         }
     }
-    
+
     \$data = [
         '$dataEventEntityName' => '$tableName',
         '$dataEventEntityId' => \$this->getPrimaryKey(),
@@ -372,14 +372,14 @@ protected function addDeleteEventToMemory()
         return "
 /**
  * @return array
- */        
+ */
 protected function getForeignKeys()
 {
     \$foreignKeysWithValue = [];
     foreach (\$this->_foreignKeys as \$key => \$value) {
         \$foreignKeysWithValue[\$key] = \$this->getByName(\$value);
     }
-    
+
     return \$foreignKeysWithValue;
 }
         ";
@@ -399,16 +399,16 @@ protected function getForeignKeys()
 protected function saveEventBehaviorEntityChange(array \$data)
 {
     \$isInstancePoolingDisabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();
-    
+
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
     \$spyEventBehaviorEntityChange->setData(json_encode(\$data));
     \$spyEventBehaviorEntityChange->setProcessId(\\Spryker\\Zed\\Kernel\\RequestIdentifier::getRequestId());
     \$spyEventBehaviorEntityChange->save();
-    
+
     if (\$isInstancePoolingDisabledSuccessfully) {
         \\Propel\\Runtime\\Propel::enableInstancePooling();
     }
-}        
+}
         ";
     }
 
@@ -428,7 +428,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
  * @return bool
  */
 protected function isEventColumnsModified()
-{            
+{
     /* There is a wildcard(*) property for this event */
     return true;
 }
@@ -456,14 +456,14 @@ protected function isEventColumnsModified()
 {
     \$eventColumns = [$implodedModifiedColumns
     ];
-    
+
     foreach (\$this->_modifiedColumns as \$modifiedColumn) {
-        if (isset(\$eventColumns[\$modifiedColumn])) {           
-            
+        if (isset(\$eventColumns[\$modifiedColumn])) {
+
             if (!isset(\$eventColumns[\$modifiedColumn]['value'])) {
                 return true;
             }
-            
+
             \$xmlValue = \$eventColumns[\$modifiedColumn]['value'];
             \$xmlValue = \$this->getPhpType(\$xmlValue, \$modifiedColumn);
             \$xmlOperator = '';
@@ -473,7 +473,7 @@ protected function isEventColumnsModified()
             \$before = \$this->_initialValues[\$modifiedColumn];
             \$field = str_replace('$tableName.', '', \$modifiedColumn);
             \$after = \$this->\$field;
-            
+
             if (\$before === null && \$after !== null) {
                 return true;
             }
@@ -506,11 +506,11 @@ protected function isEventColumnsModified()
                     break;
                 case '!==':
                     \$result = (\$before !== \$xmlValue xor \$after !== \$xmlValue);
-                    break;     
+                    break;
                 default:
                     \$result = (\$before === \$xmlValue xor \$after === \$xmlValue);
             }
-            
+
             if (\$result) {
                 return true;
             }
@@ -518,7 +518,7 @@ protected function isEventColumnsModified()
     }
 
     return false;
-}        
+}
         ";
     }
 
@@ -550,13 +550,13 @@ protected function getAdditionalValueColumnNames(): array
 protected function getAdditionalValues(): array
 {
     \$additionalValues = [];
-    foreach (\$this->getAdditionalValueColumnNames() as \$additionalValueColumnName) {          
-        \$field = str_replace('$tableName.', '', \$additionalValueColumnName);  
+    foreach (\$this->getAdditionalValueColumnNames() as \$additionalValueColumnName) {
+        \$field = str_replace('$tableName.', '', \$additionalValueColumnName);
         \$additionalValues[\$additionalValueColumnName] = \$this->\$field;
     }
 
     return \$additionalValues;
-}        
+}
         ";
     }
 
@@ -592,7 +592,7 @@ protected function getOriginalValues(): array
     }
 
     \$originalValues = [];
-    foreach (\$this->_modifiedColumns as \$modifiedColumn) {            
+    foreach (\$this->_modifiedColumns as \$modifiedColumn) {
         if (!in_array(\$modifiedColumn, \$this->getOriginalValueColumnNames())) {
             continue;
         }
@@ -600,14 +600,14 @@ protected function getOriginalValues(): array
         \$before = \$this->_initialValues[\$modifiedColumn];
         \$field = str_replace('$tableName.', '', \$modifiedColumn);
         \$after = \$this->\$field;
-        
+
         if (\$before !== \$after) {
             \$originalValues[\$modifiedColumn] = \$before;
         }
     }
 
     return \$originalValues;
-}        
+}
         ";
     }
 
@@ -708,7 +708,7 @@ protected function getPhpType(\$xmlValue, \$column)
     } else if (in_array(strtoupper(\$columnType), ['DATE', 'TIME', 'TIMESTAMP', 'BU_DATE', 'BU_TIMESTAMP'])) {
         \$xmlValue = \\DateTime::createFromFormat('Y-m-d H:i:s', \$xmlValue);
     }
-    
+
     return \$xmlValue;
 }
         ";
