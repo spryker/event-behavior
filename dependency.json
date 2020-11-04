@@ -1,7 +1,4 @@
 {
-  "include": {
-    "spryker/util-uuid-generator": "UtilUuidGenerator only used within templates."
-  },
   "include-dev": {
     "codeception/module-asserts": "Codeception module containing various assertions."
   }
