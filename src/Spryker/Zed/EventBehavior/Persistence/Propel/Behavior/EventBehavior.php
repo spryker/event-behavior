@@ -7,10 +7,10 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence\Propel\Behavior;
 
+use Laminas\Filter\Word\UnderscoreToCamelCase;
 use Propel\Generator\Model\Behavior;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
-use Laminas\Filter\Word\UnderscoreToCamelCase;
 
 class EventBehavior extends Behavior
 {
