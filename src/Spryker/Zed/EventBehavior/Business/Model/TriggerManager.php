@@ -89,7 +89,13 @@ class TriggerManager implements TriggerManagerInterface
         }
 
         $processId = RequestIdentifier::getRequestId();
-        if (!$this->eventBehaviorTableExists()) {
+        try {
+            if(!$this->eventBehaviorTableExists()){
+                static::$eventBehaviorTableExists = false;
+
+                return;
+            }
+        } catch ( \Throwable $exception) {
             static::$eventBehaviorTableExists = false;
 
             return;
