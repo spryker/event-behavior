@@ -9,6 +9,9 @@ namespace Spryker\Zed\EventBehavior\Persistence\Exception;
 
 use Exception;
 
+/**
+ * @deprecated Will be removed without replacement.
+ */
 class EventBehaviorQueryNotExistsException extends Exception
 {
 }

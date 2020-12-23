@@ -22,6 +22,9 @@ use Spryker\Zed\Kernel\RequestIdentifier;
 
 class TriggerManager implements TriggerManagerInterface
 {
+    /**
+     * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
+     */
     protected const TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE = 'spy_event_behavior_entity_change';
 
     /**
@@ -89,13 +92,7 @@ class TriggerManager implements TriggerManagerInterface
         }
 
         $processId = RequestIdentifier::getRequestId();
-        try {
-            if(!$this->eventBehaviorTableExists()){
-                static::$eventBehaviorTableExists = false;
-
-                return;
-            }
-        } catch ( \Throwable $exception) {
+        if (!$this->eventBehaviorTableExists()) {
             static::$eventBehaviorTableExists = false;
 
             return;
