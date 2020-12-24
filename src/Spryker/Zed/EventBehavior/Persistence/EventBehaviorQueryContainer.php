@@ -113,7 +113,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      *
      * @throws EventBehaviorQueryNotExistsException
      */
-    protected function checkRequiredClasses():void
+    protected function checkRequiredClasses(): void
     {
         if (
             !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
