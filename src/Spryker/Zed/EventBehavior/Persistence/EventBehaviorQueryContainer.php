@@ -113,7 +113,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      *
      * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
      */
-    protected function checkRequiredClasses(): void
+    protected function eventBehaviorEntityClassExists(): void
     {
         if (
             !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
