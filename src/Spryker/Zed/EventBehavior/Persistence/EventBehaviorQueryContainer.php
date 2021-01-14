@@ -36,7 +36,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function queryEntityChange($processId)
     {
-        $this->checkRequiredClasses();
+        $this->eventBehaviorEntityClassExists();
 
         $query = $this->getFactory()
             ->createEventBehaviorEntityChangeQuery()
