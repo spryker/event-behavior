@@ -17,18 +17,18 @@
   "require-dev": {
     "codeception/module-asserts": "^1.3.0",
     "phpstan/phpstan": "^0.12.57",
-    "spryker/code-sniffer": "*",
+    "spryker/code-sniffer": "^0.15.0",
     "spryker/config": "^3.1.0",
     "spryker/console": "^3.2.0 || ^4.0.0",
     "spryker/container": "^1.4.0",
     "spryker/event-dispatcher": "^1.0.0",
     "spryker/silex": "^2.0.0",
-    "spryker/testify": "*"
+    "spryker/testify": "^3.0.0"
   },
   "suggest": {
-    "spryker/console": "*",
-    "spryker/container": "Install this module when you want to use the EventBehaviorEventDispatcherPlugin",
-    "spryker/event-dispatcher": "Install this module when you want to use the EventBehaviorEventDispatcherPlugin",
+    "spryker/console": "If you want to execute console commands",
+    "spryker/container": "If you want to use the EventBehaviorEventDispatcherPlugin",
+    "spryker/event-dispatcher": "If you want to use the EventBehaviorEventDispatcherPlugin",
     "spryker/silex": "^2.0.0"
   },
   "autoload": {
