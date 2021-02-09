@@ -15,6 +15,7 @@ use Spryker\Zed\EventBehavior\Business\Model\EventResourcePluginResolverInterfac
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceRepositoryManager;
 use Spryker\Zed\EventBehavior\Business\Model\TriggerManager;
+use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorDependencyProvider;
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 
@@ -33,7 +34,8 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getEventFacade(),
             $this->getUtilEncodingService(),
             $this->getQueryContainer(),
-            $this->getConfig()
+            $this->getConfig(),
+            $this->getPropelFacade()
         );
     }
 
@@ -113,5 +115,13 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     protected function getEventResourcePlugins()
     {
         return $this->getProvidedDependency(EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE);
+    }
+
+    /**
+     * @return \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface
+     */
+    public function getPropelFacade(): EventBehaviorToPropelFacadeInterface
+    {
+        return $this->getProvidedDependency(EventBehaviorDependencyProvider::FACADE_PROPEL);
     }
 }

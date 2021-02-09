@@ -36,12 +36,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      */
     public function queryEntityChange($processId)
     {
-        if (
-            !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
-            || !class_exists(SpyEventBehaviorEntityChangeQuery::class)
-        ) {
-            throw new EventBehaviorQueryNotExistsException();
-        }
+        $this->eventBehaviorEntityClassExists();
 
         $query = $this->getFactory()
             ->createEventBehaviorEntityChangeQuery()
@@ -110,6 +105,21 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
              *  is not ready for transactions.
              */
             return false;
+        }
+    }
+
+    /**
+     * @deprecated Will be removed without replacement.
+     *
+     * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
+     */
+    protected function eventBehaviorEntityClassExists(): void
+    {
+        if (
+            !class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
+            || !class_exists(SpyEventBehaviorEntityChangeQuery::class)
+        ) {
+            throw new EventBehaviorQueryNotExistsException();
         }
     }
 }

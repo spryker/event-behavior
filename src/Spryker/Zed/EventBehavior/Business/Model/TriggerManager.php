@@ -10,18 +10,23 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
-use Propel\Runtime\Connection\Exception\ConnectionException;
-use Propel\Runtime\Exception\PropelException;
+use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
+use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
+use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
-use Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
 
 class TriggerManager implements TriggerManagerInterface
 {
+    /**
+     * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
+     */
+    protected const TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE = 'spy_event_behavior_entity_change';
+
     /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface
      */
@@ -43,6 +48,11 @@ class TriggerManager implements TriggerManagerInterface
     protected $config;
 
     /**
+     * @var \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface
+     */
+    protected $propelFacade;
+
+    /**
      * @var bool|null
      */
     protected static $eventBehaviorTableExists;
@@ -52,17 +62,20 @@ class TriggerManager implements TriggerManagerInterface
      * @param \Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface $utilEncodingService
      * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface $queryContainer
      * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
+     * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface $propelFacade
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         EventBehaviorToUtilEncodingInterface $utilEncodingService,
         EventBehaviorQueryContainerInterface $queryContainer,
-        EventBehaviorConfig $config
+        EventBehaviorConfig $config,
+        EventBehaviorToPropelFacadeInterface $propelFacade
     ) {
         $this->eventFacade = $eventFacade;
         $this->utilEncodingService = $utilEncodingService;
         $this->queryContainer = $queryContainer;
         $this->config = $config;
+        $this->propelFacade = $propelFacade;
     }
 
     /**
@@ -79,14 +92,14 @@ class TriggerManager implements TriggerManagerInterface
         }
 
         $processId = RequestIdentifier::getRequestId();
-        try {
-            $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
-            static::$eventBehaviorTableExists = true;
-        } catch (PropelException | ConnectionException | EventBehaviorQueryNotExistsException $e) {
+        if (!$this->eventBehaviorTableExists()) {
             static::$eventBehaviorTableExists = false;
 
             return;
         }
+
+        $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+        static::$eventBehaviorTableExists = true;
 
         $triggeredRows = $this->triggerEvents($events);
 
@@ -153,5 +166,15 @@ class TriggerManager implements TriggerManagerInterface
         }
 
         return $triggeredRows;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function eventBehaviorTableExists(): bool
+    {
+        return class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
+            && class_exists(SpyEventBehaviorEntityChangeQuery::class)
+            && $this->propelFacade->tableExists(static::TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE);
     }
 }

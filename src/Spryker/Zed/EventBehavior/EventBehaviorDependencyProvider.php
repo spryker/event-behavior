@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior;
 
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventBridge;
+use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeBridge;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingBridge;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
@@ -18,6 +19,7 @@ use Spryker\Zed\Kernel\Container;
 class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
 {
     public const FACADE_EVENT = 'FACADE_EVENT';
+    public const FACADE_PROPEL = 'FACADE_PROPEL';
     public const SERVICE_UTIL_ENCODING = 'UTIL_ENCODING_SERVICE';
     public const PLUGINS_EVENT_TRIGGER_RESOURCE = 'PLUGINS_EVENT_TRIGGER_RESOURCE';
 
@@ -31,6 +33,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addEventFacade($container);
         $container = $this->addUtilEncodingService($container);
         $container = $this->addEventTriggerResourcePlugins($container);
+        $container = $this->addPropelFacade($container);
 
         return $container;
     }
@@ -87,5 +90,21 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     protected function getEventTriggerResourcePlugins()
     {
         return [];
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addPropelFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_PROPEL, function (Container $container) {
+            return new EventBehaviorToPropelFacadeBridge(
+                $container->getLocator()->propel()->facade()
+            );
+        });
+
+        return $container;
     }
 }
