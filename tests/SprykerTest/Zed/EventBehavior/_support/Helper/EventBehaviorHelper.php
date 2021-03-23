@@ -9,6 +9,7 @@ namespace SprykerTest\Zed\EventBehavior\Helper;
 
 use Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
+use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
 use Spryker\Zed\Kernel\RequestIdentifier;
@@ -26,8 +27,7 @@ class EventBehaviorHelper extends AbstractHelper
     use DependencyProviderHelperTrait;
 
     /**
-     * Loads entities from `\Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME` and
-     * moves them to the event queue.
+     * Loads entities from `SpyEventBehaviorEntityChangeTableMap::TABLE_NAME` and adds them to the event queue.
      *
      * @return void
      */
@@ -52,105 +52,90 @@ class EventBehaviorHelper extends AbstractHelper
      *
      * @return void
      */
-    public function assertEventBehaviorEntryExistsForEvent(string $eventName): void
+    public function assertAtLeastOneEventBehaviorEntityChangeEntryExistsForEvent(string $eventName): void
     {
-        $this->assertEventBehaviorEntryForEvent($tableName, 'create');
-    }
-
-    /**
-     * @param string $tableName
-     *
-     * @return void
-     */
-    public function assertEventBehaviorCreateEntryExistsFor(string $tableName): void
-    {
-        $this->assertEventBehaviorEntryForEvent($tableName, 'create');
-    }
-
-    /**
-     * @param string $tableName
-     *
-     * @return void
-     */
-    public function assertEventBehaviorUpdateEntryExistsFor(string $tableName): void
-    {
-        $this->assertEventBehaviorEntryForEvent($tableName, 'update');
-    }
-
-    /**
-     * @param string $tableName
-     *
-     * @return void
-     */
-    public function assertEventBehaviorDeleteEntryExistsFor(string $tableName): void
-    {
-        $this->assertEventBehaviorEntryForEvent($tableName, 'delete');
+        $this->assertEventBehaviorEntryForEventExists($eventName);
     }
 
     /**
      * The EventBehavior adds methods to entities and saves a copy of the relevant data in it's own database table. This
-     * table should have a line added for the entity under test.
+     * table should have at least one line added for the `$eventName`.
      *
-     * Additionally, we assert that the `event` is named `Entity.your_table_name.delete`.
-     *
-     * @param string $tableName The name of the entity under test e.g. `spy_foo_bar`.
-     * @param string $eventSuffix The suffix for the expected eventName of the entity under test e.g. `spy_foo_bar`.
+     * @param string $eventName
      *
      * @return void
      */
-    protected function assertEventBehaviorEntryForEvent(string $tableName, string $eventSuffix): void
+    protected function assertEventBehaviorEntryForEventExists(string $eventName): void
     {
-        $expectedEventName = sprintf('Entity.%s.%s', $tableName, $eventSuffix);
-        $eventData = $this->findEntityEventBehaviorChangeEntityData($tableName, $expectedEventName);
+        $eventData = $this->findEventBehaviorEntityChangeDataForEvent($eventName);
 
         $this->assertNotNull($eventData, $this->format(sprintf(
-            '<fg=green>%s</> not found in the <fg=green>spy_event_behavior_entity_change</> table. To find out whats wrong debug <fg=yellow>YourEntity::saveEventBehaviorEntityChange()</> method.',
-            $tableName
-        )));
-
-        $this->assertSame($expectedEventName, $eventData['event'], $this->format(sprintf(
-            '<fg=yellow>%s</> not found in the saved data for the <fg=green>%s</> entity. To find out whats wrong debug <fg=yellow>YourEntity::saveEventBehaviorEntityChange()</> method.',
-            $expectedEventName,
-            $tableName
+            'No data with event <fg=green>%s</> found in the <fg=green>spy_event_behavior_entity_change</> table. To find out whats wrong debug <fg=yellow>YourEntity::saveEventBehaviorEntityChange()</> method.',
+            $eventName
         )));
 
         codecept_debug($this->format(sprintf(
-            'Expected entry for <fg=green>%s</> found in <fg=green>%s</> and has expected <fg=green>%s</> event name.',
-            $tableName,
-            SpyEventBehaviorEntityChangeTableMap::TABLE_NAME,
-            $expectedEventName
+            'Expected entry for <fg=green>%s</> event found in <fg=green>%s</>.',
+            $eventName,
+            SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
         )));
     }
 
     /**
-     * @param string $entityName
+     * Returns all found entries with the given `$eventName` or null when no entry found.
+     *
      * @param string $eventName
      *
      * @return array|null
      */
-    protected function findEntityEventBehaviorChangeEntityData(string $entityName, string $eventName): ?array
+    protected function findEventBehaviorEntityChangeDataForEvent(string $eventName): ?array
     {
-        $eventBehaviorEntityChangeEntityCollection = $this->findEntityEventBehaviorChangeEntityForCurrentRequest();
+        $eventBehaviorEntityChangeCollection = $this->findEventBehaviorEntityChangeForCurrentRequest();
 
-        if ($eventBehaviorEntityChangeEntityCollection->count() === 0) {
+        if ($eventBehaviorEntityChangeCollection->count() === 0) {
             return null;
         }
 
-        foreach ($eventBehaviorEntityChangeEntityCollection as $spyEventBehaviorEntityChangeEntity) {
-            $decodedData = json_decode($spyEventBehaviorEntityChangeEntity->getData(), true);
+        $eventBehaviorChangeEntityDataCollection = [];
 
-            if ($decodedData['name'] === $entityName && $decodedData['event'] === $eventName) {
-                return $decodedData;
+        foreach ($eventBehaviorEntityChangeCollection as $eventBehaviorEntityChangeEntity) {
+            $decodedData = json_decode($eventBehaviorEntityChangeEntity->getData(), true);
+
+            if ($decodedData['event'] === $eventName) {
+                $eventBehaviorChangeEntityDataCollection[] = $decodedData;
             }
         }
 
-        return null;
+        if (count($eventBehaviorChangeEntityDataCollection) === 0) {
+            $this->printDebugMessage($eventBehaviorEntityChangeCollection);
+
+            return null;
+        }
+
+        return $eventBehaviorChangeEntityDataCollection;
+    }
+
+    /**
+     * @param Collection $eventBehaviorEntityChangeCollection
+     *
+     * @return void
+     */
+    protected function printDebugMessage(Collection $eventBehaviorEntityChangeCollection): void
+    {
+        codecept_debug("\n" . $this->format(sprintf('The <fg=yellow>%s</> contains the following entries:', SpyEventBehaviorEntityChangeTableMap::TABLE_NAME)));
+
+        foreach ($eventBehaviorEntityChangeCollection as $eventBehaviorEntityChangeEntity) {
+            $decodedData = json_decode($eventBehaviorEntityChangeEntity->getData(), true);
+            codecept_debug($this->format(sprintf('<fg=green>%s</> with <fg=yellow>%s</>', $decodedData['event'], $eventBehaviorEntityChangeEntity->getData())));
+        }
+
+        codecept_debug('');
     }
 
     /**
      * @return \Propel\Runtime\Collection\ObjectCollection
      */
-    protected function findEntityEventBehaviorChangeEntityForCurrentRequest(): ObjectCollection
+    protected function findEventBehaviorEntityChangeForCurrentRequest(): ObjectCollection
     {
         $processId = RequestIdentifier::getRequestId();
 
