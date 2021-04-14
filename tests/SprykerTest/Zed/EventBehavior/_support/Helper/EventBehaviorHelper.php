@@ -75,7 +75,7 @@ class EventBehaviorHelper extends AbstractHelper
         )));
 
         codecept_debug($this->format(sprintf(
-            'Expected entry for <fg=green>%s</> event found in <fg=green>%s</>.',
+            'Expected entry for <fg=green>%s</> event found in <fg=green>%s</> database table.',
             $eventName,
             SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
         )));
@@ -93,6 +93,8 @@ class EventBehaviorHelper extends AbstractHelper
         $eventBehaviorEntityChangeCollection = $this->findEventBehaviorEntityChangeForCurrentRequest();
 
         if ($eventBehaviorEntityChangeCollection->count() === 0) {
+            codecept_debug('Could not find any data for the current request in the database.');
+
             return null;
         }
 
