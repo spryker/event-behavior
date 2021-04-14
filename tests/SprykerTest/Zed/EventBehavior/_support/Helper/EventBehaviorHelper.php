@@ -108,7 +108,7 @@ class EventBehaviorHelper extends AbstractHelper
     }
 
     /**
-     * @param Collection $eventBehaviorEntityChangeCollection
+     * @param \Propel\Runtime\Collection\Collection $eventBehaviorEntityChangeCollection
      *
      * @return void
      */

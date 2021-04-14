@@ -14,7 +14,7 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
 {
     /**
      * Specification:
-     * - TODO: Add method specification.
+     * - Returns SpyEventBehaviorEntityChangeQuery that filters by a given `$processId`.
      *
      * @api
      *
@@ -26,7 +26,7 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
 
     /**
      * Specification:
-     * - TODO: Add method specification.
+     * - Returns SpyEventBehaviorEntityChangeQuery that filters by a given `$date`.
      *
      * @api
      *
@@ -38,7 +38,8 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
 
     /**
      * Specification:
-     * - TODO: Add method specification.
+     * - Returns true, when propel install was running with this package.
+     * - Returns false, when propel install was not running with this package.
      *
      * @api
      *
