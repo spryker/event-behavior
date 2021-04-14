@@ -48,16 +48,6 @@ class EventBehaviorHelper extends AbstractHelper
     }
 
     /**
-     * @param string $eventName
-     *
-     * @return void
-     */
-    public function assertAtLeastOneEventBehaviorEntityChangeEntryExistsForEvent(string $eventName): void
-    {
-        $this->assertEventBehaviorEntryForEventExists($eventName);
-    }
-
-    /**
      * The EventBehavior adds methods to entities and saves a copy of the relevant data in it's own database table. This
      * table should have at least one line added for the `$eventName`.
      *
@@ -65,7 +55,7 @@ class EventBehaviorHelper extends AbstractHelper
      *
      * @return void
      */
-    protected function assertEventBehaviorEntryForEventExists(string $eventName): void
+    public function assertAtLeastOneEventBehaviorEntityChangeEntryExistsForEvent(string $eventName): void
     {
         $eventData = $this->findEventBehaviorEntityChangeDataForEvent($eventName);
 
