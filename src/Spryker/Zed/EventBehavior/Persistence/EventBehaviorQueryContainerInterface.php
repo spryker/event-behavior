@@ -33,6 +33,15 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     /**
      * @api
      *
+     * @param array $keys
+     *
+     * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
+     */
+    public function queryEntityByKeys(array $keys);
+
+    /**
+     * @api
+     *
      * @deprecated This method is deprecated without replacement. It's not used by TriggerManager::triggerRuntimeEvents() anymore.
      *
      * @return bool

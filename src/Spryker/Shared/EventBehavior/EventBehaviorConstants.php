@@ -30,6 +30,14 @@ interface EventBehaviorConstants
 
     /**
      * Specification:
+     * - Chunck size for trigger events.
+     *
+     * @api
+     */
+    public const EVENT_TRIGGER_CHUNK_SIZE = 'EVENT_TRIGGER_CHUNK_SIZE';
+
+    /**
+     * Specification:
      * - Is instance pooling enabled for event triggering.
      *
      * @api
