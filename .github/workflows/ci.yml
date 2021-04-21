@@ -3,6 +3,7 @@ name: CI
 on: [
     push,
     pull_request
+    workflow_dispatch
 ]
 
 jobs:
@@ -17,9 +18,7 @@ jobs:
         ]
 
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+      - uses: actions/checkout@v2
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -65,9 +64,7 @@ jobs:
               ]
 
       steps:
-          - uses: actions/checkout@v1
-            with:
-                fetch-depth: 1
+          - uses: actions/checkout@v2
 
           - name: Get Composer Cache Directory
             id: composer-cache
