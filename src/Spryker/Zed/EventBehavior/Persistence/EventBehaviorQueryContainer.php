@@ -26,18 +26,16 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * {@inheritDoc}
      *
-     * @param string $processId
-     *
-     * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
-     * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
-     *
      * @api
      *
+     * @param string $processId
+     *
+     * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
+     *
+     * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
     public function queryEntityChange($processId)
     {
-        var_dump('queryEntityChange');
-        var_dump($processId);
         $this->eventBehaviorEntityClassExists();
 
         $query = $this->getFactory()
@@ -51,11 +49,11 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * {@inheritDoc}
      *
+     * @api
+     *
      * @param \DateTime $date
      *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
-     * @api
-     *
      */
     public function queryLatestEntityChange(DateTime $date)
     {
@@ -70,11 +68,11 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
     /**
      * {@inheritDoc}
      *
+     * @api
+     *
      * @param array $keys
      *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
-     * @api
-     *
      */
     public function queryEntityByKeys(array $keys)
     {
@@ -132,6 +130,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      * @deprecated Will be removed without replacement.
      *
      * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
+     *
+     * @return void
      */
     protected function eventBehaviorEntityClassExists(): void
     {

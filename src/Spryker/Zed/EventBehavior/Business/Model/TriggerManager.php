@@ -98,7 +98,7 @@ class TriggerManager implements TriggerManagerInterface
             return;
         }
 
-        $limit  =  $this->config->getTriggerChunkSize();
+        $limit = $this->config->getTriggerChunkSize();
         do {
             $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
             $countEvents = count($events);
@@ -111,7 +111,7 @@ class TriggerManager implements TriggerManagerInterface
             if ($triggeredRows !== 0 && $countEvents === $triggeredRows) {
                 $this->queryContainer->queryEntityByKeys($pKeys)->delete();
             }
-        } while ($countEvents  === $limit);
+        } while ($countEvents === $limit);
     }
 
     /**
@@ -127,7 +127,7 @@ class TriggerManager implements TriggerManagerInterface
         $date = new DateTime();
         $date->sub(new DateInterval($defaultTimeout));
 
-        $limit  =  $this->config->getTriggerChunkSize();
+        $limit = $this->config->getTriggerChunkSize();
         do {
             $events = $this->queryContainer->queryLatestEntityChange($date)->limit($limit)->find()->getData();
             $countEvents = count($events);
@@ -136,11 +136,9 @@ class TriggerManager implements TriggerManagerInterface
             $triggeredRows = $this->triggerEvents($events);
 
             if ($triggeredRows !== 0 && $countEvents === $triggeredRows) {
-              $this->queryContainer->queryEntityByKeys($pKeys)->delete();
-
+                $this->queryContainer->queryEntityByKeys($pKeys)->delete();
             }
-        } while ($countEvents  === $limit);
-
+        } while ($countEvents === $limit);
     }
 
     /**

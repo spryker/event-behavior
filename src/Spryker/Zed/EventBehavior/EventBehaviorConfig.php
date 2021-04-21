@@ -16,7 +16,6 @@ class EventBehaviorConfig extends AbstractBundleConfig
     protected const DEFAULT_CHUNK_SIZE = 10000;
     protected const DEFUALT_TRIGGER_CHUNK_SIZE = 1000;
 
-
     /**
      * @var bool
      */
@@ -51,7 +50,6 @@ class EventBehaviorConfig extends AbstractBundleConfig
     {
         return $this->get(EventBehaviorConstants::EVENT_BEHAVIOR_CHUNK_SIZE, static::DEFAULT_CHUNK_SIZE);
     }
-
 
     /**
      * @api
