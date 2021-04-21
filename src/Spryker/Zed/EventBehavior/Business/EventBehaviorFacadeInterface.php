@@ -10,7 +10,7 @@ namespace Spryker\Zed\EventBehavior\Business;
 interface EventBehaviorFacadeInterface
 {
     /**
-     * Specification
+     * Specification:
      *  - Will find all entity change events with current processId from
      *  database and trigger them.
      *  - Deletes all triggered events from database.
@@ -22,7 +22,7 @@ interface EventBehaviorFacadeInterface
     public function triggerRuntimeEvents();
 
     /**
-     * Specification
+     * Specification:
      *  - Will find all expired/non-triggered entity change events from
      * database and trigger them.
      *  - Deletes all triggered events from database.

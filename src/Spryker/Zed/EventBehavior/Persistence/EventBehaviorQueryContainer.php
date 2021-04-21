@@ -112,6 +112,8 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      * @deprecated Will be removed without replacement.
      *
      * @throws \Spryker\Zed\EventBehavior\Persistence\Exception\EventBehaviorQueryNotExistsException
+     *
+     * @return void
      */
     protected function eventBehaviorEntityClassExists(): void
     {
