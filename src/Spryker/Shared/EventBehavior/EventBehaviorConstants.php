@@ -22,7 +22,7 @@ interface EventBehaviorConstants
 
     /**
      * Specification:
-     * - Chunck size for behavior events.
+     * - Chunk size for behavior events.
      *
      * @api
      */
@@ -30,7 +30,7 @@ interface EventBehaviorConstants
 
     /**
      * Specification:
-     * - Chunck size for trigger events.
+     * - Chunk size for trigger events.
      *
      * @api
      */

@@ -101,16 +101,10 @@ class TriggerManager implements TriggerManagerInterface
         $limit = $this->config->getTriggerChunkSize();
         do {
             $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
-            $countEvents = count($events);
-            $pKeys = $this->getPKeys($events);
-
             static::$eventBehaviorTableExists = true;
+            $countEvents = count($events);
 
-            $triggeredRows = $this->triggerEvents($events);
-
-            if ($triggeredRows !== 0 && $countEvents === $triggeredRows) {
-                $this->queryContainer->queryEntityByKeys($pKeys)->delete();
-            }
+            $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
     }
 
@@ -131,14 +125,26 @@ class TriggerManager implements TriggerManagerInterface
         do {
             $events = $this->queryContainer->queryLatestEntityChange($date)->limit($limit)->find()->getData();
             $countEvents = count($events);
-            $pKeys = $this->getPKeys($events);
 
-            $triggeredRows = $this->triggerEvents($events);
-
-            if ($triggeredRows !== 0 && $countEvents === $triggeredRows) {
-                $this->queryContainer->queryEntityByKeys($pKeys)->delete();
-            }
+            $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
+    }
+
+    /**
+     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     *
+     * @return int
+     */
+    protected function triggerEventsAndDelete(array $events): int
+    {
+        $pKeys = $this->getPKeys($events);
+        $triggeredRows = $this->triggerEvents($events);
+
+        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
+            return $this->queryContainer->queryEntityByKeys($pKeys)->delete();
+        }
+
+        return 0;
     }
 
     /**

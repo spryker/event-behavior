@@ -70,17 +70,15 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
      *
      * @api
      *
-     * @param array $keys
+     * @param int[] $keys
      *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
-    public function queryEntityByKeys(array $keys)
+    public function queryEntityByKeys(array $keys): SpyEventBehaviorEntityChangeQuery
     {
-        $query = $this->getFactory()
+        return $this->getFactory()
             ->createEventBehaviorEntityChangeQuery()
             ->filterByPrimaryKeys($keys);
-
-        return $query;
     }
 
     /**
