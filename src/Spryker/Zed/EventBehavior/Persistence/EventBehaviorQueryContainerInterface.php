@@ -33,7 +33,7 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     /**
      * @api
      *
-     * @param array $keys
+     * @param int[] $keys
      *
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
