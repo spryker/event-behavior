@@ -46,7 +46,7 @@
     "scripts": {
         "cs-check": "phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/",
         "cs-fix": "phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/",
-        "stan": "phpstan analyse -c phpstan.neon -l 5 src/",
+        "stan": "phpstan analyse -c phpstan.neon -l 7 src/",
         "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^0.12 && mv composer.backup composer.json",
         "test": "codecept build && codecept run"
     },
