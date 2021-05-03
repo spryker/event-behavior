@@ -95,7 +95,7 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
             $con = null;
 
             if (!$result) {
-                return $result;
+                return false;
             }
 
             return true;
