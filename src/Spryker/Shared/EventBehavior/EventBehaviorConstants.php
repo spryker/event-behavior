@@ -34,7 +34,7 @@ interface EventBehaviorConstants
      *
      * @api
      */
-    public const EVENT_TRIGGER_CHUNK_SIZE = 'EVENT_TRIGGER_CHUNK_SIZE';
+    public const TRIGGER_CHUNK_SIZE = 'EVENT_BEHAVIOR:TRIGGER_CHUNK_SIZE';
 
     /**
      * Specification:

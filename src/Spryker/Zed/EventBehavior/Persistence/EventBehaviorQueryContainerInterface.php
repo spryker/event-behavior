@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Persistence;
 
 use DateTime;
+use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Zed\Kernel\Persistence\QueryContainer\QueryContainerInterface;
 
 interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
@@ -35,18 +36,6 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
      * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
      */
     public function queryLatestEntityChange(DateTime $date);
-
-    /**
-     * Specification:
-     * - TODO: Add method specification.
-     *
-     * @api
-     *
-     * @param int[] $keys
-     *
-     * @return \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery
-     */
-    public function queryEntityByKeys(array $keys);
 
     /**
      * @api

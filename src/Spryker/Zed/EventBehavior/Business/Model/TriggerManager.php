@@ -19,6 +19,7 @@ use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
+use  Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 
 class TriggerManager implements TriggerManagerInterface
 {
@@ -53,6 +54,11 @@ class TriggerManager implements TriggerManagerInterface
     protected $propelFacade;
 
     /**
+     * @var \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface
+     */
+    protected $eventBehaviorEntityManager;
+
+    /**
      * @var bool|null
      */
     protected static $eventBehaviorTableExists;
@@ -69,13 +75,15 @@ class TriggerManager implements TriggerManagerInterface
         EventBehaviorToUtilEncodingInterface $utilEncodingService,
         EventBehaviorQueryContainerInterface $queryContainer,
         EventBehaviorConfig $config,
-        EventBehaviorToPropelFacadeInterface $propelFacade
+        EventBehaviorToPropelFacadeInterface $propelFacade,
+        EventBehaviorEntityManagerInterface $eventBehaviorEntityManager
     ) {
         $this->eventFacade = $eventFacade;
         $this->utilEncodingService = $utilEncodingService;
         $this->queryContainer = $queryContainer;
         $this->config = $config;
         $this->propelFacade = $propelFacade;
+        $this->eventBehaviorEntityManager = $eventBehaviorEntityManager;
     }
 
     /**
@@ -137,11 +145,11 @@ class TriggerManager implements TriggerManagerInterface
      */
     protected function triggerEventsAndDelete(array $events): int
     {
-        $pKeys = $this->getPKeys($events);
+        $primaryKeysIds = $this->getPrimaryKeysIds($events);
         $triggeredRows = $this->triggerEvents($events);
 
         if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            return $this->queryContainer->queryEntityByKeys($pKeys)->delete();
+            return $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeysIds($primaryKeysIds);
         }
 
         return 0;
@@ -201,7 +209,7 @@ class TriggerManager implements TriggerManagerInterface
      *
      * @return int[]
      */
-    private function getPKeys($events)
+    protected function getPrimaryKeysIds(array $events): array
     {
         $keys = [];
 

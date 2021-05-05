@@ -35,7 +35,8 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getUtilEncodingService(),
             $this->getQueryContainer(),
             $this->getConfig(),
-            $this->getPropelFacade()
+            $this->getPropelFacade(),
+            $this->getEntityManager()
         );
     }
 

@@ -58,7 +58,7 @@ class EventBehaviorConfig extends AbstractBundleConfig
      */
     public function getTriggerChunkSize(): int
     {
-        return $this->get(EventBehaviorConstants::EVENT_TRIGGER_CHUNK_SIZE, static::DEFUALT_TRIGGER_CHUNK_SIZE);
+        return $this->get(EventBehaviorConstants::TRIGGER_CHUNK_SIZE, static::DEFUALT_TRIGGER_CHUNK_SIZE);
     }
 
     /**
