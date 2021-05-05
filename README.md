@@ -1,5 +1,5 @@
 # EventBehavior Module
-[![CI](https://github.com/spryker/event-behavior/workflows/CI/badge.svg?branch=master)](https://travis-ci.org/spryker/event-behavior)
+[![CI](https://github.com/spryker/event-behavior/workflows/CI/badge.svg?branch=master)](https://github.com/spryker/event-behavior/actions?query=workflow%3ACI+branch%3Amaster)
 [![Latest Stable Version](https://poser.pugx.org/spryker/event-behavior/v/stable.svg)](https://packagist.org/packages/spryker/event-behavior)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
 
