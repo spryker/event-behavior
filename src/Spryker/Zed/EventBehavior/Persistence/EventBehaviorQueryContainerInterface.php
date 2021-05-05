@@ -13,6 +13,9 @@ use Spryker\Zed\Kernel\Persistence\QueryContainer\QueryContainerInterface;
 interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
 {
     /**
+     * Specification:
+     * - TODO: Add method specification.
+     *
      * @api
      *
      * @param string $processId
@@ -22,6 +25,9 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     public function queryEntityChange($processId);
 
     /**
+     * Specification:
+     * - TODO: Add method specification.
+     *
      * @api
      *
      * @param \DateTime $date
@@ -31,6 +37,9 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     public function queryLatestEntityChange(DateTime $date);
 
     /**
+     * Specification:
+     * - TODO: Add method specification.
+     *
      * @api
      *
      * @param int[] $keys
