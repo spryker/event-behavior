@@ -38,7 +38,7 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
 
     /**
      * Specification:
-     * - Checks if the table exists
+     * - TODO: Add method specification.
      *
      * @api
      *

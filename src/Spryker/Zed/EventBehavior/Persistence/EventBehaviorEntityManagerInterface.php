@@ -10,14 +10,9 @@ namespace Spryker\Zed\EventBehavior\Persistence;
 interface EventBehaviorEntityManagerInterface
 {
     /**
-     * Specification:
-     * - Delete entities by primary keys ids
-     *
-     * @api
-     *
-     * @param int[] $primaryKeysIds
+     * @param int[] $primaryKeys
      *
      * @return int
      */
-    public function deleteEventBehaviorEntityByPrimaryKeysIds(array $primaryKeysIds = []): int;
+    public function deleteEventBehaviorEntityByPrimaryKeys(array $primaryKeys = []): int;
 }

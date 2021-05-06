@@ -15,17 +15,15 @@ use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
 class EventBehaviorEntityManager extends AbstractEntityManager implements EventBehaviorEntityManagerInterface
 {
     /**
-     * @inheriDoc
-     *
-     * @param int[] $primaryKeysIds
+     * @param int[] $primaryKeys
      *
      * @return int
      */
-    public function deleteEventBehaviorEntityByPrimaryKeysIds(array $primaryKeysIds = []): int
+    public function deleteEventBehaviorEntityByPrimaryKeys(array $primaryKeys = []): int
     {
         return $this->getFactory()
             ->createEventBehaviorEntityChangeQuery()
-            ->filterByPrimaryKeys($primaryKeysIds)
+            ->filterByPrimaryKeys($primaryKeys)
             ->delete();
     }
 }

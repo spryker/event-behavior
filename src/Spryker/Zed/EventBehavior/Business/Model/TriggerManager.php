@@ -146,11 +146,11 @@ class TriggerManager implements TriggerManagerInterface
      */
     protected function triggerEventsAndDelete(array $events): int
     {
-        $primaryKeysIds = $this->getPrimaryKeysIds($events);
+        $primaryKeys = $this->getPrimaryKeys($events);
         $triggeredRows = $this->triggerEvents($events);
 
         if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            return $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeysIds($primaryKeysIds);
+            return $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
         }
 
         return 0;
@@ -210,7 +210,7 @@ class TriggerManager implements TriggerManagerInterface
      *
      * @return int[]
      */
-    protected function getPrimaryKeysIds(array $events): array
+    protected function getPrimaryKeys(array $events): array
     {
         $keys = [];
 
