@@ -13,6 +13,7 @@ use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
 /**
  * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
  * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface getQueryContainer()
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface getEntityManager()
  */
 class EventBehaviorPersistenceFactory extends AbstractPersistenceFactory
 {

@@ -65,7 +65,6 @@ class EventBehaviorQueryContainer extends AbstractQueryContainer implements Even
         return $query;
     }
 
-
     /**
      * {@inheritDoc}
      *

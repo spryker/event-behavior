@@ -8,7 +8,6 @@
 namespace Spryker\Zed\EventBehavior\Persistence;
 
 use DateTime;
-use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Zed\Kernel\Persistence\QueryContainer\QueryContainerInterface;
 
 interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
@@ -38,6 +37,9 @@ interface EventBehaviorQueryContainerInterface extends QueryContainerInterface
     public function queryLatestEntityChange(DateTime $date);
 
     /**
+     * Specification:
+     * - Checks if the table exists
+     *
      * @api
      *
      * @deprecated This method is deprecated without replacement. It's not used by TriggerManager::triggerRuntimeEvents() anymore.

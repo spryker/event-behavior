@@ -11,6 +11,7 @@ use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
  * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorBusinessFactory getFactory()
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface getEntityManager()
  */
 class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeInterface
 {

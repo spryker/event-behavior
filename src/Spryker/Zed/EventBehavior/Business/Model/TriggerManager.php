@@ -16,10 +16,10 @@ use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
+use Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
-use  Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 
 class TriggerManager implements TriggerManagerInterface
 {
@@ -69,6 +69,7 @@ class TriggerManager implements TriggerManagerInterface
      * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface $queryContainer
      * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface $propelFacade
+     * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface $eventBehaviorEntityManager
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,

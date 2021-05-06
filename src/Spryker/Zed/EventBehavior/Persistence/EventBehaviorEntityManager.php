@@ -9,7 +9,9 @@ namespace Spryker\Zed\EventBehavior\Persistence;
 
 use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
 
-
+/**
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorPersistenceFactory getFactory()
+ */
 class EventBehaviorEntityManager extends AbstractEntityManager implements EventBehaviorEntityManagerInterface
 {
     /**

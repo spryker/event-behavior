@@ -7,7 +7,6 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence;
 
-
 interface EventBehaviorEntityManagerInterface
 {
     /**

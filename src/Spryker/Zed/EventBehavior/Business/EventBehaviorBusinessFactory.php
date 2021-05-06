@@ -22,6 +22,7 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 /**
  * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
  * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface getQueryContainer()
+ * @method \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface getEntityManager()
  */
 class EventBehaviorBusinessFactory extends AbstractBusinessFactory
 {
