@@ -89,7 +89,6 @@ class TriggerManager implements TriggerManagerInterface
         $eventTriggerResponseTransfer->setEventBehaviorTableExists(true);
         $eventTriggerResponseTransfer->setIsEventTriggeringActive(true);
 
-        // TODO cleanup this method, it's not clear what it does.
         if (static::$eventBehaviorTableExists === false) {
             $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
             $eventTriggerResponseTransfer->setEventBehaviorTableExists(false);
@@ -104,10 +103,6 @@ class TriggerManager implements TriggerManagerInterface
             return $eventTriggerResponseTransfer;
         }
 
-        $requestId = RequestIdentifier::getRequestId();
-
-        $eventTriggerResponseTransfer->setRequestId($requestId);
-
         if (!$this->eventBehaviorTableExists()) {
             static::$eventBehaviorTableExists = false;
             $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
@@ -115,6 +110,10 @@ class TriggerManager implements TriggerManagerInterface
 
             return $eventTriggerResponseTransfer;
         }
+
+        $requestId = RequestIdentifier::getRequestId();
+
+        $eventTriggerResponseTransfer->setRequestId($requestId);
 
         $events = $this->queryContainer->queryEntityChange($requestId)->find()->getData();
         $eventTriggerResponseTransfer->setEventCount(count($events));
