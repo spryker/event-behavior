@@ -16,13 +16,25 @@ interface EventBehaviorFacadeInterface
      *  - Will find all entity change events with current processId from
      *  database and trigger them.
      *  - Deletes all triggered events from database.
+     *
+     * @api
+     *
+     * @return void
+     */
+    public function triggerRuntimeEvents(): void;
+
+    /**
+     * Specification:
+     *  - Will find all entity change events with current processId from
+     *  database and trigger them.
+     *  - Deletes all triggered events from database.
      *  - Returns a EventTriggerResponseTransfer with debug information.
      *
      * @api
      *
      * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents(): EventTriggerResponseTransfer;
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer;
 
     /**
      * Specification:

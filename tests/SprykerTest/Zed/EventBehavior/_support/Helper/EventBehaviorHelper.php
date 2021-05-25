@@ -34,7 +34,7 @@ class EventBehaviorHelper extends AbstractHelper
      */
     public function triggerRuntimeEvents(): EventTriggerResponseTransfer
     {
-        return $this->getFacade()->triggerRuntimeEvents();
+        return $this->getFacade()->triggerRuntimeEventsWithReport();
     }
 
     /**

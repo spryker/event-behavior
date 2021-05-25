@@ -20,9 +20,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
+     * @return void
+     */
+    public function triggerRuntimeEvents(): void
+    {
+        $this->getFactory()->createTriggerManager()->triggerRuntimeEvents();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
      * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents(): EventTriggerResponseTransfer
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer
     {
         return $this->getFactory()->createTriggerManager()->triggerRuntimeEvents();
     }
