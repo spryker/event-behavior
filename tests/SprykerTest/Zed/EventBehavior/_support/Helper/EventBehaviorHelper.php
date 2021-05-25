@@ -7,6 +7,7 @@
 
 namespace SprykerTest\Zed\EventBehavior\Helper;
 
+use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 use Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Propel\Runtime\Collection\Collection;
@@ -29,11 +30,11 @@ class EventBehaviorHelper extends AbstractHelper
     /**
      * Loads entities from `SpyEventBehaviorEntityChangeTableMap::TABLE_NAME` and adds them to the event queue.
      *
-     * @return void
+     * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents(): void
+    public function triggerRuntimeEvents(): EventTriggerResponseTransfer
     {
-        $this->getFacade()->triggerRuntimeEvents();
+        return $this->getFacade()->triggerRuntimeEvents();
     }
 
     /**

@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
+use Generated\Shared\Transfer\EventTriggerResponseTransfer;
+
 interface EventBehaviorFacadeInterface
 {
     /**
@@ -14,12 +16,13 @@ interface EventBehaviorFacadeInterface
      *  - Will find all entity change events with current processId from
      *  database and trigger them.
      *  - Deletes all triggered events from database.
+     *  - Returns a EventTriggerResponseTransfer with debug information.
      *
      * @api
      *
-     * @return void
+     * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents();
+    public function triggerRuntimeEvents(): EventTriggerResponseTransfer;
 
     /**
      * Specification:

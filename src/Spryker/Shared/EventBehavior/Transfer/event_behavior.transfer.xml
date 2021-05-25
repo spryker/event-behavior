@@ -13,5 +13,16 @@
         <property name="additionalValues" type="array" singular="additionalValue"/>
     </transfer>
 
+    <transfer name="EventTriggerResponse">
+        <property name="isSuccessful" type="bool"/>
+        <property name="isEventTriggeringActive" type="bool"/>
+        <property name="eventBehaviorTableExists" type="bool"/>
+        <property name="message" type="string"/>
+        <property name="requestId" type="string"/>
+        <property name="eventCount" type="int"/>
+        <property name="triggeredRows" type="int"/>
+        <property name="deletedRows" type="int"/>
+    </transfer>
+
 </transfers>
 
