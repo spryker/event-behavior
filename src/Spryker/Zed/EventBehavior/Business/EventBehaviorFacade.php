@@ -22,7 +22,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @return void
      */
-    public function triggerRuntimeEvents(): void
+    public function triggerRuntimeEvents()
     {
         $this->getFactory()->createTriggerManager()->triggerRuntimeEvents();
     }

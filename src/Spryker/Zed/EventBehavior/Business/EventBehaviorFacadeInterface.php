@@ -21,7 +21,7 @@ interface EventBehaviorFacadeInterface
      *
      * @return void
      */
-    public function triggerRuntimeEvents(): void;
+    public function triggerRuntimeEvents();
 
     /**
      * Specification:
