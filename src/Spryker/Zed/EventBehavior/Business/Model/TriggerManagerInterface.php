@@ -7,12 +7,14 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Generated\Shared\Transfer\EventTriggerResponseTransfer;
+
 interface TriggerManagerInterface
 {
     /**
-     * @return void
+     * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents();
+    public function triggerRuntimeEvents(): EventTriggerResponseTransfer;
 
     /**
      * @return void
