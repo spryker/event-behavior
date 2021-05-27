@@ -20,3 +20,4 @@ parameters:
         - '#Parameter .+ of method .+ has invalid typehint type .+\\Spy.+#'
         - '#Class .+Query not found#'
         - '#Parameter \#2 \$transfers of method .+EventFacadeInterface::triggerBulk\(\) expects array<.+TransferInterface>, array<.+EventEntityTransfer> given.#'
+        - '#Call to method propel\(\) on an unknown class .+AutoCompletion.#'
