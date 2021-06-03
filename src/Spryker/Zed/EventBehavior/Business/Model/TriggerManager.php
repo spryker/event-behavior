@@ -80,9 +80,39 @@ class TriggerManager implements TriggerManagerInterface
     }
 
     /**
+     * @return void
+     */
+    public function triggerRuntimeEvents()
+    {
+        if (static::$eventBehaviorTableExists === false) {
+            return;
+        }
+
+        if (!$this->config->getEventBehaviorTriggeringStatus()) {
+            return;
+        }
+
+        $processId = RequestIdentifier::getRequestId();
+        if (!$this->eventBehaviorTableExists()) {
+            static::$eventBehaviorTableExists = false;
+
+            return;
+        }
+
+        $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
+        static::$eventBehaviorTableExists = true;
+
+        $triggeredRows = $this->triggerEvents($events);
+
+        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
+            $this->queryContainer->queryEntityChange($processId)->delete();
+        }
+    }
+
+    /**
      * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents(): EventTriggerResponseTransfer
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer
     {
         $eventTriggerResponseTransfer = new EventTriggerResponseTransfer();
         $eventTriggerResponseTransfer->setIsSuccessful(false);
