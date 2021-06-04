@@ -12,9 +12,14 @@ use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 interface TriggerManagerInterface
 {
     /**
+     * @return void
+     */
+    public function triggerRuntimeEvents();
+
+    /**
      * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
      */
-    public function triggerRuntimeEvents(): EventTriggerResponseTransfer;
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer;
 
     /**
      * @return void
