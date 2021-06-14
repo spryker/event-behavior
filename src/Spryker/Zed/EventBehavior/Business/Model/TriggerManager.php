@@ -10,6 +10,7 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 use Orm\Zed\EventBehavior\Persistence\Base\SpyEventBehaviorEntityChangeQuery as BaseSpyEventBehaviorEntityChangeQuery;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
@@ -115,6 +116,61 @@ class TriggerManager implements TriggerManagerInterface
 
             $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
+     */
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer
+    {
+        $eventTriggerResponseTransfer = new EventTriggerResponseTransfer();
+        $eventTriggerResponseTransfer->setIsSuccessful(false);
+        $eventTriggerResponseTransfer->setEventBehaviorTableExists(true);
+        $eventTriggerResponseTransfer->setIsEventTriggeringActive(true);
+
+        if (static::$eventBehaviorTableExists === false) {
+            $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
+            $eventTriggerResponseTransfer->setEventBehaviorTableExists(false);
+
+            return $eventTriggerResponseTransfer;
+        }
+
+        if (!$this->config->getEventBehaviorTriggeringStatus()) {
+            $eventTriggerResponseTransfer->setMessage('Event triggering is not enabled.');
+            $eventTriggerResponseTransfer->setIsEventTriggeringActive(false);
+
+            return $eventTriggerResponseTransfer;
+        }
+
+        if (!$this->eventBehaviorTableExists()) {
+            static::$eventBehaviorTableExists = false;
+            $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
+            $eventTriggerResponseTransfer->setEventBehaviorTableExists(false);
+
+            return $eventTriggerResponseTransfer;
+        }
+
+        $requestId = RequestIdentifier::getRequestId();
+
+        $eventTriggerResponseTransfer->setRequestId($requestId);
+
+        $events = $this->queryContainer->queryEntityChange($requestId)->find()->getData();
+        $eventTriggerResponseTransfer->setEventCount(count($events));
+
+        static::$eventBehaviorTableExists = true;
+
+        $triggeredRows = $this->triggerEvents($events);
+
+        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+
+        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
+            $deletedRows = $this->queryContainer->queryEntityChange($requestId)->delete();
+            $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
+        }
+
+        $eventTriggerResponseTransfer->setIsSuccessful(true);
+
+        return $eventTriggerResponseTransfer;
     }
 
     /**

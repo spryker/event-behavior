@@ -7,6 +7,7 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
+use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
@@ -25,6 +26,18 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     public function triggerRuntimeEvents()
     {
         $this->getFactory()->createTriggerManager()->triggerRuntimeEvents();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @return \Generated\Shared\Transfer\EventTriggerResponseTransfer
+     */
+    public function triggerRuntimeEventsWithReport(): EventTriggerResponseTransfer
+    {
+        return $this->getFactory()->createTriggerManager()->triggerRuntimeEventsWithReport();
     }
 
     /**
