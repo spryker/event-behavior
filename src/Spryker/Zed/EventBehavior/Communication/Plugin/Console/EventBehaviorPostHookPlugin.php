@@ -21,7 +21,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EventBehaviorPostHookPlugin extends AbstractPlugin implements ConsolePostRunHookPluginInterface
 {
+    /**
+     * @var int
+     */
     public const CODE_SUCCESS = 0;
+    /**
+     * @var int
+     */
     public const CODE_ERROR = 1;
 
     /**

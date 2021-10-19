@@ -14,12 +14,33 @@ use Propel\Runtime\Exception\PropelException;
 
 class EventBehavior extends Behavior
 {
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_NAME = 'name';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_ID = 'id';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_FOREIGN_KEYS = 'foreignKeys';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS = 'modifiedColumns';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_ORIGINAL_VALUES = 'originalValues';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES = 'additionalValues';
+    /**
+     * @var string
+     */
     public const EVENT_CHANGE_NAME = 'event';
 
     /**
