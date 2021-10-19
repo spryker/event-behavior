@@ -162,12 +162,18 @@ class TriggerManager implements TriggerManagerInterface
 
         $triggeredRows = $this->triggerEvents($events);
 
-        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $deletedRows = 0;
+        $limit = $this->config->getTriggerChunkSize();
+        do {
+            $events = $this->queryContainer->queryEntityChange($requestId)->limit($limit)->find()->getData();
+            static::$eventBehaviorTableExists = true;
+            $countEvents = count($events);
 
-        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            $deletedRows = $this->queryContainer->queryEntityChange($requestId)->delete();
-            $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
-        }
+            $deletedRows += $this->triggerEventsAndDelete($events);
+        } while ($countEvents === $limit);
+
+        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
 
         $eventTriggerResponseTransfer->setIsSuccessful(true);
 
