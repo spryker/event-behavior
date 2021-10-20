@@ -166,7 +166,6 @@ class TriggerManager implements TriggerManagerInterface
         $limit = $this->config->getTriggerChunkSize();
         do {
             $events = $this->queryContainer->queryEntityChange($requestId)->limit($limit)->find()->getData();
-            static::$eventBehaviorTableExists = true;
             $countEvents = count($events);
 
             $deletedRows += $this->triggerEventsAndDelete($events);
