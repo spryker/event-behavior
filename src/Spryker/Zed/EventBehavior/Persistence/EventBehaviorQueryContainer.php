@@ -21,6 +21,9 @@ use Throwable;
  */
 class EventBehaviorQueryContainer extends AbstractQueryContainer implements EventBehaviorQueryContainerInterface
 {
+    /**
+     * @var string
+     */
     public const TABLE_EXISTS = 'exists';
 
     /**

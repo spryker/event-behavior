@@ -39,9 +39,21 @@ use Spryker\Zed\Kernel\RequestIdentifier;
  */
 class EventBehaviorFacadeTest extends Unit
 {
+    /**
+     * @var string
+     */
     protected const FOREIGN_KEYS = 'foreign_keys';
+    /**
+     * @var string
+     */
     protected const MODIFIED_COLUMNS = 'modified_columns';
+    /**
+     * @var string
+     */
     protected const ORIGINAL_VALUES = 'original_values';
+    /**
+     * @var string
+     */
     protected const FIELD_ADDITIONAL_VALUES = 'additional_values';
 
     /**

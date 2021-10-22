@@ -22,13 +22,34 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class EventTriggerConsole extends Console
 {
+    /**
+     * @var string
+     */
     public const COMMAND_NAME = 'event:trigger';
+    /**
+     * @var string
+     */
     public const DESCRIPTION = 'Triggers events for publishing the resources';
+    /**
+     * @var string
+     */
     public const RESOURCE_OPTION = 'resource';
+    /**
+     * @var string
+     */
     public const RESOURCE_OPTION_SHORTCUT = 'r';
+    /**
+     * @var string
+     */
     public const RESOURCE_IDS_OPTION = 'ids';
+    /**
+     * @var string
+     */
     public const RESOURCE_IDS_OPTION_SHORTCUT = 'i';
 
+    /**
+     * @var string
+     */
     protected const WARNING_MESSAGE = "Don't run this command in production environment.";
 
     /**

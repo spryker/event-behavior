@@ -19,7 +19,13 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
 {
     use InstancePoolingTrait;
 
+    /**
+     * @var string
+     */
     protected const REPOSITORY_EVENT_RESOURCE_PLUGINS = 'repository';
+    /**
+     * @var string
+     */
     protected const QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS = 'query_container';
 
     /**

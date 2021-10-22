@@ -16,7 +16,13 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInt
 
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
+    /**
+     * @var int
+     */
     protected const DEFAULT_CHUNK_SIZE = 100;
+    /**
+     * @var string
+     */
     protected const DELIMITER = '.';
 
     /**

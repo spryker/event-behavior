@@ -17,6 +17,7 @@ use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
+use Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\RequestIdentifier;
@@ -25,6 +26,7 @@ class TriggerManager implements TriggerManagerInterface
 {
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
+     * @var string
      */
     protected const TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE = 'spy_event_behavior_entity_change';
 
@@ -54,6 +56,11 @@ class TriggerManager implements TriggerManagerInterface
     protected $propelFacade;
 
     /**
+     * @var \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface
+     */
+    protected $eventBehaviorEntityManager;
+
+    /**
      * @var bool|null
      */
     protected static $eventBehaviorTableExists;
@@ -64,19 +71,22 @@ class TriggerManager implements TriggerManagerInterface
      * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface $queryContainer
      * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToPropelFacadeInterface $propelFacade
+     * @param \Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface $eventBehaviorEntityManager
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         EventBehaviorToUtilEncodingInterface $utilEncodingService,
         EventBehaviorQueryContainerInterface $queryContainer,
         EventBehaviorConfig $config,
-        EventBehaviorToPropelFacadeInterface $propelFacade
+        EventBehaviorToPropelFacadeInterface $propelFacade,
+        EventBehaviorEntityManagerInterface $eventBehaviorEntityManager
     ) {
         $this->eventFacade = $eventFacade;
         $this->utilEncodingService = $utilEncodingService;
         $this->queryContainer = $queryContainer;
         $this->config = $config;
         $this->propelFacade = $propelFacade;
+        $this->eventBehaviorEntityManager = $eventBehaviorEntityManager;
     }
 
     /**
@@ -99,14 +109,14 @@ class TriggerManager implements TriggerManagerInterface
             return;
         }
 
-        $events = $this->queryContainer->queryEntityChange($processId)->find()->getData();
-        static::$eventBehaviorTableExists = true;
+        $limit = $this->config->getTriggerChunkSize();
+        do {
+            $events = $this->queryContainer->queryEntityChange($processId)->limit($limit)->find()->getData();
+            static::$eventBehaviorTableExists = true;
+            $countEvents = count($events);
 
-        $triggeredRows = $this->triggerEvents($events);
-
-        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            $this->queryContainer->queryEntityChange($processId)->delete();
-        }
+            $this->triggerEventsAndDelete($events);
+        } while ($countEvents === $limit);
     }
 
     /**
@@ -152,12 +162,17 @@ class TriggerManager implements TriggerManagerInterface
 
         $triggeredRows = $this->triggerEvents($events);
 
-        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $deletedRows = 0;
+        $limit = $this->config->getTriggerChunkSize();
+        do {
+            $events = $this->queryContainer->queryEntityChange($requestId)->limit($limit)->find()->getData();
+            $countEvents = count($events);
 
-        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            $deletedRows = $this->queryContainer->queryEntityChange($requestId)->delete();
-            $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
-        }
+            $deletedRows += $this->triggerEventsAndDelete($events);
+        } while ($countEvents === $limit);
+
+        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
 
         $eventTriggerResponseTransfer->setIsSuccessful(true);
 
@@ -177,12 +192,30 @@ class TriggerManager implements TriggerManagerInterface
         $date = new DateTime();
         $date->sub(new DateInterval($defaultTimeout));
 
-        $events = $this->queryContainer->queryLatestEntityChange($date)->find()->getData();
+        $limit = $this->config->getTriggerChunkSize();
+        do {
+            $events = $this->queryContainer->queryLatestEntityChange($date)->limit($limit)->find()->getData();
+            $countEvents = count($events);
+
+            $this->triggerEventsAndDelete($events);
+        } while ($countEvents === $limit);
+    }
+
+    /**
+     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     *
+     * @return int
+     */
+    protected function triggerEventsAndDelete(array $events): int
+    {
+        $primaryKeys = $this->getPrimaryKeys($events);
         $triggeredRows = $this->triggerEvents($events);
 
         if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            $this->queryContainer->queryLatestEntityChange($date)->delete();
+            return $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
         }
+
+        return 0;
     }
 
     /**
@@ -232,5 +265,21 @@ class TriggerManager implements TriggerManagerInterface
         return class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
             && class_exists(SpyEventBehaviorEntityChangeQuery::class)
             && $this->propelFacade->tableExists(static::TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE);
+    }
+
+    /**
+     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     *
+     * @return int[]
+     */
+    protected function getPrimaryKeys(array $events): array
+    {
+        $keys = [];
+
+        foreach ($events as $event) {
+            $keys[] = $event->getIdEventBehaviorEntityChange();
+        }
+
+        return $keys;
     }
 }

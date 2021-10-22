@@ -18,7 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EventBehaviorTriggerTimeoutConsole extends Console
 {
+    /**
+     * @var string
+     */
     public const COMMAND_NAME = 'event:trigger:timeout';
+    /**
+     * @var string
+     */
     public const DESCRIPTION = 'Triggers timeout events which stored in database and clean them afterwards';
 
     /**

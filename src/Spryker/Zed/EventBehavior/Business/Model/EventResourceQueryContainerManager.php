@@ -14,6 +14,9 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPlugi
 
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
 {
+    /**
+     * @var int
+     */
     protected const DEFAULT_CHUNK_SIZE = 100;
 
     /**

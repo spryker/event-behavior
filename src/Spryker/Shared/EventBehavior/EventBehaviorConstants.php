@@ -17,22 +17,38 @@ interface EventBehaviorConstants
      * - Is triggering activated for behavior events (true|false)
      *
      * @api
+     *
+     * @var string
      */
     public const EVENT_BEHAVIOR_TRIGGERING_ACTIVE = 'EVENT_BEHAVIOR_TRIGGERING_ACTIVE';
 
     /**
      * Specification:
-     * - Chunck size for behavior events.
+     * - Chunk size for behavior events.
      *
      * @api
+     *
+     * @var string
      */
     public const EVENT_BEHAVIOR_CHUNK_SIZE = 'EVENT_BEHAVIOR_CHUNK_SIZE';
+
+    /**
+     * Specification:
+     * - Chunk size for trigger events.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const TRIGGER_CHUNK_SIZE = 'EVENT_BEHAVIOR:TRIGGER_CHUNK_SIZE';
 
     /**
      * Specification:
      * - Is instance pooling enabled for event triggering.
      *
      * @api
+     *
+     * @var string
      */
     public const ENABLE_INSTANCE_POOLING = 'EVENT_BEHAVIOR:ENABLE_INSTANCE_POOLING';
 }

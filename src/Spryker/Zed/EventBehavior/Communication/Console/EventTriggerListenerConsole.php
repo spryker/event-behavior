@@ -20,16 +20,40 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EventTriggerListenerConsole extends Console
 {
+    /**
+     * @var string
+     */
     protected const NAME = 'event:trigger:listener';
+    /**
+     * @var string
+     */
     protected const DESCRIPTION = 'Triggers listener with provided event data.';
 
+    /**
+     * @var string
+     */
     protected const OPTION_LONG_FORMAT = 'format';
+    /**
+     * @var string
+     */
     protected const OPTION_SHORT_FORMAT = 'f';
 
+    /**
+     * @var string
+     */
     protected const ARGUMENT_LISTENER_NAME = 'listenerName';
+    /**
+     * @var string
+     */
     protected const ARGUMENT_DATA = 'data';
 
+    /**
+     * @var string
+     */
     protected const OPTION_EVENT_NAME = 'event';
+    /**
+     * @var string
+     */
     protected const OPTION_SHORT_EVENT_NAME = 'e';
 
     /**
