@@ -26,6 +26,7 @@ class TriggerManager implements TriggerManagerInterface
 {
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
+     *
      * @var string
      */
     protected const TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE = 'spy_event_behavior_entity_change';
