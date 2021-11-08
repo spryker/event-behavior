@@ -33,8 +33,8 @@ class EventBehaviorTriggerTimeoutConsole extends Console
      */
     protected function configure()
     {
-        $this->setName(self::COMMAND_NAME)
-            ->setDescription(self::DESCRIPTION);
+        $this->setName(static::COMMAND_NAME)
+            ->setDescription(static::DESCRIPTION);
     }
 
     /**
