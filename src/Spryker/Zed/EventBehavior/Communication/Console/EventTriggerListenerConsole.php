@@ -96,10 +96,14 @@ class EventTriggerListenerConsole extends Console
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $listenerName = (string)$input->getArgument(static::ARGUMENT_LISTENER_NAME);
-        $transferData = (string)$input->getArgument(static::ARGUMENT_DATA);
-        $format = (string)$input->getOption(static::OPTION_LONG_FORMAT);
-        $eventName = (string)$input->getOption(static::OPTION_EVENT_NAME);
+        /** @var string $listenerName */
+        $listenerName = $input->getArgument(static::ARGUMENT_LISTENER_NAME);
+        /** @var string $transferData */
+        $transferData = $input->getArgument(static::ARGUMENT_DATA);
+        /** @var string $format */
+        $format = $input->getOption(static::OPTION_LONG_FORMAT);
+        /** @var string $eventName */
+        $eventName = $input->getOption(static::OPTION_EVENT_NAME);
 
         $this->getFacade()->triggerEventListenerByName($listenerName, $transferData, $format, $eventName);
 
