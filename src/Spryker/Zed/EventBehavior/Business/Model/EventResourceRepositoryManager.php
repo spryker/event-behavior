@@ -22,6 +22,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected const DEFAULT_CHUNK_SIZE = 100;
 
     /**
+     * @phpstan-var non-empty-string
+     *
      * @var string
      */
     protected const DELIMITER = '.';
