@@ -10,18 +10,18 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 interface EventResourcePluginResolverInterface
 {
     /**
-     * @param string[] $resources
-     * @param (string|int)[] $ids
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<string> $resources
+     * @param array<(string|int)> $ids
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
      * @return void
      */
     public function executeResolvedPluginsBySources(array $resources, array $ids = [], array $resourcePublisherPlugins = []): void;
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getAvailableResourceNames(array $resourcePublisherPlugins = []): array;
 }

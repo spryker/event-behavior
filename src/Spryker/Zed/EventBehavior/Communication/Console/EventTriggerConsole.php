@@ -26,22 +26,27 @@ class EventTriggerConsole extends Console
      * @var string
      */
     public const COMMAND_NAME = 'event:trigger';
+
     /**
      * @var string
      */
     public const DESCRIPTION = 'Triggers events for publishing the resources';
+
     /**
      * @var string
      */
     public const RESOURCE_OPTION = 'resource';
+
     /**
      * @var string
      */
     public const RESOURCE_OPTION_SHORTCUT = 'r';
+
     /**
      * @var string
      */
     public const RESOURCE_IDS_OPTION = 'ids';
+
     /**
      * @var string
      */
@@ -122,7 +127,7 @@ class EventTriggerConsole extends Console
         return sprintf(
             "-%s [\n\t%s\n]",
             static::RESOURCE_OPTION_SHORTCUT,
-            implode(",\n\t", $availableResourceNames)
+            implode(",\n\t", $availableResourceNames),
         );
     }
 }

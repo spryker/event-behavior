@@ -22,14 +22,17 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
      * @var string
      */
     public const FACADE_EVENT = 'FACADE_EVENT';
+
     /**
      * @var string
      */
     public const FACADE_PROPEL = 'FACADE_PROPEL';
+
     /**
      * @var string
      */
     public const SERVICE_UTIL_ENCODING = 'UTIL_ENCODING_SERVICE';
+
     /**
      * @var string
      */
@@ -59,7 +62,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_EVENT, function (Container $container) {
             return new EventBehaviorToEventBridge(
-                $container->getLocator()->event()->facade()
+                $container->getLocator()->event()->facade(),
             );
         });
 
@@ -75,7 +78,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
             return new EventBehaviorToUtilEncodingBridge(
-                $container->getLocator()->utilEncoding()->service()
+                $container->getLocator()->utilEncoding()->service(),
             );
         });
 
@@ -97,7 +100,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface>
      */
     protected function getEventTriggerResourcePlugins()
     {
@@ -113,7 +116,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     {
         $container->set(static::FACADE_PROPEL, function (Container $container) {
             return new EventBehaviorToPropelFacadeBridge(
-                $container->getLocator()->propel()->facade()
+                $container->getLocator()->propel()->facade(),
             );
         });
 

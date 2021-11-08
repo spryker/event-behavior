@@ -21,7 +21,7 @@ interface EventBehaviorToEventInterface
 
     /**
      * @param string $eventName
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $transfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $transfers
      *
      * @return void
      */
@@ -30,7 +30,7 @@ interface EventBehaviorToEventInterface
     /**
      * @param string $listenerName
      * @param string $eventName
-     * @param \Spryker\Shared\Kernel\Transfer\TransferInterface[] $transfers
+     * @param array<\Spryker\Shared\Kernel\Transfer\TransferInterface> $transfers
      *
      * @return void
      */

@@ -24,6 +24,7 @@ class EventTriggerListenerConsole extends Console
      * @var string
      */
     protected const NAME = 'event:trigger:listener';
+
     /**
      * @var string
      */
@@ -33,6 +34,7 @@ class EventTriggerListenerConsole extends Console
      * @var string
      */
     protected const OPTION_LONG_FORMAT = 'format';
+
     /**
      * @var string
      */
@@ -42,6 +44,7 @@ class EventTriggerListenerConsole extends Console
      * @var string
      */
     protected const ARGUMENT_LISTENER_NAME = 'listenerName';
+
     /**
      * @var string
      */
@@ -51,6 +54,7 @@ class EventTriggerListenerConsole extends Console
      * @var string
      */
     protected const OPTION_EVENT_NAME = 'event';
+
     /**
      * @var string
      */
@@ -73,14 +77,14 @@ class EventTriggerListenerConsole extends Console
                 static::OPTION_SHORT_FORMAT,
                 InputOption::VALUE_OPTIONAL,
                 'Input format data. Default is querystring. Json also supported.',
-                'querystring'
+                'querystring',
             )
             ->addOption(
                 static::OPTION_EVENT_NAME,
                 static::OPTION_SHORT_EVENT_NAME,
                 InputOption::VALUE_OPTIONAL,
                 'An event name that should be triggered.',
-                ''
+                '',
             );
     }
 

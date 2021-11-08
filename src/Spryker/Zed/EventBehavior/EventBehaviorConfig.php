@@ -16,10 +16,12 @@ class EventBehaviorConfig extends AbstractBundleConfig
      * @var int
      */
     public const EVENT_ENTITY_CHANGE_TIMEOUT_MINUTE = 5;
+
     /**
      * @var int
      */
     protected const DEFAULT_CHUNK_SIZE = 10000;
+
     /**
      * @var int
      */

@@ -57,7 +57,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      *
      * @return array
      */
@@ -71,7 +71,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -86,10 +86,10 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
-     * @param string[] $columns
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param array<string> $columns
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array<\Generated\Shared\Transfer\EventEntityTransfer>
      */
     public function getEventTransfersByModifiedColumns(array $eventTransfers, array $columns)
     {
@@ -101,7 +101,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array
@@ -116,7 +116,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array
@@ -131,9 +131,9 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param string[] $resources
-     * @param (string|int)[] $ids
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<string> $resources
+     * @param array<(string|int)> $ids
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
      * @return void
      */
@@ -147,9 +147,9 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getAvailableResourceNames(array $resourcePublisherPlugins = []): array
     {
@@ -163,7 +163,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -174,7 +174,7 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
             ->createEventEntityTransferFilter()
             ->getGroupedEventTransferForeignKeysByForeignKey(
                 $eventTransfers,
-                $foreignKeyColumnName
+                $foreignKeyColumnName,
             );
     }
 

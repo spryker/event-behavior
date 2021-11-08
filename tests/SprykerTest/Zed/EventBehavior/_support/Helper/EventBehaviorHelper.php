@@ -62,13 +62,13 @@ class EventBehaviorHelper extends AbstractHelper
 
         $this->assertNotNull($eventData, $this->format(sprintf(
             'No data with event <fg=green>%s</> found in the <fg=green>spy_event_behavior_entity_change</> table. To find out whats wrong debug <fg=yellow>YourEntity::saveEventBehaviorEntityChange()</> method.',
-            $eventName
+            $eventName,
         )));
 
         codecept_debug($this->format(sprintf(
             'Expected entry for <fg=green>%s</> event found in <fg=green>%s</> database table.',
             $eventName,
-            SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
+            SpyEventBehaviorEntityChangeTableMap::TABLE_NAME,
         )));
     }
 

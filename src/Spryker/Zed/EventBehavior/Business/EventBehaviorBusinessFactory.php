@@ -37,7 +37,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->getQueryContainer(),
             $this->getConfig(),
             $this->getPropelFacade(),
-            $this->getEntityManager()
+            $this->getEntityManager(),
         );
     }
 
@@ -48,7 +48,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new ListenerTrigger(
             $this->getEventFacade(),
-            $this->getUtilEncodingService()
+            $this->getUtilEncodingService(),
         );
     }
 
@@ -59,7 +59,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new EventResourceQueryContainerManager(
             $this->getEventFacade(),
-            $this->getConfig()->getChunkSize()
+            $this->getConfig()->getChunkSize(),
         );
     }
 
@@ -70,7 +70,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new EventResourceRepositoryManager(
             $this->getEventFacade(),
-            $this->getConfig()->getChunkSize()
+            $this->getConfig()->getChunkSize(),
         );
     }
 
@@ -83,7 +83,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
             $this->createEventResourceRepositoryManager(),
             $this->createEventResourceQueryContainerManager(),
             $this->getEventResourcePlugins(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -112,7 +112,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface>
      */
     protected function getEventResourcePlugins()
     {

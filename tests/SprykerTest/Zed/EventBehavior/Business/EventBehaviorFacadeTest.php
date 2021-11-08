@@ -43,14 +43,17 @@ class EventBehaviorFacadeTest extends Unit
      * @var string
      */
     protected const FOREIGN_KEYS = 'foreign_keys';
+
     /**
      * @var string
      */
     protected const MODIFIED_COLUMNS = 'modified_columns';
+
     /**
      * @var string
      */
     protected const ORIGINAL_VALUES = 'original_values';
+
     /**
      * @var string
      */
@@ -91,8 +94,8 @@ class EventBehaviorFacadeTest extends Unit
                         foreach ($eventTransfers as $eventTransfer) {
                             $this->assertTriggeredEvent($eventName, $eventTransfer);
                         }
-                    }
-                )
+                    },
+                ),
             );
 
             return $eventFacadeMock;
@@ -124,8 +127,8 @@ class EventBehaviorFacadeTest extends Unit
                         foreach ($eventTransfers as $eventTransfer) {
                             $this->assertTriggeredEvent($eventName, $eventTransfer);
                         }
-                    }
-                )
+                    },
+                ),
             );
 
             return $storageMock;
@@ -338,8 +341,8 @@ class EventBehaviorFacadeTest extends Unit
                     $this->returnCallback(
                         function ($eventName): void {
                             $this->assertTriggeredResourceEvent($eventName);
-                        }
-                    )
+                        },
+                    ),
                 );
 
                 return $storageMock;
@@ -359,7 +362,7 @@ class EventBehaviorFacadeTest extends Unit
     }
 
     /**
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[]
+     * @return array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface>
      */
     protected function getEventTriggerResourcePlugins(): array
     {

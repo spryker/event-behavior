@@ -54,7 +54,7 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      *
      * @return array
      */
@@ -66,7 +66,7 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -79,10 +79,10 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
-     * @param string[] $columns
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param array<string> $columns
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array<\Generated\Shared\Transfer\EventEntityTransfer>
      */
     public function getEventTransfersByModifiedColumns(array $eventTransfers, array $columns);
 
@@ -92,7 +92,7 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array
@@ -105,7 +105,7 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array
@@ -119,9 +119,9 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param string[] $resources
-     * @param (string|int)[] $ids
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<string> $resources
+     * @param array<(string|int)> $ids
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
      * @return void
      */
@@ -133,9 +133,9 @@ interface EventBehaviorFacadeInterface
      *
      * @api
      *
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $resourcePublisherPlugins
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $resourcePublisherPlugins
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getAvailableResourceNames(array $resourcePublisherPlugins = []): array;
 
@@ -147,7 +147,7 @@ interface EventBehaviorFacadeInterface
      *
      * @example ['foreignKey1Value' => ['relatedForeignKeys1' => [foreignKey1 => foreignKey1Value, ...], ...]]
      *
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array

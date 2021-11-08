@@ -57,7 +57,7 @@ class ListenerTrigger implements ListenerTriggerInterface
      *
      * @throws \InvalidArgumentException
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array<\Generated\Shared\Transfer\EventEntityTransfer>
      */
     protected function getEventEntityTransfers(string $transferData, string $format): array
     {

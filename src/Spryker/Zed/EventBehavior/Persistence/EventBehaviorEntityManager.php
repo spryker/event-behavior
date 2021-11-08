@@ -15,7 +15,7 @@ use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
 class EventBehaviorEntityManager extends AbstractEntityManager implements EventBehaviorEntityManagerInterface
 {
     /**
-     * @param int[] $primaryKeys
+     * @param array<int> $primaryKeys
      *
      * @return int
      */

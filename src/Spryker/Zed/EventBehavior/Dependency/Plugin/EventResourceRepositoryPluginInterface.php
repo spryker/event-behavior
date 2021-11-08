@@ -19,9 +19,9 @@ interface EventResourceRepositoryPluginInterface extends EventResourcePluginInte
      *
      * @api
      *
-     * @param (string|int)[] $ids
+     * @param array<(string|int)> $ids
      *
-     * @return \Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer[]
+     * @return array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer>
      */
     public function getData(array $ids = []): array;
 }

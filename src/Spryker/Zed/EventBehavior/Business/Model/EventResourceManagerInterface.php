@@ -10,8 +10,8 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 interface EventResourceManagerInterface
 {
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $plugins
-     * @param (string|int)[] $ids
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $plugins
+     * @param array<(string|int)> $ids
      *
      * @return void
      */

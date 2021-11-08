@@ -10,14 +10,14 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 interface EventEntityTransferFilterInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      *
      * @return array
      */
     public function getEventTransferIds(array $eventTransfers);
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -25,15 +25,15 @@ interface EventEntityTransferFilterInterface
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName);
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
-     * @param string[] $columns
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param array<string> $columns
      *
-     * @return \Generated\Shared\Transfer\EventEntityTransfer[]
+     * @return array<\Generated\Shared\Transfer\EventEntityTransfer>
      */
     public function getEventTransfersByModifiedColumns(array $eventTransfers, array $columns);
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -41,7 +41,7 @@ interface EventEntityTransferFilterInterface
     public function getGroupedEventTransferForeignKeysByForeignKey(array $eventTransfers, string $foreignKeyColumnName);
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array
@@ -49,7 +49,7 @@ interface EventEntityTransferFilterInterface
     public function getEventTransfersOriginalValues(array $eventTransfers, string $columnName): array;
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $eventTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
      * @return array

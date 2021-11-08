@@ -20,6 +20,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      * @var int
      */
     protected const DEFAULT_CHUNK_SIZE = 100;
+
     /**
      * @var string
      */
@@ -48,8 +49,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface[] $plugins
-     * @param (string|int)[] $ids
+     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $plugins
+     * @param array<(string|int)> $ids
      *
      * @return void
      */
@@ -87,7 +88,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
-     * @param (string|int)[] $ids
+     * @param array<(string|int)> $ids
      *
      * @return void
      */
@@ -118,7 +119,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
      *
-     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
+     * @return \Iterator|array<array<\Generated\Shared\Transfer\EventEntityTransfer>>
      */
     protected function createEventResourceRepositoryPluginIterator(EventResourceRepositoryPluginInterface $plugin): Iterator
     {
@@ -141,7 +142,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      *
-     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
+     * @return \Iterator|array<array<\Generated\Shared\Transfer\EventEntityTransfer>>
      */
     protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin): Iterator
     {
@@ -150,7 +151,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param \Generated\Shared\Transfer\EventEntityTransfer[] $chunkOfEventEntitiesTransfers
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $chunkOfEventEntitiesTransfers
      *
      * @return array
      */

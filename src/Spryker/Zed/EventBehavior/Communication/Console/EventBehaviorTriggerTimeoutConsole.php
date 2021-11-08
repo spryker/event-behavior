@@ -22,6 +22,7 @@ class EventBehaviorTriggerTimeoutConsole extends Console
      * @var string
      */
     public const COMMAND_NAME = 'event:trigger:timeout';
+
     /**
      * @var string
      */

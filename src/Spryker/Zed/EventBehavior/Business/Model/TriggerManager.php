@@ -203,7 +203,7 @@ class TriggerManager implements TriggerManagerInterface
     }
 
     /**
-     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
      *
      * @return int
      */
@@ -220,7 +220,7 @@ class TriggerManager implements TriggerManagerInterface
     }
 
     /**
-     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
      *
      * @return int
      */
@@ -269,9 +269,9 @@ class TriggerManager implements TriggerManagerInterface
     }
 
     /**
-     * @param \Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange[] $events
+     * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
      *
-     * @return int[]
+     * @return array<int>
      */
     protected function getPrimaryKeys(array $events): array
     {

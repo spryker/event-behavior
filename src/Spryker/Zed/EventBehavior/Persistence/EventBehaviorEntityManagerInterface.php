@@ -10,7 +10,7 @@ namespace Spryker\Zed\EventBehavior\Persistence;
 interface EventBehaviorEntityManagerInterface
 {
     /**
-     * @param int[] $primaryKeys
+     * @param array<int> $primaryKeys
      *
      * @return int
      */

@@ -17,7 +17,7 @@ class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginI
     protected $plugin;
 
     /**
-     * @var \Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer[]
+     * @var array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer>
      */
     protected $data;
 
