@@ -82,14 +82,14 @@ jobs:
                 restore-keys: |
                     ${{ runner.os }}-composer-
 
-          - name: Composer prefer-lowest
-            run: composer lowest-setup
-
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
             with:
                 php-version: ${{ matrix.php-version }}
                 extensions: mbstring, intl, pdo_mysql
+
+          - name: Composer prefer-lowest
+            run: composer lowest-setup
 
           - name: PHPStan checks
             run: |
