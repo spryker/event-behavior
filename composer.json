@@ -23,7 +23,7 @@
         "spryker/event-dispatcher": "^1.0.0",
         "spryker/silex": "^2.0.0",
         "spryker/testify": "^3.42.0",
-        "spryker/transfer": "^3.0.0"
+        "spryker/transfer": "^3.25.0"
     },
     "suggest": {
         "spryker/console": "If you want to execute console commands",
