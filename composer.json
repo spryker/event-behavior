@@ -22,7 +22,7 @@
         "spryker/container": "^1.4.0",
         "spryker/event-dispatcher": "^1.0.0",
         "spryker/silex": "^2.0.0",
-        "spryker/testify": "^3.5.0",
+        "spryker/testify": "^3.42.0",
         "spryker/transfer": "^3.0.0"
     },
     "suggest": {
