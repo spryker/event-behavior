@@ -29,6 +29,4 @@ suites:
                         - Spryker
                 - \SprykerTest\Shared\Transfer\Helper\TransferGenerateHelper:
                     isolated: true
-                    schemaDirectories:
-                        - ../../src/*/Shared/*/Transfer/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper

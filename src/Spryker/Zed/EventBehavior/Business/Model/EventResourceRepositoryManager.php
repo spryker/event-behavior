@@ -50,7 +50,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $plugins
-     * @param array<(string|int)> $ids
+     * @param array<int> $ids
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
-     * @param array<(string|int)> $ids
+     * @param array<int> $ids
      *
      * @return void
      */
@@ -176,7 +176,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function getIdColumnName($plugin): ?string
     {
         /** @phpstan-var array<int, string> $idColumnName */
-        $idColumnName = explode(static::DELIMITER, $plugin->getIdColumnName());
+        $idColumnName = explode(static::DELIMITER, (string)$plugin->getIdColumnName());
 
         return $idColumnName[1] ?? null;
     }

@@ -96,6 +96,7 @@ class EventTriggerConsole extends Console
 
         if ($input->getOption(static::RESOURCE_IDS_OPTION)) {
             $idsString = (string)$input->getOption(static::RESOURCE_IDS_OPTION);
+            /** @var array<int> $resourcesIds */
             $resourcesIds = explode(',', $idsString);
         }
 
