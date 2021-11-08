@@ -102,7 +102,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      *
-     * @return \Iterator|array<array<\Generated\Shared\Transfer\EventEntityTransfer>>
+     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
      */
     protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin): Iterator
     {
