@@ -18,13 +18,4 @@ settings:
 coverage:
     enabled: true
     whitelist: { include: ['src/*'] }
-
-extensions:
-    enabled:
-        - \SprykerTest\Shared\Testify\Helper\WebDriverHelper
-    config:
-        \SprykerTest\Shared\Testify\Helper\WebDriverHelper:
-            suites: ['Presentation']
-            loadImages: false
-            diskCache: true
 bootstrap: bootstrap.php

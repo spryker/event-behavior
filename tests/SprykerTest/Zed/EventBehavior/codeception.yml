@@ -32,4 +32,3 @@ suites:
                     schemaDirectories:
                         - ../../src/*/Shared/*/Transfer/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
-                - \SprykerTest\Shared\Propel\Helper\TransactionHelper
