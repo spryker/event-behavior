@@ -46,13 +46,13 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, intl, pdo_mysql
 
-      - name: CodeStyle checks
-        run: composer cs-check
-
       - name: PHPStan checks
         run: |
-          composer stan-setup
-          composer stan
+            composer stan-setup
+            composer stan
+
+      - name: CodeStyle checks
+        run: composer cs-check
 
   prefer-lowest:
       runs-on: ubuntu-18.04
@@ -79,7 +79,7 @@ jobs:
                     ${{ runner.os }}-composer-
 
           - name: Composer prefer-lowest
-            run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
+            run: composer lowest-setup
 
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
@@ -88,4 +88,9 @@ jobs:
                 extensions: mbstring, intl, pdo_mysql
 
           - name: PHPStan checks
-            run: composer stan
+            run: |
+                composer stan-setup
+                composer stan
+
+          - name: Prefer lowest checks
+            run: composer lowest

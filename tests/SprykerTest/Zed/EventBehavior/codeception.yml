@@ -18,8 +18,18 @@ suites:
         modules:
             enabled:
                 - Asserts
-                - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\Environment:
+                    isolated: true
+                - \SprykerTest\Zed\Testify\Helper\BusinessHelper
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
-                - \SprykerTest\Shared\Testify\Helper\LocatorHelper
+                - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
+                    projectNamespaces:
+                        - Spryker
+                    coreNamespaces:
+                        - Spryker
+                - \SprykerTest\Shared\Transfer\Helper\TransferGenerateHelper:
+                    isolated: true
+                    schemaDirectories:
+                        - ../../src/*/Shared/*/Transfer/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Shared\Propel\Helper\TransactionHelper

@@ -27,3 +27,4 @@ extensions:
             suites: ['Presentation']
             loadImages: false
             diskCache: true
+bootstrap: bootstrap.php
