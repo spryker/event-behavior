@@ -18,7 +18,7 @@ interface EventResourceQueryContainerPluginInterface extends EventResourcePlugin
      *
      * @api
      *
-     * @param array<(string|int)> $ids
+     * @param array<int> $ids
      *
      * @return \Propel\Runtime\ActiveQuery\ModelCriteria|null
      */

@@ -47,6 +47,9 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, intl, pdo_mysql
 
+      - name: Run tests (failing right now)
+        run: composer test || true
+
       - name: PHPStan checks
         run: |
           composer stan-setup
@@ -79,14 +82,24 @@ jobs:
                 restore-keys: |
                     ${{ runner.os }}-composer-
 
-          - name: Composer prefer-lowest
-            run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
-
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
             with:
                 php-version: ${{ matrix.php-version }}
                 extensions: mbstring, intl, pdo_mysql
 
+          - name: Composer prefer-lowest
+            run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
+
+          - name: Run tests (failing right now)
+            run: composer test || true
+
           - name: PHPStan checks
-            run: composer stan
+            run: |
+                composer stan-setup
+                composer stan
+
+          - name: Prefer lowest checks
+            run: |
+                composer require --dev --update-with-all-dependencies dereuromark/composer-prefer-lowest:dev-master
+                composer lowest

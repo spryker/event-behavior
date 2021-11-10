@@ -86,7 +86,8 @@ class EventTriggerConsole extends Console
         $resourcesIds = [];
 
         if ($input->getOption(static::RESOURCE_OPTION)) {
-            $resourceString = (string)$input->getOption(static::RESOURCE_OPTION);
+            /** @var string $resourceString */
+            $resourceString = $input->getOption(static::RESOURCE_OPTION);
             $resources = explode(',', $resourceString);
         }
 
@@ -95,7 +96,9 @@ class EventTriggerConsole extends Console
         }
 
         if ($input->getOption(static::RESOURCE_IDS_OPTION)) {
-            $idsString = (string)$input->getOption(static::RESOURCE_IDS_OPTION);
+            /** @var string $idsString */
+            $idsString = $input->getOption(static::RESOURCE_IDS_OPTION);
+            /** @var array<int> $resourcesIds */
             $resourcesIds = explode(',', $idsString);
         }
 

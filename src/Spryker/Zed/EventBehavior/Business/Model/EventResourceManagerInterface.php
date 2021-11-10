@@ -11,7 +11,7 @@ interface EventResourceManagerInterface
 {
     /**
      * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $plugins
-     * @param array<(string|int)> $ids
+     * @param array<int> $ids
      *
      * @return void
      */

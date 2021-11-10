@@ -1,5 +1,8 @@
 {
-  "include-dev": {
-    "codeception/module-asserts": "Codeception module containing various assertions."
-  }
+    "include-dev": {
+        "codeception/module-asserts": "Codeception module containing various assertions."
+    },
+    "exclude-dev": {
+        "phpstan/phpstan": "Done via composer command."
+    }
 }
