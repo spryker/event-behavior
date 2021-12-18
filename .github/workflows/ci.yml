@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, pdo_mysql
+
       - name: Validate composer.json and composer.lock
         run: composer validate
 
@@ -40,12 +46,6 @@ jobs:
         run: |
           composer --version
           composer install --optimize-autoloader
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: mbstring, intl, pdo_mysql
 
       - name: Run tests (failing right now)
         run: composer test || true
@@ -70,6 +70,12 @@ jobs:
       steps:
           - uses: actions/checkout@v2
 
+          - name: Setup PHP
+            uses: shivammathur/setup-php@v2
+            with:
+                php-version: ${{ matrix.php-version }}
+                extensions: mbstring, intl, pdo_mysql
+
           - name: Get Composer Cache Directory
             id: composer-cache
             run: |
@@ -81,12 +87,6 @@ jobs:
                 key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                 restore-keys: |
                     ${{ runner.os }}-composer-
-
-          - name: Setup PHP
-            uses: shivammathur/setup-php@v2
-            with:
-                php-version: ${{ matrix.php-version }}
-                extensions: mbstring, intl, pdo_mysql
 
           - name: Composer prefer-lowest
             run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
