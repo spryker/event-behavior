@@ -19,12 +19,5 @@
         "rule": "BridgeMethodsInterfaceRule",
         "ruleset": "Spryker",
         "priority": "2"
-    },
-    {
-        "fileName": "src/Spryker/Zed/EventBehavior/EventBehaviorConfig.php",
-        "description": "Getter `Spryker\\Zed\\EventBehavior\\EventBehaviorConfig::getEventBehaviorTriggeringStatus()` must not return bool.",
-        "rule": "GetterReturnTypeRule",
-        "ruleset": "Spryker",
-        "priority": "1"
     }
 ]
