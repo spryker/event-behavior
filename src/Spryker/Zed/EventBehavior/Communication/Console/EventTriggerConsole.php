@@ -91,7 +91,7 @@ class EventTriggerConsole extends Console
             $resources = explode(',', $resourceString);
         }
 
-        if (empty($resources)) {
+        if (!$resources) {
             $this->displayWarningMessage($input, $output);
         }
 
