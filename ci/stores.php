@@ -5,8 +5,8 @@ $stores = [];
 $stores['DE'] = [
     'queuePools' => [
         'synchronizationPool' => [
-            'DE-connection'
-        ]
+            'DE-connection',
+        ],
     ],
     'locales' => [
         'de' => 'de_DE',
@@ -17,7 +17,7 @@ $stores['DE'] = [
         'NO',
         'CH',
         'ES',
-        'GB'
+        'GB',
     ],
 ];
 $stores['AT']['queuePools']['synchronizationPool'] = ['DE-connection'];
