@@ -43,7 +43,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
 
     /**
      * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface> $plugins
-     * @param array $ids
+     * @param array<int> $ids
      *
      * @return void
      */
@@ -56,7 +56,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
-     * @param array $ids
+     * @param array<int> $ids
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      *
-     * @return \Iterator|\Generated\Shared\Transfer\EventEntityTransfer[][]
+     * @return \Iterator|int[]
      */
     protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin): Iterator
     {
@@ -111,7 +111,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
-     * @param array $ids
+     * @param array<int> $ids
      *
      * @return void
      */
