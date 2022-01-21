@@ -121,7 +121,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
      *
-     * @return \Iterator|array<array<\Generated\Shared\Transfer\EventEntityTransfer>>
+     * @return \Iterator<array<\Generated\Shared\Transfer\EventEntityTransfer>>
      */
     protected function createEventResourceRepositoryPluginIterator(EventResourceRepositoryPluginInterface $plugin): Iterator
     {
@@ -144,7 +144,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      *
-     * @return \Iterator|array<array<\Generated\Shared\Transfer\EventEntityTransfer>>
+     * @return \Iterator<array<\Generated\Shared\Transfer\EventEntityTransfer>>
      */
     protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin): Iterator
     {

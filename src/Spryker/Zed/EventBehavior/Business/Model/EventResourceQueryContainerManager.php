@@ -102,7 +102,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      *
-     * @return \Iterator|int[]
+     * @return \Iterator<array<int>>
      */
     protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin): Iterator
     {
