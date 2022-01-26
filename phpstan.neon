@@ -5,7 +5,7 @@ parameters:
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     excludePaths:
-        - */Propel/*
+        - '*/Propel/*'
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
         - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
