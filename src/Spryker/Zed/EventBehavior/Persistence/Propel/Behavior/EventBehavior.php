@@ -188,9 +188,9 @@ if (\$affectedRows) {
         $initialValueField = sprintf('[%sTableMap::COL_%s]', $this->getTable()->getPhpName(), strtoupper($column));
 
         $methodNamePattern = '(' . $methodName . '\(\$v\)\n[ ]*{)';
-        $newMethodCode = preg_replace_callback($methodNamePattern, function ($matches) use ($initialValueField, $column) {
+        $newMethodCode = (string)preg_replace_callback($methodNamePattern, function ($matches) use ($initialValueField, $column) {
             return $matches[0] . "\n\t\t\$this->_initialValues$initialValueField = \$this->$column;\n";
-        }, $parser->findMethod($methodName));
+        }, (string)$parser->findMethod($methodName));
 
         $parser->replaceMethod($methodName, $newMethodCode);
     }

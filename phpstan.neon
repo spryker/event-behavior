@@ -5,7 +5,9 @@ parameters:
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     excludePaths:
-        - '*/Propel/*'
+        - '*/templates/*'
+        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChange.php'
+        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChangeQuery.php'
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
         - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
