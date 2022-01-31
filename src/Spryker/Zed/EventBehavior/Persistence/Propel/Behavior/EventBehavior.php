@@ -184,7 +184,9 @@ if (\$affectedRows) {
     {
         $camelCaseFilter = new UnderscoreToCamelCase();
 
-        $methodName = sprintf('set%s', $camelCaseFilter->filter($column));
+        /** @var string $name */
+        $name = $camelCaseFilter->filter($column);
+        $methodName = sprintf('set%s', $name);
         $initialValueField = sprintf('[%sTableMap::COL_%s]', $this->getTable()->getPhpName(), strtoupper($column));
 
         $methodNamePattern = '(' . $methodName . '\(\$v\)\n[ ]*{)';
