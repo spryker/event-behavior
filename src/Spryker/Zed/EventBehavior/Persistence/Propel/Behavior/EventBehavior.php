@@ -93,7 +93,7 @@ if (\$affectedRows) {
      *
      * @return void
      */
-    public function addParameter(array $parameter)
+    public function addParameter(array $parameter): void
     {
         $parameter = array_change_key_case($parameter, CASE_LOWER);
 
