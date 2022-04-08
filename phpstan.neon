@@ -15,5 +15,6 @@ parameters:
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
         - '#.+ has invalid return type Orm\\.+#'
         - '#.+ has invalid type Orm\\.+#'
+        - '#Call to an undefined method .+ActiveRecordInterface::.+#'
     bootstrapFiles:
         - tests/bootstrap.php

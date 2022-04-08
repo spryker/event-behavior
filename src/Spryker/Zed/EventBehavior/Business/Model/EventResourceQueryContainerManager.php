@@ -9,6 +9,7 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
 use Iterator;
+use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use ReflectionClass;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
@@ -72,7 +73,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      * @param array<int> $ids
      *
-     * @return \Iterator<array<int>>
+     * @return \Iterator<array<\Propel\Runtime\ActiveRecord\ActiveRecordInterface>>
      */
     protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin, $ids = []): Iterator
     {
@@ -98,11 +99,10 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
         $protectAdditionalValuesMethod = $reflactionEntity->getMethod('getAdditionalValues');
         $protectAdditionalValuesMethod->setAccessible(true);
 
-        $eventEntityTransfers = array_map(function ($entity) use ($plugin, $protectForeignKeysMethod, $protectAdditionalValuesMethod) {
+        $eventEntityTransfers = array_map(function (ActiveRecordInterface $entity) use ($plugin, $protectForeignKeysMethod, $protectAdditionalValuesMethod) {
 
             return (new EventEntityTransfer())
                 ->setId($entity->getPrimaryKey())
-                ->setName($entity)
                 ->setEvent($plugin->getEventName())
                 ->setForeignKeys($protectForeignKeysMethod->invokeArgs($entity, []))
                 ->setAdditionalValues($protectAdditionalValuesMethod->invokeArgs($entity, []));
