@@ -18,12 +18,19 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
     protected $plugin;
 
     /**
+     * @var array<int>
+     */
+    protected $ids;
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      * @param int $chunkSize
      */
-    public function __construct(EventResourceQueryContainerPluginInterface $plugin, int $chunkSize)
+    public function __construct(EventResourceQueryContainerPluginInterface $plugin, int $chunkSize, $ids = [])
     {
         parent::__construct($plugin, $chunkSize);
+
+        $this->ids = $ids;
     }
 
     /**
@@ -31,11 +38,11 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
      */
     protected function updateCurrent(): void
     {
+        $whereCondition = !$this->ids ? ModelCriteria::ISNOTNULL : sprintf('%s (%s)', ModelCriteria::IN, implode(',', $this->ids));
         $this->current = $this->plugin->queryData()
             ->offset($this->offset)
             ->limit($this->chunkSize)
-            ->where($this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
-            ->select([$this->plugin->getIdColumnName()])
+            ->where($this->plugin->getIdColumnName() . ' ' . $whereCondition)
             ->orderBy((string)$this->plugin->getIdColumnName())
             ->find()
             ->getData();

@@ -9,6 +9,7 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Generated\Shared\Transfer\EventEntityTransfer;
 use Iterator;
+use ReflectionClass;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 
@@ -62,64 +63,50 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function triggerEvents(EventResourceQueryContainerPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids) {
-            $this->triggerBulk($plugin, $ids);
-
-            return;
+        foreach ($this->createEventResourceQueryContainerPluginIterator($plugin, $ids) as $entities) {
+            $this->triggerBulk($plugin, $entities);
         }
-
-        if ($plugin->queryData($ids) === null) {
-            $this->triggerEventWithEmptyId($plugin);
-
-            return;
-        }
-
-        $this->processEventsByPluginItreator($plugin);
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
-     *
-     * @return void
-     */
-    protected function triggerEventWithEmptyId(EventResourceQueryContainerPluginInterface $plugin): void
-    {
-        $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
-     *
-     * @return void
-     */
-    protected function processEventsByPluginItreator(EventResourceQueryContainerPluginInterface $plugin): void
-    {
-        foreach ($this->createEventResourceQueryContainerPluginIterator($plugin) as $ids) {
-            $this->triggerBulk($plugin, $ids);
-        }
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
-     *
-     * @return \Iterator<array<int>>
-     */
-    protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin): Iterator
-    {
-        return new EventResourceQueryContainerPluginIterator($plugin, $this->chunkSize);
     }
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      * @param array<int> $ids
      *
+     * @return \Iterator<array<int>>
+     */
+    protected function createEventResourceQueryContainerPluginIterator(EventResourceQueryContainerPluginInterface $plugin, $ids = []): Iterator
+    {
+        return new EventResourceQueryContainerPluginIterator($plugin, $this->chunkSize, $ids);
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
+     * @param array<\Propel\Runtime\ActiveRecord\ActiveRecordInterface> $entities
+     *
      * @return void
      */
-    protected function triggerBulk(EventResourceQueryContainerPluginInterface $plugin, array $ids): void
+    protected function triggerBulk(EventResourceQueryContainerPluginInterface $plugin, array $entities): void
     {
-        $eventEntityTransfers = array_map(function ($id) {
-            return (new EventEntityTransfer())->setId($id);
-        }, $ids);
+        if (!$entities) {
+            return;
+        }
+
+        $reflactionEntity = new ReflectionClass(get_class($entities[0]));
+
+        $protectForeignKeysMethod = $reflactionEntity->getMethod('getForeignKeys');
+        $protectForeignKeysMethod->setAccessible(true);
+        $protectAdditionalValuesMethod = $reflactionEntity->getMethod('getAdditionalValues');
+        $protectAdditionalValuesMethod->setAccessible(true);
+
+        $eventEntityTransfers = array_map(function ($entity) use ($plugin, $protectForeignKeysMethod, $protectAdditionalValuesMethod) {
+
+            return (new EventEntityTransfer())
+                ->setId($entity->getPrimaryKey())
+                ->setName($entity)
+                ->setEvent($plugin->getEventName())
+                ->setForeignKeys($protectForeignKeysMethod->invokeArgs($entity, []))
+                ->setAdditionalValues($protectAdditionalValuesMethod->invokeArgs($entity, []));
+        }, $entities);
 
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
