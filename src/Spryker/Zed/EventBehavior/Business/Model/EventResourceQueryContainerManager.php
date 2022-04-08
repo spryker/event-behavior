@@ -100,7 +100,6 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
         $protectAdditionalValuesMethod->setAccessible(true);
 
         $eventEntityTransfers = array_map(function (ActiveRecordInterface $entity) use ($plugin, $protectForeignKeysMethod, $protectAdditionalValuesMethod) {
-
             return (new EventEntityTransfer())
                 ->setId($entity->getPrimaryKey())
                 ->setEvent($plugin->getEventName())
