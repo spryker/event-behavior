@@ -18,6 +18,8 @@ interface EventResourceQueryContainerPluginInterface extends EventResourcePlugin
      *
      * @api
      *
+     * @deprecated Parameter $ids will be removed.
+     *
      * @param array<int> $ids
      *
      * @return \Propel\Runtime\ActiveQuery\ModelCriteria|null

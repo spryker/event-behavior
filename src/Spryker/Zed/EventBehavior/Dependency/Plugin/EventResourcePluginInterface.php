@@ -35,6 +35,8 @@ interface EventResourcePluginInterface
      *
      * @api
      *
+     * @deprecated Method will be removed
+     *
      * @return string|null
      */
     public function getIdColumnName(): ?string;
