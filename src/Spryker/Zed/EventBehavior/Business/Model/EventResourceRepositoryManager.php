@@ -79,13 +79,9 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids !== []) {
-            $this->triggerBulk($plugin, $ids);
-
-            return;
+        foreach ($this->createEventResourceRepositoryPluginIterator($plugin) as $eventEntities) {
+            $this->triggerBulk($plugin, $eventEntities);
         }
-
-        $this->processEventsForRepositoryPlugin($plugin);
     }
 
     /**
@@ -96,25 +92,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function processEventsForBulkRepositoryPlugins(EventResourceBulkRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids !== []) {
-            $this->triggerBulk($plugin, $ids);
-
-            return;
-        }
-
-        $this->processEventsForRepositoryBulkPlugins($plugin);
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
-     *
-     * @return void
-     */
-    protected function processEventsForRepositoryPlugin(EventResourceRepositoryPluginInterface $plugin): void
-    {
-        foreach ($this->createEventResourceRepositoryPluginIterator($plugin) as $eventEntities) {
-            $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
-            $this->triggerBulk($plugin, $eventEntitiesIds);
+        foreach ($this->createEventResourceRepositoryBulkPluginIterator($plugin) as $eventEntities) {
+            $this->triggerBulk($plugin, $eventEntities);
         }
     }
 
@@ -131,43 +110,11 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      *
-     * @return void
-     */
-    protected function processEventsForRepositoryBulkPlugins(EventResourceBulkRepositoryPluginInterface $plugin): void
-    {
-        foreach ($this->createEventResourceRepositoryBulkPluginIterator($plugin) as $eventEntities) {
-            $eventEntitiesIds = $this->getEventEntitiesIds($plugin, $eventEntities);
-            $this->triggerBulk($plugin, $eventEntitiesIds);
-        }
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
-     *
      * @return \Iterator<array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer>>
      */
     protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin): Iterator
     {
         return new EventResourceRepositoryBulkPluginIterator($plugin, $this->chunkSize);
-    }
-
-    /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer> $chunkOfEventEntitiesTransfers
-     *
-     * @return array<int>
-     */
-    protected function getEventEntitiesIds($plugin, $chunkOfEventEntitiesTransfers): array
-    {
-        $eventEntitiesIds = [];
-
-        foreach ($chunkOfEventEntitiesTransfers as $entitiesTransfer) {
-            $entitiesTransferArray = $entitiesTransfer->modifiedToArray();
-            $idColumnName = $this->getIdColumnName($plugin);
-            $eventEntitiesIds[] = $entitiesTransferArray[$idColumnName];
-        }
-
-        return $eventEntitiesIds;
     }
 
     /**
@@ -185,15 +132,24 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param array<int> $ids
+     * @param array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer> $entityTransfers
      *
      * @return void
      */
-    protected function triggerBulk(EventResourcePluginInterface $plugin, array $ids): void
+    protected function triggerBulk(EventResourcePluginInterface $plugin, array $entityTransfers): void
     {
-        $eventEntityTransfers = array_map(function ($id) {
-            return (new EventEntityTransfer())->setId($id);
-        }, $ids);
+        $eventEntityTransfers = array_map(function ($entityTransfer) use ($plugin) {\var_dump(\get_class($entityTransfer));die;
+            $entityName = $entityTransfer::$entityNamespace;
+            $entity = new $entityName;
+            $entity->fromArray($entityTransfer->toArray());
+
+            return (new EventEntityTransfer())
+                ->setId($entity->getId())
+                ->setName($entity->getName())
+                ->setEvent($plugin->getEventName())
+                ->setForeignKeys($entity->getForeignKeys())
+                ->setAdditionalValues($entity->getAdditionalValues());
+        }, $entityTransfers);
 
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }

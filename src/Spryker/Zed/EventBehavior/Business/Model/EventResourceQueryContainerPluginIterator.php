@@ -39,13 +39,15 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
      */
     protected function updateCurrent(): void
     {
-        $whereCondition = !$this->ids ? ModelCriteria::ISNOTNULL : sprintf('%s (%s)', ModelCriteria::IN, implode(',', $this->ids));
-        $this->current = $this->plugin->queryData()
+        $query = $this->plugin->queryData()
             ->offset($this->offset)
-            ->limit($this->chunkSize)
-            ->where($this->plugin->getIdColumnName() . ' ' . $whereCondition)
-            ->orderBy((string)$this->plugin->getIdColumnName())
-            ->find()
+            ->limit($this->chunkSize);
+
+        if ($this->ids) {
+            $query->filterByPrimaryKeys($this->ids);
+        }
+
+        $this->current = $query->find()
             ->getData();
     }
 }
