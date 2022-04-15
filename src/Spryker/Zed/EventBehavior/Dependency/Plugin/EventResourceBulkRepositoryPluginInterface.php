@@ -17,8 +17,9 @@ interface EventResourceBulkRepositoryPluginInterface extends EventResourcePlugin
      *
      * @param int $offset
      * @param int $limit
+     * @param array<int> $ids
      *
      * @return array<\Spryker\Shared\Kernel\Transfer\AbstractTransfer>
      */
-    public function getData(int $offset, int $limit): array;
+    public function getData(int $offset, int $limit, array $ids = []): array;
 }

@@ -23,13 +23,14 @@ class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginI
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
+     * @param array<int> $ids
      * @param int $chunkSize
      */
-    public function __construct(EventResourceRepositoryPluginInterface $plugin, int $chunkSize)
+    public function __construct(EventResourceRepositoryPluginInterface $plugin, int $chunkSize, array $ids = [])
     {
         parent::__construct($plugin, $chunkSize);
 
-        $this->data = $plugin->getData();
+        $this->data = $plugin->getData($ids);
     }
 
     /**
