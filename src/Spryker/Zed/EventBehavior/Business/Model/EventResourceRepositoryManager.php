@@ -234,7 +234,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
             return $eventEntityTransfer;
         }, $transfers);
-        \var_dump(count($eventEntityTransfers),$eventEntityTransfers[0]->toArray());die;
+        
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
 
@@ -265,7 +265,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         $eventEntityTransfers = array_map(function ($id) {
             return (new EventEntityTransfer())->setId($id);
         }, $ids);
-        \var_dump(count($eventEntityTransfers),$eventEntityTransfers[0]->toArray());die;
+        
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
 

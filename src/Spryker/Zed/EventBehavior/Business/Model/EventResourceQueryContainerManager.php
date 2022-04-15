@@ -92,7 +92,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
             return;
         }
 
-        $reflactionEntity = new ReflectionClass(get_class($entities[0]));
+        $reflactionEntity = new ReflectionClass(current($entities));
 
         $protectForeignKeysMethod = $reflactionEntity->getMethod('getForeignKeys');
         $protectForeignKeysMethod->setAccessible(true);
