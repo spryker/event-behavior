@@ -16,7 +16,6 @@ use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPlugi
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceForeignKeysRepositoryExtensionPluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
-use function _HumbugBox60b1d604e02d\Amp\Iterator\concat;
 
 class EventResourceRepositoryManager implements EventResourceManagerInterface
 {
@@ -83,7 +82,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
-        if ($ids !== [] && !$this->hasAdditionalValues($plugin)) {
+        if (!$ids && !$this->hasAdditionalValues($plugin)) {
             $this->triggerBulkIds($plugin, $ids);
 
             return;
@@ -160,7 +159,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      * @param array<int> $ids
-     * 
+     *
      * @return \Iterator<array<\Spryker\Shared\Kernel\Transfer\AbstractTransfer>>
      */
     protected function createEventResourceRepositoryBulkPluginIterator(EventResourceBulkRepositoryPluginInterface $plugin, $ids): Iterator
@@ -170,7 +169,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param array<\Spryker\Shared\Kernel\Transfer\AbstractEntityTransfer> $chunkOfEventEntitiesTransfers
+     * @param array<\Spryker\Shared\Kernel\Transfer\AbstractTransfer> $chunkOfEventEntitiesTransfers
      *
      * @return array<int>
      */
@@ -202,7 +201,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
-     * @param \Iterator<array<\Spryker\Shared\Kernel\Transfer\AbstractTransfer>> $transfers
+     * @param array<\Spryker\Shared\Kernel\Transfer\AbstractTransfer> $transfers
      *
      * @return void
      */
@@ -234,7 +233,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
 
             return $eventEntityTransfer;
         }, $transfers);
-        
+
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
 
@@ -265,16 +264,16 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         $eventEntityTransfers = array_map(function ($id) {
             return (new EventEntityTransfer())->setId($id);
         }, $ids);
-        
+
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
      *
      * @return bool
      */
-    protected function hasAdditionalValues(EventResourceBulkRepositoryPluginInterface $plugin)
+    protected function hasAdditionalValues(EventResourcePluginInterface $plugin)
     {
         if (
             $plugin instanceof EventResourceAdditionalValuesRepositoryExtensionPluginInterface ||

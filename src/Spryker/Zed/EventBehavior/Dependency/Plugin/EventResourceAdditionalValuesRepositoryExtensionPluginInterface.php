@@ -16,7 +16,7 @@ interface EventResourceAdditionalValuesRepositoryExtensionPluginInterface
      *
      * @api
      *
-     * @return string
+     * @return array<string, string>
      */
     public function getAdditionalValuesMapping(): array;
 }

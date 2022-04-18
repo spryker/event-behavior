@@ -16,7 +16,7 @@ interface EventResourceForeignKeysRepositoryExtensionPluginInterface
      *
      * @api
      *
-     * @return string
+     * @return array<string, string>
      */
     public function getForeignKeysMapping(): array;
 }
