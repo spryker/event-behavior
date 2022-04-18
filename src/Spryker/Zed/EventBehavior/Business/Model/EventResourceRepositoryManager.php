@@ -141,6 +141,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      * @param array<int> $ids
+     *
      * @return void
      */
     protected function processEventsForRepositoryBulkPlugins(EventResourceBulkRepositoryPluginInterface $plugin, array $ids): void
@@ -225,10 +226,10 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
                 ->setId($transferArray[$idColumnName]);
 
             $eventEntityTransfer->setForeignKeys(
-                $this->mapAdditionalFiles($foreignKeys, $transferInCamelCaseArray)
+                $this->mapAdditionalFiles($foreignKeys, $transferInCamelCaseArray),
             );
             $eventEntityTransfer->setAdditionalValues(
-                $this->mapAdditionalFiles($additionalValues, $transferInCamelCaseArray)
+                $this->mapAdditionalFiles($additionalValues, $transferInCamelCaseArray),
             );
 
             return $eventEntityTransfer;
