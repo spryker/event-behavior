@@ -10,6 +10,11 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface;
 
+/**
+ * @template TValue
+ *
+ * @implements \Iterator<TValue>
+ */
 abstract class AbstractEventResourcePluginIterator implements Iterator
 {
     /**
