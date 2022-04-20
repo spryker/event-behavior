@@ -3,7 +3,6 @@ parameters:
     paths:
         - src/
     checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
     excludePaths:
         - '*/templates/*'
         - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChange.php'

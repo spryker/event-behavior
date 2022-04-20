@@ -229,8 +229,10 @@ class TriggerManager implements TriggerManagerInterface
         $triggeredRows = 0;
         $eventEntityTransfersByEvent = [];
         foreach ($events as $event) {
+            /** @var string $stringData */
+            $stringData = $event->getData();
             /** @var array<string, mixed> $data */
-            $data = $this->utilEncodingService->decodeJson($event->getData(), true);
+            $data = $this->utilEncodingService->decodeJson($stringData, true);
             $eventEntityTransfer = new EventEntityTransfer();
             $eventEntityTransfer->setEvent($data[EventBehavior::EVENT_CHANGE_NAME]);
             $eventEntityTransfer->setName($data[EventBehavior::EVENT_CHANGE_ENTITY_NAME]);
@@ -279,7 +281,10 @@ class TriggerManager implements TriggerManagerInterface
         $keys = [];
 
         foreach ($events as $event) {
-            $keys[] = $event->getIdEventBehaviorEntityChange();
+            /** @var int $idEventBehaviorEntityChange */
+            $idEventBehaviorEntityChange = $event->getIdEventBehaviorEntityChange();
+
+            $keys[] = $idEventBehaviorEntityChange;
         }
 
         return $keys;
