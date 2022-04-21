@@ -7,7 +7,6 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
 
 /**
@@ -21,12 +20,20 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
     protected $plugin;
 
     /**
+     * @var array<int>
+     */
+    protected $ids;
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface $plugin
      * @param int $chunkSize
+     * @param array<int> $ids
      */
-    public function __construct(EventResourceQueryContainerPluginInterface $plugin, int $chunkSize)
+    public function __construct(EventResourceQueryContainerPluginInterface $plugin, int $chunkSize, $ids = [])
     {
         parent::__construct($plugin, $chunkSize);
+
+        $this->ids = $ids;
     }
 
     /**
@@ -34,11 +41,9 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
      */
     protected function updateCurrent(): void
     {
-        $this->current = $this->plugin->queryData()
+        $this->current = $this->plugin->queryData($this->ids)
             ->offset($this->offset)
             ->limit($this->chunkSize)
-            ->where($this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
-            ->select([$this->plugin->getIdColumnName()])
             ->orderBy((string)$this->plugin->getIdColumnName())
             ->find()
             ->getData();
