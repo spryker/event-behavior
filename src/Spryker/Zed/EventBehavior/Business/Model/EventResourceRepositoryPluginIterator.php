@@ -9,6 +9,9 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface;
 
+/**
+ * @extends \Spryker\Zed\EventBehavior\Business\Model\AbstractEventResourcePluginIterator<array<\Generated\Shared\Transfer\EventEntityTransfer>>
+ */
 class EventResourceRepositoryPluginIterator extends AbstractEventResourcePluginIterator
 {
     /**
