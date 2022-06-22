@@ -25,15 +25,15 @@ abstract class AbstractSpyEventBehaviorEntityChange extends BaseSpyEventBehavior
     /**
      * @param \Propel\Runtime\Connection\ConnectionInterface|null $con
      *
-     * @return void
+     * @return int
      */
-    public function save(?ConnectionInterface $con = null)
+    public function save(?ConnectionInterface $con = null): int
     {
         if ($this->isEventDisabled()) {
-            return;
+            return 0;
         }
 
-        parent::save($con);
+        return parent::save($con);
     }
 
     /**
