@@ -24,11 +24,4 @@ trait EventBehaviorHelperTrait
 
         return $eventBehaviorHelper;
     }
-
-    /**
-     * @param string $name
-     *
-     * @return \Codeception\Module
-     */
-    //abstract protected function getModule(string $name): Module;
 }
