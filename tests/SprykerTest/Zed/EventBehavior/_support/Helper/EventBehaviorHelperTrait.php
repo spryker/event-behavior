@@ -7,7 +7,6 @@
 
 namespace SprykerTest\Zed\EventBehavior\Helper;
 
-use Codeception\Module;
 use SprykerTest\Shared\Testify\Helper\ModuleHelperTrait;
 
 trait EventBehaviorHelperTrait
