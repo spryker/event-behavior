@@ -40,7 +40,7 @@ jobs:
           mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
           mysql user: ${{ env.DATABASE_USERNAME }}
           mysql password: ${{ env.DATABASE_PASSWORD }}  
-          
+
   validation:
     runs-on: ubuntu-18.04
     strategy:
@@ -125,7 +125,7 @@ jobs:
             run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
 
           - name: Run tests (failing right now)
-            run: composer test || true
+            run: composer test
 
           - name: PHPStan checks
             run: |
