@@ -14,6 +14,6 @@ parameters:
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
         - '#.+ has invalid return type Orm\\.+#'
         - '#.+ has invalid type Orm\\.+#'
-        - '#Method Spryker\\Zed\\EventBehavior\\Business\\EventBehaviorFacade\:\:triggerRuntimeEventsWithReport\(\) has invalid return type Generated\\Shared\\Transfer\\EventTriggerResponseTransfer.#'
+        - '#Parameter \#1 \$clause of method .+\\ModelCriteria::where\(\) expects array\|literal-string, non-falsy-string given.#'
     bootstrapFiles:
         - tests/bootstrap.php

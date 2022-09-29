@@ -37,7 +37,7 @@ class EventResourceQueryContainerPluginIterator extends AbstractEventResourcePlu
         $this->current = $this->plugin->queryData()
             ->offset($this->offset)
             ->limit($this->chunkSize)
-            ->where((string)$this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
+            ->where($this->plugin->getIdColumnName() . ModelCriteria::ISNOTNULL)
             ->select([$this->plugin->getIdColumnName()])
             ->orderBy((string)$this->plugin->getIdColumnName())
             ->find()
