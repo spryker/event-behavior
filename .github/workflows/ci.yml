@@ -22,20 +22,6 @@ on:
       - master
   workflow_dispatch:
 
-ci:
-  services:
-    mariadb:
-      image: mariadb:10.2
-      env:
-        MYSQL_ALLOW_EMPTY_PASSWORD: false
-        MYSQL_ROOT_PASSWORD: secret
-        MYSQL_DATABASE: eu-docker
-      ports:
-        - 3306:3306
-      options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        
-
-
 jobs:
   setup:
     name: Setup Database MariaDB
