@@ -51,6 +51,7 @@ spl_autoload_register(function ($className) {
 
 $configSourceDirectory = MODULE_ROOT_DIR . 'ci' . DIRECTORY_SEPARATOR;
 copy($configSourceDirectory . 'config_default.php', $configSharedTargetDirectory . 'config_default.php');
+copy($configSourceDirectory . 'config_propel.php', $configSharedTargetDirectory . 'config_propel.php');
 copy($configSourceDirectory . 'default_store.php', $configSharedTargetDirectory . 'default_store.php');
 
 copy($configSourceDirectory . 'stores.php', $configSharedTargetDirectory . 'stores.php');
