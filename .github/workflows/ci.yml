@@ -22,7 +22,7 @@ on:
       - master
   workflow_dispatch:
 
-jobs:
+ci:
   services:
     mariadb:
       image: mariadb:10.2
@@ -33,7 +33,10 @@ jobs:
       ports:
         - 3306:3306
       options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-      
+        
+
+
+jobs:
   setup:
     name: Setup Database MariaDB
     runs-on: ubuntu-18.04
