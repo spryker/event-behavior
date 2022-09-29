@@ -8,6 +8,7 @@
 namespace Spryker\Zed\EventBehavior\Persistence\Propel\Behavior;
 
 use Laminas\Filter\Word\UnderscoreToCamelCase;
+use LogicException;
 use Propel\Generator\Model\Behavior;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
@@ -187,7 +188,7 @@ if (\$affectedRows) {
         /** @var string $name */
         $name = $camelCaseFilter->filter($column);
         $methodName = sprintf('set%s', $name);
-        $initialValueField = sprintf('[%sTableMap::COL_%s]', $this->getTable()->getPhpName(), strtoupper($column));
+        $initialValueField = sprintf('[%sTableMap::COL_%s]', $this->getTableOrFail()->getPhpName(), strtoupper($column));
 
         $methodNamePattern = '(' . $methodName . '\(\$v\)\n[ ]*{)';
         $newMethodCode = (string)preg_replace_callback($methodNamePattern, function ($matches) use ($initialValueField, $column) {
@@ -235,8 +236,8 @@ private \$_isEventDisabled;
      */
     protected function addForeignKeysAttribute()
     {
-        $foreignKeys = $this->getTable()->getForeignKeys();
-        $tableName = $this->getTable()->getName();
+        $foreignKeys = $this->getTableOrFail()->getForeignKeys();
+        $tableName = $this->getTableOrFail()->getName();
         $implodedForeignKeys = '';
 
         foreach ($foreignKeys as $foreignKey) {
@@ -259,8 +260,8 @@ private \$_foreignKeys = [$implodedForeignKeys
      */
     protected function addPrepareEventMethod()
     {
-        $createEvent = 'Entity.' . $this->getTable()->getName() . '.create';
-        $updateEvent = 'Entity.' . $this->getTable()->getName() . '.update';
+        $createEvent = 'Entity.' . $this->getTableOrFail()->getName() . '.create';
+        $updateEvent = 'Entity.' . $this->getTableOrFail()->getName() . '.update';
 
         return "
 /**
@@ -309,7 +310,7 @@ public function enableEvent()
      */
     protected function addSaveEventMethod()
     {
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $dataEventEntityName = static::EVENT_CHANGE_ENTITY_NAME;
         $dataEventEntityId = static::EVENT_CHANGE_ENTITY_ID;
         $dataEventEntityForeignKeys = static::EVENT_CHANGE_ENTITY_FOREIGN_KEYS;
@@ -362,7 +363,7 @@ protected function addSaveEventToMemory()
      */
     protected function addDeleteEventMethod()
     {
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $deleteEvent = 'Entity.' . $tableName . '.delete';
         $dataEventEntityName = static::EVENT_CHANGE_ENTITY_NAME;
         $dataEventEntityId = static::EVENT_CHANGE_ENTITY_ID;
@@ -447,7 +448,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
     protected function addIsEventColumnsModifiedMethod()
     {
         $eventParameters = $this->getParameters();
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $implodedModifiedColumns = '';
 
         foreach ($eventParameters as $eventParameter) {
@@ -556,7 +557,7 @@ protected function isEventColumnsModified()
      */
     protected function addGetAdditionalValuesMethod()
     {
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $additionalColumns = $this->getAdditionalColumnNames();
         $implodedAdditionalColumnNames = implode("\n", array_map(function ($columnName) {
             return sprintf("\t'%s',", $columnName);
@@ -594,7 +595,7 @@ protected function getAdditionalValues(): array
      */
     protected function addGetOriginalValuesMethod()
     {
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $originalValueColumns = $this->getKeepOriginalValueColumnNames();
         $implodedOriginalValueColumnNames = implode("\n", array_map(function ($columnName) {
             return sprintf("\t'%s',", $columnName);
@@ -646,7 +647,7 @@ protected function getOriginalValues(): array
     protected function getAdditionalColumnNames(): array
     {
         $additionalColumns = [];
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $eventColumns = $this->getParameters();
         foreach ($eventColumns as $eventColumn) {
             if ($eventColumn['column'] === '*' && isset($eventColumn['keep-additional']) && $eventColumn['keep-additional'] === 'true') {
@@ -667,7 +668,7 @@ protected function getOriginalValues(): array
     protected function getKeepOriginalValueColumnNames(): array
     {
         $originalValueColumns = [];
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
         $eventColumns = $this->getParameters();
         foreach ($eventColumns as $eventColumn) {
             if ($eventColumn['column'] === '*' && isset($eventColumn['keep-original']) && $eventColumn['keep-original'] === 'true') {
@@ -687,9 +688,9 @@ protected function getOriginalValues(): array
      */
     protected function getTableFullColumnNames(): array
     {
-        $tableName = $this->getTable()->getName();
+        $tableName = $this->getTableOrFail()->getName();
 
-        return array_reduce($this->getTable()->getColumns(), function ($columns, $columnObj) use ($tableName) {
+        return array_reduce($this->getTableOrFail()->getColumns(), function ($columns, $columnObj) use ($tableName) {
             $columns[] = $this->formatFullColumnName($tableName, $columnObj->getName());
 
             return $columns;
@@ -712,7 +713,7 @@ protected function getOriginalValues(): array
      */
     public function addGetPhpType()
     {
-        $tableMapPhpName = sprintf('%s%s', $this->getTable()->getPhpName(), 'TableMap');
+        $tableMapPhpName = sprintf('%s%s', $this->getTableOrFail()->getPhpName(), 'TableMap');
 
         return "
 /**
@@ -741,5 +742,23 @@ protected function getPhpType(\$xmlValue, \$column)
     return \$xmlValue;
 }
         ";
+    }
+
+    /**
+     * Returns the table this behavior is applied to
+     *
+     * @throws \LogicException
+     *
+     * @return \Propel\Generator\Model\Table
+     */
+    public function getTableOrFail(): Table
+    {
+        $table = $this->getTable();
+
+        if ($table === null) {
+            throw new LogicException('Table is not defined.');
+        }
+
+        return $table;
     }
 }
