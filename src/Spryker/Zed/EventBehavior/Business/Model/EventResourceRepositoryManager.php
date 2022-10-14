@@ -225,7 +225,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return bool
      */
-    public function pluginHasData(EventResourceBulkRepositoryPluginInterface $plugin): bool
+    protected function pluginHasData(EventResourceBulkRepositoryPluginInterface $plugin): bool
     {
         return $plugin->getData(0, static::DEFAULT_CHUNK_SIZE) !== [];
     }
