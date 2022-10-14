@@ -85,6 +85,12 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
+        if ($this->pluginHasData($plugin) === false) {
+            $this->triggerPluginOnce($plugin);
+
+            return;
+        }
+
         $this->processEventsForRepositoryPlugin($plugin);
     }
 
@@ -98,6 +104,12 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     {
         if ($ids !== []) {
             $this->triggerBulk($plugin, $ids);
+
+            return;
+        }
+
+        if ($this->pluginHasData($plugin) === false) {
+            $this->triggerPluginOnce($plugin);
 
             return;
         }
@@ -196,5 +208,25 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
         }, $ids);
 
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface $plugin
+     *
+     * @return void
+     */
+    protected function triggerPluginOnce(EventResourcePluginInterface $plugin): void
+    {
+        $this->eventFacade->trigger($plugin->getEventName(), new EventEntityTransfer());
+    }
+
+    /**
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
+     *
+     * @return bool
+     */
+    public function pluginHasData(EventResourceBulkRepositoryPluginInterface $plugin): bool
+    {
+        return $plugin->getData(0, static::DEFAULT_CHUNK_SIZE) !== [];
     }
 }
