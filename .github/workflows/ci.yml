@@ -97,6 +97,18 @@ jobs:
       steps:
           - uses: actions/checkout@v2
 
+          - uses: getong/mariadb-action@v1.1
+            with:
+                host port: ${{ env.DATABASE_PORT }}
+                container port: ${{ env.DATABASE_PORT }}
+                character set server: ${{ env.DATABASE_CHARACTER_SET }}
+                collation server: ${{ env.DATABASE_COLLATE }}
+                mariadb version: ${{ env.DATABASE_VERSION }}
+                mysql database: ${{ env.DATABASE_NAME }}
+                mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                mysql user: ${{ env.DATABASE_USERNAME }}
+                mysql password: ${{ env.DATABASE_PASSWORD }}
+                
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
             with:
