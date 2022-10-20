@@ -1,6 +1,7 @@
 {
     "include-dev": {
-        "codeception/module-asserts": "Codeception module containing various assertions."
+        "codeception/module-asserts": "Codeception module containing various assertions.",
+        "phpunit/phpunit": "Need due to compatibility minimal version package with PHP 8."
     },
     "exclude-dev": {
         "phpstan/phpstan": "Done via composer command."

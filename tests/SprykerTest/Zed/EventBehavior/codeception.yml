@@ -5,6 +5,7 @@ paths:
     data: ../../../_data
     support: _support
     log: ../../../_output
+    output: ../../../_output
 
 coverage:
     enabled: true
@@ -13,20 +14,32 @@ coverage:
 
 suites:
     Business:
-        path: Business
+        path: .
         class_name: EventBehaviorBusinessTester
         modules:
             enabled:
                 - Asserts
                 - \SprykerTest\Shared\Testify\Helper\Environment:
                     isolated: true
-                - \SprykerTest\Zed\Testify\Helper\BusinessHelper
+                - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
+                - \SprykerTest\Shared\Propel\Helper\PropelHelper:
+                    isolated: true
+                    schemaSourceDirectoryList:
+                        - src/*/Zed/*/Persistence/Propel/Schema/
+                        - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper:
-                    projectNamespaces:
-                        - Spryker
                     coreNamespaces:
                         - Spryker
+                        - SprykerTest
+                        - SprykerEco
+                        - SprykerEcoTest
                 - \SprykerTest\Shared\Transfer\Helper\TransferGenerateHelper:
                     isolated: true
+                    schemaDirectories:
+                        - src/*/Shared/*/Transfer/
+                        - vendor/spryker/*/src/Spryker/Shared/*/Transfer/
+                    dataBuilderSchemaDirectories:
+                        - tests/_data/
+                        - vendor/*/*/tests/_data/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
