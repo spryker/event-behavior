@@ -85,7 +85,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        if ($this->pluginHasData($plugin) === false) {
+        if (!$this->isPluginWithData($plugin)) {
             $this->triggerPluginOnce($plugin);
 
             return;
@@ -108,7 +108,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        if ($this->pluginHasData($plugin) === false) {
+        if (!$this->isPluginWithData($plugin)) {
             $this->triggerPluginOnce($plugin);
 
             return;
@@ -225,7 +225,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return bool
      */
-    protected function pluginHasData(EventResourceBulkRepositoryPluginInterface $plugin): bool
+    protected function isPluginWithData(EventResourceBulkRepositoryPluginInterface $plugin): bool
     {
         return $plugin->getData(0, 1) !== [];
     }
