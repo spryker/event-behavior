@@ -225,7 +225,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      *
      * @return bool
      */
-    protected function isPluginWithData(EventResourceRepositoryPluginInterface|EventResourceBulkRepositoryPluginInterface $plugin): bool
+    protected function isPluginWithData($plugin): bool
     {
         return $plugin->getData(0, 1) !== [];
     }
