@@ -221,11 +221,11 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface|\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
      *
      * @return bool
      */
-    protected function isPluginWithData(EventResourceBulkRepositoryPluginInterface $plugin): bool
+    protected function isPluginWithData(EventResourceRepositoryPluginInterface|EventResourceBulkRepositoryPluginInterface $plugin): bool
     {
         return $plugin->getData(0, 1) !== [];
     }
