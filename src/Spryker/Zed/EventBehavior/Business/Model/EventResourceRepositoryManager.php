@@ -81,17 +81,17 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
         if ($ids !== []) {
-            if ($plugin->getData($ids) === []) {
-                $this->triggerPluginOnce($plugin);
-
-                return;
-            }
 
             $this->triggerBulk($plugin, $ids);
 
             return;
         }
 
+        if ($plugin->getData() === []) {
+            $this->triggerPluginOnce($plugin);
+
+            return;
+        }
 
         $this->processEventsForRepositoryPlugin($plugin);
     }
