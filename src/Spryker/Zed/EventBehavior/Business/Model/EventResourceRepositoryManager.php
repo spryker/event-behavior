@@ -44,8 +44,9 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        ?int $chunkSize = null
-    ) {
+        ?int                          $chunkSize = null
+    )
+    {
         $this->eventFacade = $eventFacade;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
     }
@@ -80,16 +81,17 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
         if ($ids !== []) {
+            if ($plugin->getData($ids) === []) {
+                $this->triggerPluginOnce($plugin);
+
+                return;
+            }
+
             $this->triggerBulk($plugin, $ids);
 
             return;
         }
 
-        if (!$this->isPluginWithData($plugin)) {
-            $this->triggerPluginOnce($plugin);
-
-            return;
-        }
 
         $this->processEventsForRepositoryPlugin($plugin);
     }
@@ -108,7 +110,7 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
             return;
         }
 
-        if (!$this->isPluginWithData($plugin)) {
+        if (!$this->isBulkRepositoryPluginWithData($plugin)) {
             $this->triggerPluginOnce($plugin);
 
             return;
@@ -221,11 +223,11 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     }
 
     /**
-     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface|\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceRepositoryPluginInterface $plugin
+     * @param \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceBulkRepositoryPluginInterface $plugin
      *
      * @return bool
      */
-    protected function isPluginWithData($plugin): bool
+    protected function isBulkRepositoryPluginWithData(EventResourceBulkRepositoryPluginInterface $plugin): bool
     {
         return $plugin->getData(0, 1) !== [];
     }
