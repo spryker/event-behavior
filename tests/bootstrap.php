@@ -31,26 +31,31 @@ if (!is_dir($configZedTargetDirectory)) {
 }
 
 spl_autoload_register(function ($className) {
-    if (strrpos($className, 'Transfer') === false) {
+    if (
+        strrpos($className, 'Transfer') === false
+        && strrpos($className, 'Builder') === false
+        && strrpos($className, 'Spy') === false
+    ) {
         return false;
     }
 
     $classNameParts = explode('\\', $className);
 
-    $transferFileName = implode(DIRECTORY_SEPARATOR, $classNameParts) . '.php';
-    $transferFilePath = APPLICATION_ROOT_DIR . 'src' . DIRECTORY_SEPARATOR . $transferFileName;
+    $fileName = implode(DIRECTORY_SEPARATOR, $classNameParts) . '.php';
+    $filePath = APPLICATION_ROOT_DIR . 'src' . DIRECTORY_SEPARATOR . $fileName;
 
-    if (!file_exists($transferFilePath)) {
+    if (!file_exists($filePath)) {
         return false;
     }
 
-    require_once $transferFilePath;
+    require_once $filePath;
 
     return true;
 });
 
 $configSourceDirectory = MODULE_ROOT_DIR . 'ci' . DIRECTORY_SEPARATOR;
 copy($configSourceDirectory . 'config_default.php', $configSharedTargetDirectory . 'config_default.php');
+copy($configSourceDirectory . 'config_propel.php', $configSharedTargetDirectory . 'config_propel.php');
 copy($configSourceDirectory . 'default_store.php', $configSharedTargetDirectory . 'default_store.php');
 
 copy($configSourceDirectory . 'stores.php', $configSharedTargetDirectory . 'stores.php');
