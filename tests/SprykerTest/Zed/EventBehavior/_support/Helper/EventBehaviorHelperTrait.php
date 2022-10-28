@@ -7,12 +7,10 @@
 
 namespace SprykerTest\Zed\EventBehavior\Helper;
 
-use SprykerTest\Shared\Testify\Helper\ModuleHelperTrait;
+use Codeception\Module;
 
 trait EventBehaviorHelperTrait
 {
-    use ModuleHelperTrait;
-
     /**
      * @return \SprykerTest\Zed\EventBehavior\Helper\EventBehaviorHelper
      */
@@ -23,4 +21,11 @@ trait EventBehaviorHelperTrait
 
         return $eventBehaviorHelper;
     }
+
+    /**
+     * @param string $name
+     *
+     * @return \Codeception\Module
+     */
+    abstract protected function getModule(string $name): Module;
 }
