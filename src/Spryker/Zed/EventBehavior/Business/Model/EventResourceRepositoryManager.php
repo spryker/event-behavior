@@ -44,9 +44,8 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        ?int                          $chunkSize = null
-    )
-    {
+        ?int $chunkSize = null
+    ) {
         $this->eventFacade = $eventFacade;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
     }
@@ -81,7 +80,6 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function processEventsForRepositoryPlugins(EventResourceRepositoryPluginInterface $plugin, array $ids = []): void
     {
         if ($ids !== []) {
-
             $this->triggerBulk($plugin, $ids);
 
             return;
