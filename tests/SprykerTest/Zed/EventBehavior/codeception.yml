@@ -4,7 +4,6 @@ paths:
     tests: .
     data: ../../../_data
     support: _support
-    log: ../../../_output
     output: ../../../_output
 
 coverage:
@@ -15,7 +14,7 @@ coverage:
 suites:
     Business:
         path: .
-        class_name: EventBehaviorBusinessTester
+        actor: EventBehaviorBusinessTester
         modules:
             enabled:
                 - Asserts
