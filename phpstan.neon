@@ -9,8 +9,11 @@ parameters:
         - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChangeQuery.php'
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
+        - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
         - '#Call to method (event|utilEncoding|propel)\(\) on an unknown class .+AutoCompletion#'
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
+        - '#.+ has invalid return type Orm\\.+#'
+        - '#.+ has invalid type Orm\\.+#'
         - '#Parameter \#1 \$clause of method .+\\ModelCriteria::where\(\) expects array\|literal-string, non-falsy-string given.#'
     bootstrapFiles:
         - tests/bootstrap.php
