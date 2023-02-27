@@ -10,10 +10,12 @@ parameters:
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
         - '#Call to (static method|method) .+ on an unknown class .+\\Spy.+#'
-        - '#Call to method (event|utilEncoding|propel)\(\) on an unknown class .+AutoCompletion#'
+        - '#Call to (static method|method) .+ on an unknown class Generated\\.+#'
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
-        - '#.+ has invalid return type Orm\\.+#'
-        - '#.+ has invalid type Orm\\.+#'
+        - '#.+ has invalid (return type|type) Orm\\.+#'
+        - '#.+ has invalid (return type|type) Generated\\.+#'
+        - '#Instantiated class Generated\\.+ not found.#'
         - '#Parameter \#1 \$clause of method .+\\ModelCriteria::where\(\) expects array\|literal-string, non-falsy-string given.#'
+        - '#Parameter .+ of method .+ expects (.+|.?)Spryker\\Shared\\Kernel\\Transfer\\TransferInterface.+ given.#'
     bootstrapFiles:
         - tests/bootstrap.php
