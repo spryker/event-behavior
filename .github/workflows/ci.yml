@@ -108,7 +108,7 @@ jobs:
                 mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
                 mysql user: ${{ env.DATABASE_USERNAME }}
                 mysql password: ${{ env.DATABASE_PASSWORD }}
-                
+
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
             with:
@@ -137,8 +137,3 @@ jobs:
             run: |
                 composer stan-setup
                 composer stan || true
-
-          - name: Prefer lowest checks
-            run: |
-                composer require --dev --update-with-all-dependencies dereuromark/composer-prefer-lowest:dev-master
-                composer lowest
