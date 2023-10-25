@@ -16,7 +16,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     /**
      * @var string
      */
-    public const FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR1';
+    public const FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
 
     /**
      * @param \Spryker\Glue\EventBehavior\Container $container
