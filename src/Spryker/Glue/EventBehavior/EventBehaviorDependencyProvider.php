@@ -19,11 +19,11 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     public const FACADE_EVENT_BEHAVIOR = 'FACADE_EVENT_BEHAVIOR';
 
     /**
-     * @param \Spryker\Glue\EventBehavior\Container $container
+     * @param \Spryker\Glue\Kernel\Container $container
      *
-     * @return \Spryker\Glue\EventBehavior\Container
+     * @return \Spryker\Glue\Kernel\Container
      */
-    public function provideDependencies(Container $container)
+    public function provideDependencies(Container $container): Container
     {
         $container = parent::provideDependencies($container);
         $container = $this->addEventBehaviorFacade($container);
@@ -32,9 +32,9 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     }
 
     /**
-     * @param \Spryker\Glue\Kernel\Backend\Container $container
+     * @param \Spryker\Glue\Kernel\Container $container
      *
-     * @return \Spryker\Glue\Kernel\Backend\Container
+     * @return \Spryker\Glue\Kernel\Container
      */
     protected function addEventBehaviorFacade(Container $container): Container
     {

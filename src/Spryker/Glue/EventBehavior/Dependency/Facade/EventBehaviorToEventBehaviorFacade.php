@@ -7,6 +7,8 @@
 
 namespace Spryker\Glue\EventBehavior\Dependency\Facade;
 
+use Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface;
+
 class EventBehaviorToEventBehaviorFacade implements EventBehaviorToEventBehaviorFacadeInterface
 {
     /**
@@ -17,7 +19,7 @@ class EventBehaviorToEventBehaviorFacade implements EventBehaviorToEventBehavior
     /**
      * @param $eventBehaviorFacade \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface
      */
-    public function __construct($eventBehaviorFacade)
+    public function __construct(EventBehaviorFacadeInterface $eventBehaviorFacade)
     {
         $this->eventBehaviorFacade = $eventBehaviorFacade;
     }
