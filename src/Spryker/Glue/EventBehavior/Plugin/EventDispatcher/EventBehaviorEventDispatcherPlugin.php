@@ -7,7 +7,6 @@
 
 namespace Spryker\Glue\EventBehavior\Plugin\EventDispatcher;
 
-use Spryker\Glue\Kernel\AbstractFactory;
 use Spryker\Glue\Kernel\Backend\AbstractPlugin;
 use Spryker\Service\Container\ContainerInterface;
 use Spryker\Shared\EventDispatcher\EventDispatcherInterface;
