@@ -1,0 +1,24 @@
+namespace: SprykerTest\Glue\EventBehavior
+paths:
+    tests: .
+    data: ../../../_data/
+    support: _support/
+    output: ../../../_output/
+coverage:
+    enabled: true
+    remote: false
+    whitelist:
+        include:
+            - '../../../../src/*'
+suites:
+    Plugin:
+        path: /
+        actor: EventBehaviorGlueTester
+        modules:
+            enabled:
+                - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\ConfigHelper
+                - \SprykerTest\Shared\Testify\Helper\LocatorHelper
+                - \SprykerTest\Shared\Testify\Helper\DependencyHelper
+                - \SprykerTest\Glue\Testify\Helper\FactoryHelper
+                - \SprykerTest\Service\Container\Helper\ContainerHelper
