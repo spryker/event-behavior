@@ -7,7 +7,6 @@
 
 namespace Spryker\Glue\EventBehavior;
 
-use Spryker\Glue\EventBehavior\Dependency\Facade\EventBehaviorToEventBehaviorFacade;
 use Spryker\Glue\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Glue\Kernel\Container;
 
@@ -39,9 +38,7 @@ class EventBehaviorDependencyProvider extends AbstractBundleDependencyProvider
     protected function addEventBehaviorFacade(Container $container): Container
     {
         $container->set(static::FACADE_EVENT_BEHAVIOR, function (Container $container) {
-            return new EventBehaviorToEventBehaviorFacade(
-                $container->getLocator()->eventBehavior()->facade(),
-            );
+            return $container->getLocator()->eventBehavior()->facade();
         });
 
         return $container;
