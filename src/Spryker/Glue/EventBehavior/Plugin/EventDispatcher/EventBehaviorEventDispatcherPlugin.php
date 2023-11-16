@@ -33,7 +33,6 @@ class EventBehaviorEventDispatcherPlugin extends AbstractPlugin implements Event
     {
         $eventDispatcher->addListener(KernelEvents::TERMINATE, function () {
             $this->getFacade()->triggerRuntimeEvents();
-            // $this->getFactory()->getEventBehaviorFacade()->triggerRuntimeEvents();
         });
 
         return $eventDispatcher;
