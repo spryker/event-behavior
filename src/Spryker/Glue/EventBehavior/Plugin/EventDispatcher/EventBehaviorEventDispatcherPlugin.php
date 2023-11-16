@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * @method \Spryker\Glue\EventBehavior\EventBehaviorDependencyFactory getFactory()
- * @method \Spryker\Zed\GlueBackendApiApplicationAuthorizationConnector\Business\GlueBackendApiApplicationAuthorizationConnectorFacadeInterface getFacade()
+ * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface getFacade()
  */
 class EventBehaviorEventDispatcherPlugin extends AbstractPlugin implements EventDispatcherPluginInterface
 {
