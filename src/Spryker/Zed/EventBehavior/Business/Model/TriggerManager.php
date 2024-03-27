@@ -20,10 +20,12 @@ use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
+use Spryker\Zed\Kernel\Persistence\EntityManager\InstancePoolingTrait;
 use Spryker\Zed\Kernel\RequestIdentifier;
 
 class TriggerManager implements TriggerManagerInterface
 {
+    use InstancePoolingTrait;
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
      *
@@ -110,14 +112,36 @@ class TriggerManager implements TriggerManagerInterface
             return;
         }
 
+        $triggeredEvents = 0;
         $limit = $this->config->getTriggerChunkSize();
+        $primaryKeys = [];
         do {
+            $instacePoolingDisabled = false;
+            if ($this->isInstancePoolingEnabled()) {
+                $this->disableInstancePooling();
+                $instacePoolingDisabled = true;
+            }
             $events = $this->queryContainer->queryEntityChange($processId)->limit($limit)->find()->getData();
+            if ($instacePoolingDisabled) {
+                $this->enableInstancePooling();
+            }
             static::$eventBehaviorTableExists = true;
             $countEvents = count($events);
 
-            $this->triggerEventsAndDelete($events);
+            $triggeredEvents += $this->triggerEvents($events);
+            $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
         } while ($countEvents === $limit);
+
+        if ($countEvents === $triggeredEvents) {
+            $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
+
+            if ($instacePoolingDisabled) {
+                $this->enableInstancePooling();
+            }
+            return;
+        }
+
+        $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
     }
 
     /**
