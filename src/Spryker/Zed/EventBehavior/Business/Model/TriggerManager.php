@@ -115,13 +115,14 @@ class TriggerManager implements TriggerManagerInterface
         $triggeredEvents = 0;
         $limit = $this->config->getTriggerChunkSize();
         $primaryKeys = [];
+        $offset = 0;
         do {
             $instacePoolingDisabled = false;
             if ($this->isInstancePoolingEnabled()) {
                 $this->disableInstancePooling();
                 $instacePoolingDisabled = true;
             }
-            $events = $this->queryContainer->queryEntityChange($processId)->limit($limit)->find()->getData();
+            $events = $this->queryContainer->queryEntityChange($processId)->setOffset($offset)->limit($limit)->find()->getData();
             if ($instacePoolingDisabled) {
                 $this->enableInstancePooling();
             }
@@ -130,6 +131,7 @@ class TriggerManager implements TriggerManagerInterface
 
             $triggeredEvents += $this->triggerEvents($events);
             $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
+            $offset += $limit;
         } while ($countEvents === $limit);
 
         if ($countEvents === $triggeredEvents) {
