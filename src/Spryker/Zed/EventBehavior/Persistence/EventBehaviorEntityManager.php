@@ -21,21 +21,14 @@ class EventBehaviorEntityManager extends AbstractEntityManager implements EventB
      */
     public function deleteEventBehaviorEntityByPrimaryKeys(array $primaryKeys = []): int
     {
-        $keys = array_chunk($primaryKeys, 100);
-        $count = 0;
-        foreach ($keys as $chunk) {
-            $count += $this->getFactory()
-                ->createEventBehaviorEntityChangeQuery()
-                ->filterByPrimaryKeys($chunk)
-                ->delete();
-        }
-
-        return $count;
+        return $this->getFactory()
+            ->createEventBehaviorEntityChangeQuery()
+            ->filterByPrimaryKeys($primaryKeys)
+            ->delete();
     }
 
     /**
      * @param string $processId
-     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return int
      */

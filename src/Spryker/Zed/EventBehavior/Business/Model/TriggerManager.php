@@ -117,15 +117,7 @@ class TriggerManager implements TriggerManagerInterface
         $primaryKeys = [];
         $offset = 0;
         do {
-            $instacePoolingDisabled = false;
-            if ($this->isInstancePoolingEnabled()) {
-                $this->disableInstancePooling();
-                $instacePoolingDisabled = true;
-            }
-            $events = $this->queryContainer->queryEntityChange($processId)->setOffset($offset)->limit($limit)->find()->getData();
-            if ($instacePoolingDisabled) {
-                $this->enableInstancePooling();
-            }
+            $events = $this->getEventEntitiesByProcessId($processId, $offset, $limit);
             static::$eventBehaviorTableExists = true;
             $countEvents = count($events);
 
@@ -137,9 +129,6 @@ class TriggerManager implements TriggerManagerInterface
         if ($countEvents === $triggeredEvents) {
             $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
 
-            if ($instacePoolingDisabled) {
-                $this->enableInstancePooling();
-            }
             return;
         }
 
@@ -226,6 +215,34 @@ class TriggerManager implements TriggerManagerInterface
 
             $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
+    }
+
+    /**
+     * @param string $processId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange>
+     */
+    protected function getEventEntitiesByProcessId(string $processId, int $offset, int $limit): array
+    {
+        $instancePoolingDisabled = false;
+        if ($this->isInstancePoolingEnabled()) {
+            $this->disableInstancePooling();
+            $instancePoolingDisabled = true;
+        }
+
+        $events = $this->queryContainer->queryEntityChange($processId)->setOffset($offset)->limit($limit)->find()->getData();
+
+        if ($instancePoolingDisabled) {
+            $this->enableInstancePooling();
+        }
+
+        if (!$events) {
+            return [];
+        }
+
+        return $events;
     }
 
     /**
