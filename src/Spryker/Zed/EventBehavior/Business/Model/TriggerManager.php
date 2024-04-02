@@ -26,6 +26,7 @@ use Spryker\Zed\Kernel\RequestIdentifier;
 class TriggerManager implements TriggerManagerInterface
 {
     use InstancePoolingTrait;
+
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
      *
