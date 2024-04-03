@@ -20,10 +20,13 @@ use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorEntityManagerInterface;
 use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
+use Spryker\Zed\Kernel\Persistence\EntityManager\InstancePoolingTrait;
 use Spryker\Zed\Kernel\RequestIdentifier;
 
 class TriggerManager implements TriggerManagerInterface
 {
+    use InstancePoolingTrait;
+
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
      *
@@ -110,14 +113,27 @@ class TriggerManager implements TriggerManagerInterface
             return;
         }
 
+        $triggeredEvents = 0;
         $limit = $this->config->getTriggerChunkSize();
+        $primaryKeys = [];
+        $offset = 0;
         do {
-            $events = $this->queryContainer->queryEntityChange($processId)->limit($limit)->find()->getData();
+            $events = $this->getEventEntitiesByProcessId($processId, $offset, $limit);
             static::$eventBehaviorTableExists = true;
             $countEvents = count($events);
 
-            $this->triggerEventsAndDelete($events);
+            $triggeredEvents += $this->triggerEvents($events);
+            $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
+            $offset += $limit;
         } while ($countEvents === $limit);
+
+        if ($countEvents === $triggeredEvents) {
+            $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
+
+            return;
+        }
+
+        $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
     }
 
     /**
@@ -200,6 +216,34 @@ class TriggerManager implements TriggerManagerInterface
 
             $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
+    }
+
+    /**
+     * @param string $processId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange>
+     */
+    protected function getEventEntitiesByProcessId(string $processId, int $offset, int $limit): array
+    {
+        $instancePoolingDisabled = false;
+        if ($this->isInstancePoolingEnabled()) {
+            $this->disableInstancePooling();
+            $instancePoolingDisabled = true;
+        }
+
+        $events = $this->queryContainer->queryEntityChange($processId)->setOffset($offset)->limit($limit)->find()->getData();
+
+        if ($instancePoolingDisabled) {
+            $this->enableInstancePooling();
+        }
+
+        if (!$events) {
+            return [];
+        }
+
+        return $events;
     }
 
     /**

@@ -26,4 +26,17 @@ class EventBehaviorEntityManager extends AbstractEntityManager implements EventB
             ->filterByPrimaryKeys($primaryKeys)
             ->delete();
     }
+
+    /**
+     * @param string $processId
+     *
+     * @return int
+     */
+    public function deleteEventBehaviorEntityByProcessId(string $processId): int
+    {
+        return $this->getFactory()
+            ->createEventBehaviorEntityChangeQuery()
+            ->filterByProcessId($processId)
+            ->delete();
+    }
 }

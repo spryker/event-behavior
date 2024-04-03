@@ -15,4 +15,11 @@ interface EventBehaviorEntityManagerInterface
      * @return int
      */
     public function deleteEventBehaviorEntityByPrimaryKeys(array $primaryKeys = []): int;
+
+    /**
+     * @param string $processId
+     *
+     * @return int
+     */
+    public function deleteEventBehaviorEntityByProcessId(string $processId): int;
 }
