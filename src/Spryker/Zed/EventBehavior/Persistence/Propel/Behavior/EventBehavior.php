@@ -13,9 +13,15 @@ use Propel\Generator\Model\Behavior;
 use Propel\Generator\Model\Table;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
+use Spryker\Zed\Kernel\BundleConfigResolverAwareTrait;
 
+/**
+ * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
+ */
 class EventBehavior extends Behavior
 {
+    use BundleConfigResolverAwareTrait;
+
     /**
      * @var string
      */
@@ -427,6 +433,8 @@ protected function getForeignKeys()
      */
     protected function addSaveEventBehaviorEntityChangeMethod()
     {
+        $maxRecommendedEventMessageDataSize = $this->getConfig()->getMaxRecommendedEventMessageDataSize();
+
         return "
 /**
  * @param array \$data
@@ -436,8 +444,17 @@ protected function getForeignKeys()
 protected function saveEventBehaviorEntityChange(array \$data)
 {
     \$encodedData = json_encode(\$data);
-    if (strlen(\$encodedData) > 256 * 1024) {
-        \$this->log((\$data['event'] ?? '') . ' event message size exceeds the allowable limit of 256KB.', \\Propel\\Runtime\\Propel::LOG_WARNING);
+    \$dataLength = strlen(\$encodedData);
+
+    if (\$dataLength > $maxRecommendedEventMessageDataSize * 1024) {
+        \$warningMessage = sprintf(
+            '%s event message data size (%d KB) exceeds the allowable limit of %d KB.',
+            (\$data['event'] ?? ''),
+            \$dataLength / 1024,
+            $maxRecommendedEventMessageDataSize,
+        );
+
+        \$this->log(\$warningMessage, \\Propel\\Runtime\\Propel::LOG_WARNING);
     }
 
     \$isInstancePoolingDisabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();

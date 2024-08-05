@@ -51,4 +51,15 @@ interface EventBehaviorConstants
      * @var string
      */
     public const ENABLE_INSTANCE_POOLING = 'EVENT_BEHAVIOR:ENABLE_INSTANCE_POOLING';
+
+    /**
+     * Specification:
+     * - Recommended maximum data size for event messages in KB.
+     * - Used to log a warning if the event message data size exceeds this limit.
+     *
+     * @api
+     *
+     * @var int
+     */
+    public const MAX_RECOMMENDED_EVENT_MESSAGE_DATA_SIZE = 256;
 }
