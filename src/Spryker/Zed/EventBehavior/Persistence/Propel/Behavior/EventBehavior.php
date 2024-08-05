@@ -435,10 +435,15 @@ protected function getForeignKeys()
  */
 protected function saveEventBehaviorEntityChange(array \$data)
 {
+    \$encodedData = json_encode(\$data);
+    if (strlen(\$encodedData) > 256 * 1024) {
+        \$this->log((\$data['event'] ?? '') . ' event message size exceeds the allowable limit of 256KB.', \\Propel\\Runtime\\Propel::LOG_WARNING);
+    }
+
     \$isInstancePoolingDisabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();
 
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
-    \$spyEventBehaviorEntityChange->setData(json_encode(\$data));
+    \$spyEventBehaviorEntityChange->setData(json_encode(\$encodedData));
     \$spyEventBehaviorEntityChange->setProcessId(\\Spryker\\Zed\\Kernel\\RequestIdentifier::getRequestId());
     \$spyEventBehaviorEntityChange->save();
 
