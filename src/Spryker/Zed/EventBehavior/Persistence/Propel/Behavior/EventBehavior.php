@@ -443,7 +443,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
     \$isInstancePoolingDisabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();
 
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
-    \$spyEventBehaviorEntityChange->setData(json_encode(\$encodedData));
+    \$spyEventBehaviorEntityChange->setData(\$encodedData);
     \$spyEventBehaviorEntityChange->setProcessId(\\Spryker\\Zed\\Kernel\\RequestIdentifier::getRequestId());
     \$spyEventBehaviorEntityChange->save();
 
