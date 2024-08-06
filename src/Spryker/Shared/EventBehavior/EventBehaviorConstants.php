@@ -59,7 +59,7 @@ interface EventBehaviorConstants
      *
      * @api
      *
-     * @var int
+     * @var string
      */
-    public const MAX_RECOMMENDED_EVENT_MESSAGE_DATA_SIZE = 256;
+    public const MAX_RECOMMENDED_EVENT_MESSAGE_DATA_SIZE = 'MAX_RECOMMENDED_EVENT_MESSAGE_DATA_SIZE';
 }
