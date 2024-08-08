@@ -123,6 +123,6 @@ class EventBehaviorConfig extends AbstractBundleConfig
      */
     public function getMaxRecommendedEventMessageDataSize(): int
     {
-        return $this->get(EventBehaviorConstants::MAX_RECOMMENDED_EVENT_MESSAGE_DATA_SIZE, 256);
+        return $this->get(EventBehaviorConstants::MAX_EVENT_MESSAGE_DATA_SIZE, 256);
     }
 }

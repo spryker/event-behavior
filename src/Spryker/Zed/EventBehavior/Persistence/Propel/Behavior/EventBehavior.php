@@ -448,7 +448,7 @@ protected function saveEventBehaviorEntityChange(array \$data)
 
     if (\$dataLength > $maxRecommendedEventMessageDataSize * 1024) {
         \$warningMessage = sprintf(
-            '%s event message data size (%d KB) exceeds the allowable limit of %d KB.',
+            '%s event message data size (%d KB) exceeds the allowable limit of %d KB. Please reduce the event message size or it might disrupt P&S process.',
             (\$data['event'] ?? ''),
             \$dataLength / 1024,
             $maxRecommendedEventMessageDataSize,
