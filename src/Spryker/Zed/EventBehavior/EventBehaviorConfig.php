@@ -111,4 +111,18 @@ class EventBehaviorConfig extends AbstractBundleConfig
     {
         return static::$isEventDisabled;
     }
+
+    /**
+     * Specification:
+     * - Recommended maximum data size for event messages in KB.
+     * - Used to log a warning if the event message data size exceeds this limit.
+     *
+     * @api
+     *
+     * @return int
+     */
+    public function getMaxEventMessageDataSize(): int
+    {
+        return $this->get(EventBehaviorConstants::MAX_EVENT_MESSAGE_DATA_SIZE, 256);
+    }
 }

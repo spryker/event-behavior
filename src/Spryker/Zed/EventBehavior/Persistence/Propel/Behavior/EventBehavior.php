@@ -13,9 +13,15 @@ use Propel\Generator\Model\Behavior;
 use Propel\Generator\Model\Table;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
+use Spryker\Zed\Kernel\BundleConfigResolverAwareTrait;
 
+/**
+ * @method \Spryker\Zed\EventBehavior\EventBehaviorConfig getConfig()
+ */
 class EventBehavior extends Behavior
 {
+    use BundleConfigResolverAwareTrait;
+
     /**
      * @var string
      */
@@ -427,6 +433,8 @@ protected function getForeignKeys()
      */
     protected function addSaveEventBehaviorEntityChangeMethod()
     {
+        $maxEventMessageDataSize = $this->getConfig()->getMaxEventMessageDataSize();
+
         return "
 /**
  * @param array \$data
@@ -435,10 +443,24 @@ protected function getForeignKeys()
  */
 protected function saveEventBehaviorEntityChange(array \$data)
 {
+    \$encodedData = json_encode(\$data);
+    \$dataLength = strlen(\$encodedData);
+
+    if (\$dataLength > $maxEventMessageDataSize * 1024) {
+        \$warningMessage = sprintf(
+            '%s event message data size (%d KB) exceeds the allowable limit of %d KB. Please reduce the event message size or it might disrupt P&S process.',
+            (\$data['event'] ?? ''),
+            \$dataLength / 1024,
+            $maxEventMessageDataSize,
+        );
+
+        \$this->log(\$warningMessage, \\Propel\\Runtime\\Propel::LOG_WARNING);
+    }
+
     \$isInstancePoolingDisabledSuccessfully = \\Propel\\Runtime\\Propel::disableInstancePooling();
 
     \$spyEventBehaviorEntityChange = new \\Orm\\Zed\\EventBehavior\\Persistence\\SpyEventBehaviorEntityChange();
-    \$spyEventBehaviorEntityChange->setData(json_encode(\$data));
+    \$spyEventBehaviorEntityChange->setData(\$encodedData);
     \$spyEventBehaviorEntityChange->setProcessId(\\Spryker\\Zed\\Kernel\\RequestIdentifier::getRequestId());
     \$spyEventBehaviorEntityChange->save();
 
