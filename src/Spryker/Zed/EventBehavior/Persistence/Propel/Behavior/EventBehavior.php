@@ -433,7 +433,7 @@ protected function getForeignKeys()
      */
     protected function addSaveEventBehaviorEntityChangeMethod()
     {
-        $maxRecommendedEventMessageDataSize = $this->getConfig()->getMaxRecommendedEventMessageDataSize();
+        $maxEventMessageDataSize = $this->getConfig()->getMaxEventMessageDataSize();
 
         return "
 /**
@@ -446,12 +446,12 @@ protected function saveEventBehaviorEntityChange(array \$data)
     \$encodedData = json_encode(\$data);
     \$dataLength = strlen(\$encodedData);
 
-    if (\$dataLength > $maxRecommendedEventMessageDataSize * 1024) {
+    if (\$dataLength > $maxEventMessageDataSize * 1024) {
         \$warningMessage = sprintf(
             '%s event message data size (%d KB) exceeds the allowable limit of %d KB. Please reduce the event message size or it might disrupt P&S process.',
             (\$data['event'] ?? ''),
             \$dataLength / 1024,
-            $maxRecommendedEventMessageDataSize,
+            $maxEventMessageDataSize,
         );
 
         \$this->log(\$warningMessage, \\Propel\\Runtime\\Propel::LOG_WARNING);
