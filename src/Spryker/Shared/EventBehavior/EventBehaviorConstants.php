@@ -61,5 +61,5 @@ interface EventBehaviorConstants
      *
      * @var string
      */
-    public const MAX_EVENT_MESSAGE_DATA_SIZE = 'MAX_EVENT_MESSAGE_DATA_SIZE';
+    public const MAX_EVENT_MESSAGE_DATA_SIZE = 'EVENT_BEHAVIOR:MAX_EVENT_MESSAGE_DATA_SIZE';
 }
