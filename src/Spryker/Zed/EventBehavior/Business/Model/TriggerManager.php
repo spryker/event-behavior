@@ -127,7 +127,7 @@ class TriggerManager implements TriggerManagerInterface
             $offset += $limit;
         } while ($countEvents === $limit);
 
-        if ($countEvents === $triggeredEvents) {
+        if ($countEvents === $triggeredEvents && $triggeredEvents > 0) {
             $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
 
             return;

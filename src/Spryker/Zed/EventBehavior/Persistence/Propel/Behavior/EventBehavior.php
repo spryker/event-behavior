@@ -105,33 +105,27 @@ if (\$affectedRows) {
     {
         $parameter = array_change_key_case($parameter, CASE_LOWER);
 
-        // @phpstan-ignore-next-line
         $this->parameters[$parameter['name']] = [];
 
         if (!isset($parameter['column'])) {
             throw new PropelException(sprintf('"column" attribute for %s event behavior is missing', $parameter['name']));
         }
 
-        // @phpstan-ignore-next-line
         $this->parameters[$parameter['name']]['column'] = $parameter['column'];
 
         if (isset($parameter['value'])) {
-            // @phpstan-ignore-next-line
             $this->parameters[$parameter['name']]['value'] = $parameter['value'];
         }
 
         if (isset($parameter['operator'])) {
-            // @phpstan-ignore-next-line
             $this->parameters[$parameter['name']]['operator'] = $parameter['operator'];
         }
 
         if (isset($parameter['keep-original'])) {
-            // @phpstan-ignore-next-line
             $this->parameters[$parameter['name']]['keep-original'] = $parameter['keep-original'];
         }
 
         if (isset($parameter['keep-additional'])) {
-            // @phpstan-ignore-next-line
             $this->parameters[$parameter['name']]['keep-additional'] = $parameter['keep-additional'];
         }
     }
