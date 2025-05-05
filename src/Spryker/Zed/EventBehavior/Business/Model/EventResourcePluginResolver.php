@@ -199,36 +199,18 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
     protected function extractEffectivePlugins($effectivePlugins, $pluginsPerExporter): array
     {
         foreach ($effectivePlugins as $effectiveEventPlugins) {
-            $effectivePlugin = $this->findEffectivePlugin($effectiveEventPlugins);
+            foreach ($effectiveEventPlugins as $effectiveEventPlugin) {
+                if ($this->isEventResourceRepositoryPlugin($effectiveEventPlugin)) {
+                    $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectiveEventPlugin;
+                }
 
-            if ($effectivePlugin === null) {
-                continue;
-            }
-
-            if ($this->isEventResourceRepositoryPlugin($effectivePlugin)) {
-                $pluginsPerExporter[static::REPOSITORY_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
-            }
-
-            if ($this->isEventResourceQueryContainerPlugin($effectivePlugin)) {
-                $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectivePlugin;
+                if ($this->isEventResourceQueryContainerPlugin($effectiveEventPlugin)) {
+                    $pluginsPerExporter[static::QUERY_CONTAINER_EVENT_RESOURCE_PLUGINS][] = $effectiveEventPlugin;
+                }
             }
         }
 
         return $pluginsPerExporter;
-    }
-
-    /**
-     * @param array<\Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface> $eventResourcePlugins
-     *
-     * @return \Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourcePluginInterface|null
-     */
-    protected function findEffectivePlugin(array $eventResourcePlugins): ?EventResourcePluginInterface
-    {
-        if ($eventResourcePlugins === []) {
-            return null;
-        }
-
-        return current($eventResourcePlugins);
     }
 
     /**
