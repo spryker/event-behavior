@@ -42,3 +42,4 @@ suites:
                         - tests/_data/
                         - vendor/*/*/tests/_data/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
+                - \SprykerTest\Service\Container\Helper\ContainerHelper
