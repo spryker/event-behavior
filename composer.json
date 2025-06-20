@@ -29,7 +29,7 @@
         "spryker/queue": "*",
         "spryker/silex": "^2.0.0",
         "spryker/testify": "^3.58.0",
-        "spryker/transfer": "^3.25.0"
+        "spryker/transfer": "^3.39.0"
     },
     "suggest": {
         "spryker/console": "If you want to execute console commands",
