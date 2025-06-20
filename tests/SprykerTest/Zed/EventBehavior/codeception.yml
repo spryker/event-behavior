@@ -43,4 +43,4 @@ suites:
                         - vendor/*/*/tests/_data/
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Service\Container\Helper\ContainerHelper
-#                - \SprykerTest\Zed\Store\Helper\StoreDependencyHelper
+                - \SprykerTest\Shared\Propel\Helper\ConnectionHelper

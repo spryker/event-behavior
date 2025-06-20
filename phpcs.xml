@@ -18,7 +18,15 @@
     <exclude-pattern>*/tests/_helpers/*</exclude-pattern>
     <exclude-pattern>*/tests/_output/*</exclude-pattern>
 
-    <rule ref="vendor/spryker/code-sniffer/Spryker/ruleset.xml"/>
+    <rule ref="vendor/spryker/code-sniffer/Spryker/ruleset.xml">
+        <exclude name="Spryker.Commenting.DocBlock"/>
+        <exclude name="Spryker.Commenting.DocBlockConst"/>
+        <exclude name="Spryker.Commenting.InlineDocBlock"/>
+        <exclude name="Spryker.Commenting.DocBlockApiAnnotation"/>
+        <exclude name="Spryker.Commenting.DocBlockReturnVoid"/>
+    </rule>
+
+    <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml"/>
 
     <!-- Define your own sniffs here -->
 

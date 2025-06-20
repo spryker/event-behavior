@@ -8,8 +8,6 @@
 namespace SprykerTest\Glue\EventBehavior\Plugin\EventDispatcher;
 
 use Codeception\Test\Unit;
-use Spryker\Glue\EventBehavior\Dependency\Facade\EventBehaviorToEventBehaviorFacadeInterface;
-use Spryker\Glue\EventBehavior\EventBehaviorDependencyFactory;
 use Spryker\Glue\EventBehavior\Plugin\EventDispatcher\EventBehaviorEventDispatcherPlugin;
 use Spryker\Shared\EventDispatcher\EventDispatcher;
 use Spryker\Shared\EventDispatcherExtension\Dependency\Plugin\EventDispatcherPluginInterface;
@@ -40,22 +38,7 @@ class EventBehaviorEventDispatcherPluginTest extends Unit
     public function testDispatchWillReturnTerminateEvent(): void
     {
         // Arrange
-        $mockFactory = $this->getMockBuilder(EventBehaviorDependencyFactory::class)
-            ->setMethods(['getEventBehaviorFacade'])
-            ->getMock();
-
-        $bridgeMock = $this->getMockBuilder(EventBehaviorToEventBehaviorFacadeInterface::class)
-            ->setMethods(['triggerRuntimeEvents'])
-            ->getMock();
-
-        $bridgeMock->expects($this->once())
-            ->method('triggerRuntimeEvents');
-
-        $mockFactory->method('getEventBehaviorFacade')
-            ->willReturn($bridgeMock);
-
         $plugin = new EventBehaviorEventDispatcherPlugin();
-        $plugin->setFactory($mockFactory);
 
         // Act
         $event = $this->dispatchEvent($plugin);
