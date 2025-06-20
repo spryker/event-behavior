@@ -23,7 +23,7 @@ suites:
                 - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Propel\Helper\PropelHelper:
-                    isolated: true
+#                    isolated: true
                     schemaSourceDirectoryList:
                         - src/*/Zed/*/Persistence/Propel/Schema/
                         - vendor/*/*/src/*/Zed/*/Persistence/Propel/Schema/
