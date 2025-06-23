@@ -9,6 +9,9 @@ use Spryker\Shared\Log\LogConstants;
 use Spryker\Shared\Propel\PropelConstants;
 use Spryker\Shared\Queue\QueueConstants;
 use Spryker\Zed\Propel\PropelConfig;
+use Spryker\Shared\EventBehavior\EventBehaviorConstants;
+
+$config[EventBehaviorConstants::EVENT_BEHAVIOR_TRIGGERING_ACTIVE] = true;
 
 // ----------------------------------------------------------------------------
 // ------------------------------ CODEBASE: TO REMOVE -------------------------
@@ -62,4 +65,5 @@ $config[PropelConstants::ZED_DB_PASSWORD] = getenv('SPRYKER_DB_PASSWORD') ?: 'se
 $config[PropelConstants::ZED_DB_DATABASE] = getenv('SPRYKER_DB_DATABASE') ?: 'eu-docker';
 $config[PropelConstants::ZED_DB_REPLICAS] = json_decode(getenv('SPRYKER_DB_REPLICAS') ?: '[]', true);
 $config[PropelConstants::USE_SUDO_TO_MANAGE_DATABASE] = false;
-//= $config[PropelQueryBuilderConstants::ZED_DB_ENGINE]
+
+$config[KernelConstants::ENABLE_CONTAINER_OVERRIDING] = true;
