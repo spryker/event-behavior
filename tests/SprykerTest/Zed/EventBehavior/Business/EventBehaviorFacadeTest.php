@@ -14,8 +14,6 @@ use Generated\Shared\Transfer\EventEntityTransfer;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
-use Spryker\Shared\Config\Config;
-use Spryker\Shared\EventBehavior\EventBehaviorConstants;
 use Spryker\Shared\Kernel\Transfer\TransferInterface;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInterface;
