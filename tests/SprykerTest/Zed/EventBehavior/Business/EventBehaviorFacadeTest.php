@@ -20,7 +20,6 @@ use Spryker\Zed\EventBehavior\Dependency\Service\EventBehaviorToUtilEncodingInte
 use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 use Spryker\Zed\EventBehavior\EventBehaviorDependencyProvider;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
-use Spryker\Zed\Kernel\Container;
 use Spryker\Zed\Kernel\RequestIdentifier;
 use SprykerTest\Zed\EventBehavior\EventBehaviorBusinessTester;
 
