@@ -30,12 +30,15 @@ class EventResourceQueryContainerManagerTest extends Unit
      */
     public function testTriggerResourceEventsWithNoQuery(): void
     {
+        // Arrange
         $eventResourceQueryContainerPlugin = $this->createEventResourceQueryContainerMockPlugin();
 
+        // Assert
         $eventResourceQueryContainerPlugin->expects($this->once())
             ->method('queryData')
             ->will($this->returnValue(null));
 
+        // Act
         $this->createEventResourceQueryContainerManager()
             ->processResourceEvents([
                 $eventResourceQueryContainerPlugin,

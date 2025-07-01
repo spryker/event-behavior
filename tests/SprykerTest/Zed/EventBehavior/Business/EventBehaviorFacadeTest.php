@@ -86,7 +86,10 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testEventBehaviorWillTriggerMemoryEventDataForTheSameEntities(): void
     {
+        // Arrange
         $eventFacadeMock = $this->createEventFacadeMockBridge();
+
+        // Assert
         $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
             $this->returnCallback(
                 function ($eventName, array $eventTransfers): void {
@@ -102,6 +105,7 @@ class EventBehaviorFacadeTest extends Unit
         $this->createEntityChangeEvent();
         $this->createEntityChangeEvent();
 
+        // Act
         $this->tester->getFacade()->triggerRuntimeEvents();
     }
 
@@ -110,7 +114,10 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testEventBehaviorWillTriggerMemoryEventsData(): void
     {
+        // Arrange
         $eventFacadeMock = $this->createEventFacadeMockBridge();
+
+        // Assert
         $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
             $this->returnCallback(
                 function ($eventName, array $eventTransfers): void {
@@ -126,6 +133,7 @@ class EventBehaviorFacadeTest extends Unit
         $this->createEntityChangeEvent('321');
         $this->createEntityChangeEvent();
 
+        // Act
         $this->tester->getFacade()->triggerRuntimeEvents();
     }
 
@@ -134,8 +142,10 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testEventBehaviorWillTriggerLostEventsData(): void
     {
+        // Arrange
         $this->createLostEntityChangeEvent();
 
+        // Assert
         $storageMock = $this->createEventFacadeMockBridge();
         $storageMock->expects($this->once())->method('triggerBulk')->will(
             $this->returnCallback(
@@ -149,6 +159,7 @@ class EventBehaviorFacadeTest extends Unit
         $this->tester->setDependency(EventBehaviorDependencyProvider::FACADE_EVENT, $storageMock);
         $this->setDependencyUtilEncodingService($this->once());
 
+        // Act
         $this->tester->getFacade()->triggerLostEvents();
     }
 
@@ -157,8 +168,10 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testExecuteResolvedPluginsBySources(): void
     {
+        // Arrange
         $this->createEntityChangeEvent();
 
+        // Assert
         $storageMock = $this->createEventFacadeMockBridge();
         if (count($this->getEventTriggerResourcePlugins())) {
             $storageMock->expects($this->any())->method('trigger')->will(
@@ -175,6 +188,7 @@ class EventBehaviorFacadeTest extends Unit
         $this->tester->setDependency(EventBehaviorDependencyProvider::FACADE_EVENT, $storageMock);
         $this->tester->setDependency(EventBehaviorDependencyProvider::PLUGINS_EVENT_TRIGGER_RESOURCE, $this->getEventTriggerResourcePlugins());
 
+        // Act
         $this->tester->getFacade()->executeResolvedPluginsBySources([], []);
     }
 
@@ -183,6 +197,7 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testGetEventTransferIds(): void
     {
+        // Arrange
         $eventEntityTransfers = [];
 
         $eventEntityTransfer = new EventEntityTransfer();
@@ -198,6 +213,8 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfers[] = $eventEntityTransfer;
 
         $eventTransferIds = $this->tester->getFacade()->getEventTransferIds($eventEntityTransfers);
+
+        // Assert
         $this->assertEquals($eventTransferIds, [1, 2]);
     }
 
@@ -206,7 +223,7 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testGetGroupedEventTransferForeignKeysByForeignKey(): void
     {
-        $container = new Container();
+        // Arrange
         $selectedForeignKey = 'foreign_key1';
         $expectedGroupedEventTransferForeignKeys = [];
         $eventEntityTransfers = [];
@@ -249,8 +266,10 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfers[] = $eventEntityTransfer;
         $expectedGroupedEventTransferForeignKeys[$foreignKeys[$selectedForeignKey]][] = $foreignKeys;
 
+        // Act
         $groupedEventTransferForeignKeys = $this->tester->getFacade()->getGroupedEventTransferForeignKeysByForeignKey($eventEntityTransfers, $selectedForeignKey);
 
+        // Assert
         $this->assertEquals(2, count($groupedEventTransferForeignKeys));
         $this->assertEquals($expectedGroupedEventTransferForeignKeys, $groupedEventTransferForeignKeys);
     }
@@ -260,8 +279,7 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testGetEventTransferForeignKeys(): void
     {
-        $container = new Container();
-
+        // Arrange
         $eventEntityTransfers = [];
 
         $eventEntityTransfer = new EventEntityTransfer();
@@ -276,7 +294,10 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfer->setForeignKeys(['testForeignKey' => 'keyValue1']);
         $eventEntityTransfers[] = $eventEntityTransfer;
 
+        // Act
         $eventTransferForeignKeys = $this->tester->getFacade()->getEventTransferForeignKeys($eventEntityTransfers, 'testForeignKey');
+
+        // Assert
         $this->assertEquals($eventTransferForeignKeys, ['keyValue1', 'keyValue2']);
     }
 
@@ -285,8 +306,8 @@ class EventBehaviorFacadeTest extends Unit
      */
     public function testGetEventTransfersByModifiedColumns(): void
     {
+        // Arrange
         $eventEntityTransfers = [];
-
         $modifiedColumns = ['column1', 'column2', 'column3'];
         $eventEntityModifiedTransfer = new EventEntityTransfer();
         $eventEntityModifiedTransfer->setModifiedColumns($modifiedColumns);
@@ -297,7 +318,10 @@ class EventBehaviorFacadeTest extends Unit
         $eventEntityTransfer->setModifiedColumns($notModifiedColumns);
         $eventEntityTransfers[] = $eventEntityTransfer;
 
+        // Act
         $eventTransfersWithModifiedColumns = $this->tester->getFacade()->getEventTransfersByModifiedColumns($eventEntityTransfers, $modifiedColumns);
+
+        // Assert
         $this->assertEquals($eventTransfersWithModifiedColumns, [$eventEntityModifiedTransfer]);
     }
 
