@@ -117,15 +117,18 @@ class TriggerManager implements TriggerManagerInterface
         $limit = $this->config->getTriggerChunkSize();
         $primaryKeys = [];
         $offset = 0;
+        $countEvents = 0;
+
         do {
             $events = $this->getEventEntitiesByProcessId($processId, $offset, $limit);
             static::$eventBehaviorTableExists = true;
-            $countEvents = count($events);
+            $currentCountEvents = count($events);
+            $countEvents += $currentCountEvents;
 
             $triggeredEvents += $this->triggerEvents($events);
             $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
             $offset += $limit;
-        } while ($countEvents === $limit);
+        } while ($currentCountEvents === $limit);
 
         if ($countEvents === $triggeredEvents && $triggeredEvents > 0) {
             $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
@@ -277,10 +280,11 @@ class TriggerManager implements TriggerManagerInterface
             $stringData = $event->getData();
             /** @var array<string, mixed> $data */
             $data = $this->utilEncodingService->decodeJson($stringData, true);
+            $id = $data[EventBehavior::EVENT_CHANGE_ENTITY_ID];
             $eventEntityTransfer = new EventEntityTransfer();
             $eventEntityTransfer->setEvent($data[EventBehavior::EVENT_CHANGE_NAME]);
             $eventEntityTransfer->setName($data[EventBehavior::EVENT_CHANGE_ENTITY_NAME]);
-            $eventEntityTransfer->setId($data[EventBehavior::EVENT_CHANGE_ENTITY_ID]);
+            $eventEntityTransfer->setId($id);
             $eventEntityTransfer->setForeignKeys($data[EventBehavior::EVENT_CHANGE_ENTITY_FOREIGN_KEYS]);
             if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES])) {
                 $eventEntityTransfer->setOriginalValues($data[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES]);
@@ -291,7 +295,8 @@ class TriggerManager implements TriggerManagerInterface
             if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES])) {
                 $eventEntityTransfer->setAdditionalValues($data[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES]);
             }
-            $eventEntityTransfersByEvent[$data[EventBehavior::EVENT_CHANGE_NAME]][] = $eventEntityTransfer;
+            $keyId = is_int($id) || is_string($id) ? $id : spl_object_id($eventEntityTransfer);
+            $eventEntityTransfersByEvent[$data[EventBehavior::EVENT_CHANGE_NAME]][$keyId] = $eventEntityTransfer;
             $triggeredRows++;
         }
 

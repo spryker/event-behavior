@@ -20,7 +20,6 @@ suites:
                 - Asserts
                 - \SprykerTest\Shared\Testify\Helper\Environment:
                     isolated: true
-                - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
                 - \SprykerTest\Shared\Testify\Helper\ConfigHelper
                 - \SprykerTest\Shared\Propel\Helper\PropelHelper:
                     isolated: true
@@ -41,4 +40,7 @@ suites:
                     dataBuilderSchemaDirectories:
                         - tests/_data/
                         - vendor/*/*/tests/_data/
-                - \SprykerTest\Shared\Testify\Helper\DependencyHelper
+                - \SprykerTest\Shared\Propel\Helper\ConnectionHelper
+                - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
+                - \SprykerTest\Service\Container\Helper\ContainerHelper
+                - \SprykerTest\Zed\Testify\Helper\Business\DependencyProviderHelper

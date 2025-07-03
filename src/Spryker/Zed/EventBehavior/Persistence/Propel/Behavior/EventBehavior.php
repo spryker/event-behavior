@@ -348,7 +348,7 @@ protected function addSaveEventToMemory()
 
     \$data = [
         '$dataEventEntityName' => '$tableName',
-        '$dataEventEntityId' => \$this->getPrimaryKey(),
+        '$dataEventEntityId' => !is_array(\$this->getPrimaryKey()) ? \$this->getPrimaryKey() : null,
         '$dataEventName' => \$this->_eventName,
         '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
         '$dataEventEntityModifiedColumns' => \$this->_modifiedColumns,
@@ -390,7 +390,7 @@ protected function addDeleteEventToMemory()
 
     \$data = [
         '$dataEventEntityName' => '$tableName',
-        '$dataEventEntityId' => \$this->getPrimaryKey(),
+        '$dataEventEntityId' => !is_array(\$this->getPrimaryKey()) ? \$this->getPrimaryKey() : null,
         '$dataEventName' => '$deleteEvent',
         '$dataEventEntityForeignKeys' => \$this->getForeignKeys(),
         '$dataEventEntityAdditionalValues' => \$this->getAdditionalValues(),
