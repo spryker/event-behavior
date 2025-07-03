@@ -117,15 +117,18 @@ class TriggerManager implements TriggerManagerInterface
         $limit = $this->config->getTriggerChunkSize();
         $primaryKeys = [];
         $offset = 0;
+        $countEvents = 0;
+
         do {
             $events = $this->getEventEntitiesByProcessId($processId, $offset, $limit);
             static::$eventBehaviorTableExists = true;
-            $countEvents = count($events);
+            $currentCountEvents = count($events);
+            $countEvents += $currentCountEvents;
 
             $triggeredEvents += $this->triggerEvents($events);
             $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
             $offset += $limit;
-        } while ($countEvents === $limit);
+        } while ($currentCountEvents === $limit);
 
         if ($countEvents === $triggeredEvents && $triggeredEvents > 0) {
             $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
