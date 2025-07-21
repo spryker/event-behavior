@@ -148,7 +148,7 @@ interface EventBehaviorFacadeInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
-     * @return array<int, int>
+     * @return array<int|string, int>
      */
     public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
 

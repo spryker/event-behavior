@@ -38,7 +38,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
         $ids = [];
         foreach ($sortedEventTransfers as $eventTransfer) {
-            $ids[(int)$eventTransfer->getId()] = $eventTransfer->getTimestamp();
+            $ids[(int)$eventTransfer->getId()] = (int)$eventTransfer->getTimestamp();
         }
 
         return $ids;
@@ -94,7 +94,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 
             $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
             if ($value !== null) {
-                $foreignKeys[$value] = $eventTransfer->getTimestamp();
+                $foreignKeys[(int)$value] = (int)$eventTransfer->getTimestamp();
             }
         }
 
@@ -199,7 +199,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
-     * @return array<int, int>
+     * @return array<int|string, int>
      */
     public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array
     {
@@ -217,7 +217,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
                 continue;
             }
 
-            $additionalValues[$additionalValuesOfEvent[$columnName]] = $eventTransfer->getTimestamp();
+            $additionalValues[$additionalValuesOfEvent[$columnName]] = (int)$eventTransfer->getTimestamp();
         }
 
         return $additionalValues;

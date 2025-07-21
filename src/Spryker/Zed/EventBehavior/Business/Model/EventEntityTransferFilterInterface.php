@@ -35,7 +35,7 @@ interface EventEntityTransferFilterInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
-     * @return array<int, int>
+     * @return array<int|string, int>
      */
     public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array;
 
@@ -75,7 +75,7 @@ interface EventEntityTransferFilterInterface
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $columnName
      *
-     * @return array<int, int>
+     * @return array<int|string, int>
      */
     public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
 }
