@@ -28,11 +28,6 @@ class TriggerManager implements TriggerManagerInterface
     use InstancePoolingTrait;
 
     /**
-     * @var string
-     */
-    protected const DATE_FORMAT = 'Y-m-d H:i:s.u';
-
-    /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
      *
      * @var string
