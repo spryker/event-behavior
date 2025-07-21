@@ -77,7 +77,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array<int, int>
      */
-    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array
+    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, string $foreignKeyColumnName): array
     {
         if (!$foreignKeyColumnName) {
             return [];
