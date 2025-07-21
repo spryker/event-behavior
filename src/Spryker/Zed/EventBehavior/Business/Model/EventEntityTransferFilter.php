@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Generated\Shared\Transfer\EventEntityTransfer;
+
 class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 {
     /**
@@ -22,6 +24,24 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
         }
 
         return array_unique($ids);
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array
+    {
+        $sortedEventTransfers = $eventTransfers;
+        usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
+
+        $ids = [];
+        foreach ($sortedEventTransfers as $eventTransfer) {
+            $ids[(int)$eventTransfer->getId()] = $eventTransfer->getTimestamp();
+        }
+
+        return $ids;
     }
 
     /**
@@ -49,6 +69,36 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
         }
 
         return array_unique($foreignKeys);
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array
+    {
+        if (!$foreignKeyColumnName) {
+            return [];
+        }
+
+        $sortedEventTransfers = $eventTransfers;
+        usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
+
+        $foreignKeys = [];
+        foreach ($sortedEventTransfers as $eventTransfer) {
+            if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {
+                continue;
+            }
+
+            $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
+            if ($value !== null) {
+                $foreignKeys[$value] = $eventTransfer->getTimestamp();
+            }
+        }
+
+        return $foreignKeys;
     }
 
     /**
@@ -143,6 +193,34 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
         }
 
         return array_unique($additionalValues);
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $columnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array
+    {
+        if (!$columnName) {
+            return [];
+        }
+
+        $sortedEventTransfers = $eventTransfers;
+        usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
+
+        $additionalValues = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $additionalValuesOfEvent = $eventTransfer->getAdditionalValues();
+            if (!isset($additionalValuesOfEvent[$columnName])) {
+                continue;
+            }
+
+            $additionalValues[$additionalValuesOfEvent[$columnName]] = $eventTransfer->getTimestamp();
+        }
+
+        return $additionalValues;
     }
 
     /**

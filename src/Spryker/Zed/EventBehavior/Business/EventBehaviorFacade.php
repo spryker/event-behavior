@@ -72,6 +72,20 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      * @api
      *
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array
+    {
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferIdsWithTimestamps($eventTransfers);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -79,6 +93,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName)
     {
         return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferForeignKeys($eventTransfers, $foreignKeyColumnName);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array
+    {
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferForeignKeysWithTimestamps($eventTransfers, $foreignKeyColumnName);
     }
 
     /**
@@ -124,6 +153,21 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array
     {
         return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersAdditionalValues($eventTransfers, $columnName);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $columnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array
+    {
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersAdditionalValuesWithTimestamp($eventTransfers, $columnName);
     }
 
     /**

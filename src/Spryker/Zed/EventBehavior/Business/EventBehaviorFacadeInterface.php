@@ -62,6 +62,19 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
+     * - Returns Ids with event timestamps in eventTransfers.
+     * - Key: ForeignKey, Value: timestamp.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array;
+
+    /**
+     * Specification:
      *  - Returns ForeignKeys in eventTransfers.
      *
      * @api
@@ -72,6 +85,20 @@ interface EventBehaviorFacadeInterface
      * @return array
      */
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName);
+
+    /**
+     * Specification:
+     * - Returns ForeignKeys with event timestamps in eventTransfers.
+     * - Key: ForeignKey, Value: timestamp.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array;
 
     /**
      * Specification:
@@ -101,7 +128,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Returns field value of the specficed column in eventTransfers.
+     *  - Returns field value of the specified column in eventTransfers.
      *
      * @api
      *
@@ -111,6 +138,19 @@ interface EventBehaviorFacadeInterface
      * @return array
      */
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * Specification:
+     *   - Returns field value with timestamp of the specified column in eventTransfers.
+     *
+     * @api
+     *
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $columnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
 
     /**
      * Specification:

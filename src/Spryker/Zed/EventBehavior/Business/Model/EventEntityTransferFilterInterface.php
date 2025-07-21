@@ -18,11 +18,26 @@ interface EventEntityTransferFilterInterface
 
     /**
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array;
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
      */
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName);
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, $foreignKeyColumnName): array;
 
     /**
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
@@ -55,4 +70,12 @@ interface EventEntityTransferFilterInterface
      * @return array
      */
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $columnName
+     *
+     * @return array<int, int>
+     */
+    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
 }

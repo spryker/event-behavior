@@ -28,6 +28,11 @@ class TriggerManager implements TriggerManagerInterface
     use InstancePoolingTrait;
 
     /**
+     * @var string
+     */
+    protected const DATE_FORMAT = 'Y-m-d H:i:s.u';
+
+    /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
      *
      * @var string
@@ -285,6 +290,7 @@ class TriggerManager implements TriggerManagerInterface
             $eventEntityTransfer->setEvent($data[EventBehavior::EVENT_CHANGE_NAME]);
             $eventEntityTransfer->setName($data[EventBehavior::EVENT_CHANGE_ENTITY_NAME]);
             $eventEntityTransfer->setId($id);
+            $eventEntityTransfer->setTimestamp($event->getCreatedAt()?->getTimestamp());
             $eventEntityTransfer->setForeignKeys($data[EventBehavior::EVENT_CHANGE_ENTITY_FOREIGN_KEYS]);
             if (isset($data[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES])) {
                 $eventEntityTransfer->setOriginalValues($data[EventBehavior::EVENT_CHANGE_ENTITY_ORIGINAL_VALUES]);
