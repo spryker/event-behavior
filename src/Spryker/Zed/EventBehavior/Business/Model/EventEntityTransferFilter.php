@@ -10,7 +10,6 @@ namespace Spryker\Zed\EventBehavior\Business\Model;
 use Generated\Shared\Transfer\EventEntityRequestTransfer;
 use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventEntityTransfer;
-use Generated\Shared\Transfer\EventTransferRequest;
 
 class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 {

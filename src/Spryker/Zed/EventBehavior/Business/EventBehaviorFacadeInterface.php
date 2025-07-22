@@ -125,7 +125,6 @@ interface EventBehaviorFacadeInterface
      * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
      *
      * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
-     *
      */
     public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer;
 
