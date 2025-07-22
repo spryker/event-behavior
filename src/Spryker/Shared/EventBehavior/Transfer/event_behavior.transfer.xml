@@ -3,6 +3,18 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="spryker:transfer-01 http://static.spryker.com/transfer-01.xsd">
 
+    <transfer name="EventEntityRequest">
+        <property name="eventEntities" type="EventEntity[]" singular="EventEntity" description="List of event entities"/>
+        <property name="foreignKeyName" type="string" description="Foreign key name"/>
+        <property name="additionalValueName" type="string" description="Additional value key name"/>
+    </transfer>
+
+    <transfer name="EventEntityResponse">
+        <property name="ids" type="array" associative="true" singular="id" description="IDs with their timestamps"/>
+        <property name="foreignKeys" type="array" associative="true" singular="foreignKey" description="Foreign key IDs with their timestamps"/>
+        <property name="additionalValues" type="array" associative="true" singular="additionalValue" description="Additional values with their timestamps"/>
+    </transfer>
+
     <transfer name="EventEntity">
         <property name="event" type="string"/>
         <property name="name" type="string"/>
@@ -12,6 +24,7 @@
         <property name="modifiedColumns" type="array" singular="modifiedColumns"/>
         <property name="originalValues" type="array" singular="originalValues"/>
         <property name="additionalValues" type="array" singular="additionalValue"/>
+        <property name="isSuccessful111" type="bool" />
     </transfer>
 
     <transfer name="EventTriggerResponse">

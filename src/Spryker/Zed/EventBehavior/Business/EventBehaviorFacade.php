@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
+use Generated\Shared\Transfer\EventEntityRequestTransfer;
+use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
@@ -72,20 +74,6 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      * @api
      *
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array
-    {
-        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferIdsWithTimestamps($eventTransfers);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
@@ -93,21 +81,6 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName)
     {
         return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferForeignKeys($eventTransfers, $foreignKeyColumnName);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $foreignKeyColumnName
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, string $foreignKeyColumnName): array
-    {
-        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferForeignKeysWithTimestamps($eventTransfers, $foreignKeyColumnName);
     }
 
     /**
@@ -160,14 +133,13 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $columnName
+     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
      *
-     * @return array<int|string, int>
+     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
      */
-    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array
+    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer
     {
-        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransfersAdditionalValuesWithTimestamp($eventTransfers, $columnName);
+        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferValuesWithTimestamps($eventTransferRequestTransfer);
     }
 
     /**

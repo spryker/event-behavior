@@ -7,6 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
+use Generated\Shared\Transfer\EventEntityRequestTransfer;
+use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventTriggerResponseTransfer;
 
 interface EventBehaviorFacadeInterface
@@ -62,19 +64,6 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     * - Returns Ids with event timestamps in eventTransfers.
-     * - Key: ForeignKey, Value: timestamp.
-     *
-     * @api
-     *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array;
-
-    /**
-     * Specification:
      *  - Returns ForeignKeys in eventTransfers.
      *
      * @api
@@ -85,20 +74,6 @@ interface EventBehaviorFacadeInterface
      * @return array
      */
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName);
-
-    /**
-     * Specification:
-     * - Returns ForeignKeys with event timestamps in eventTransfers.
-     * - Key: ForeignKey, Value: timestamp.
-     *
-     * @api
-     *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $foreignKeyColumnName
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, string $foreignKeyColumnName): array;
 
     /**
      * Specification:
@@ -141,16 +116,18 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *   - Returns field value with timestamp of the specified column in eventTransfers.
+     *    - Returns ids with timestamp in eventTransfers.
+     *    - Returns field value with timestamp of the specified column in eventTransfers.
+     *    - Structure: EventEntityResponseTransfer.ids Key: id, Value: timestamp.
      *
      * @api
      *
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $columnName
+     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
      *
-     * @return array<int|string, int>
+     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
+     *
      */
-    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
+    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer;
 
     /**
      * Specification:

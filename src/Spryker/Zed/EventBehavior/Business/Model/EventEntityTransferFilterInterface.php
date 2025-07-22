@@ -7,6 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Generated\Shared\Transfer\EventEntityRequestTransfer;
+use Generated\Shared\Transfer\EventEntityResponseTransfer;
+
 interface EventEntityTransferFilterInterface
 {
     /**
@@ -18,26 +21,11 @@ interface EventEntityTransferFilterInterface
 
     /**
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferIdsWithTimestamps(array $eventTransfers): array;
-
-    /**
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
      * @param string $foreignKeyColumnName
      *
      * @return array
      */
     public function getEventTransferForeignKeys(array $eventTransfers, $foreignKeyColumnName);
-
-    /**
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $foreignKeyColumnName
-     *
-     * @return array<int, int>
-     */
-    public function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, string $foreignKeyColumnName): array;
 
     /**
      * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
@@ -72,10 +60,9 @@ interface EventEntityTransferFilterInterface
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
 
     /**
-     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
-     * @param string $columnName
+     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
      *
-     * @return array<int|string, int>
+     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
      */
-    public function getEventTransfersAdditionalValuesWithTimestamp(array $eventTransfers, string $columnName): array;
+    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer;
 }
