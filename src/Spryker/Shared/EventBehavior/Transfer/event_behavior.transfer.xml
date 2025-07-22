@@ -24,7 +24,7 @@
         <property name="modifiedColumns" type="array" singular="modifiedColumns"/>
         <property name="originalValues" type="array" singular="originalValues"/>
         <property name="additionalValues" type="array" singular="additionalValue"/>
-        <property name="isSuccessful111" type="bool" />
+        <property name="isSuccessful" type="bool"/>
     </transfer>
 
     <transfer name="EventTriggerResponse">
