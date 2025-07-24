@@ -7,9 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Generated\Shared\Transfer\EventEntityRequestTransfer;
-use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
 
 class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 {
@@ -150,31 +150,31 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
      *
-     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
      */
-    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer
     {
-        $eventEntityResponseTransfer = new EventEntityResponseTransfer();
-        $sortedEventTransfers = $eventTransferRequestTransfer->getEventEntities()->getArrayCopy();
+        $hydrateEventsResponseTransfer = new HydrateEventsResponseTransfer();
+        $sortedEventTransfers = $hydrateEventsRequestTransfer->getEventEntities()->getArrayCopy();
 
         if (count($sortedEventTransfers) === 0) {
-            return $eventEntityResponseTransfer;
+            return $hydrateEventsResponseTransfer;
         }
         usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
 
-        $eventEntityResponseTransfer->setIds($this->getEventTransferIdsWithTimestamps($sortedEventTransfers));
+        $hydrateEventsResponseTransfer->setIdTimestampMap($this->getIdsTimestampMap($sortedEventTransfers));
 
-        if ($eventTransferRequestTransfer->getAdditionalValueName()) {
-            $eventEntityResponseTransfer->setAdditionalValues($this->getEventTransfersAdditionalValuesWithTimestamps($sortedEventTransfers, $eventTransferRequestTransfer->getAdditionalValueName()));
+        if ($hydrateEventsRequestTransfer->getAdditionalValueName()) {
+            $hydrateEventsResponseTransfer->setAdditionalValueTimestampMap($this->getAdditionalValueTimestampMap($sortedEventTransfers, $hydrateEventsRequestTransfer->getAdditionalValueName()));
         }
 
-        if ($eventTransferRequestTransfer->getForeignKeyName()) {
-            $eventEntityResponseTransfer->setForeignKeys($this->getEventTransferForeignKeysWithTimestamps($sortedEventTransfers, $eventTransferRequestTransfer->getForeignKeyName()));
+        if ($hydrateEventsRequestTransfer->getForeignKeyName()) {
+            $hydrateEventsResponseTransfer->setForeignKeyTimestampMap($this->getForeignKeyTimestampMap($sortedEventTransfers, $hydrateEventsRequestTransfer->getForeignKeyName()));
         }
 
-        return $eventEntityResponseTransfer;
+        return $hydrateEventsResponseTransfer;
     }
 
     /**
@@ -182,13 +182,10 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array<int, int>
      */
-    protected function getEventTransferIdsWithTimestamps(array $eventTransfers): array
+    protected function getIdsTimestampMap(array $eventTransfers): array
     {
-        $sortedEventTransfers = $eventTransfers;
-        usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
-
         $ids = [];
-        foreach ($sortedEventTransfers as $eventTransfer) {
+        foreach ($eventTransfers as $eventTransfer) {
             $ids[(int)$eventTransfer->getId()] = (int)$eventTransfer->getTimestamp();
         }
 
@@ -201,7 +198,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array<int|string, int>
      */
-    protected function getEventTransfersAdditionalValuesWithTimestamps(array $eventTransfers, string $columnName): array
+    protected function getAdditionalValueTimestampMap(array $eventTransfers, string $columnName): array
     {
         if (!$columnName) {
             return [];
@@ -226,7 +223,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      *
      * @return array<int, int>
      */
-    protected function getEventTransferForeignKeysWithTimestamps(array $eventTransfers, string $foreignKeyColumnName): array
+    protected function getForeignKeyTimestampMap(array $eventTransfers, string $foreignKeyColumnName): array
     {
         if (!$foreignKeyColumnName) {
             return [];

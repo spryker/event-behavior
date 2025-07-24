@@ -7,9 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
-use Generated\Shared\Transfer\EventEntityRequestTransfer;
-use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventTriggerResponseTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
 /**
@@ -133,13 +133,13 @@ class EventBehaviorFacade extends AbstractFacade implements EventBehaviorFacadeI
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
      *
-     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
      */
-    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer
     {
-        return $this->getFactory()->createEventEntityTransferFilter()->getEventTransferValuesWithTimestamps($eventTransferRequestTransfer);
+        return $this->getFactory()->createEventEntityTransferFilter()->hydrateEventDataTransfer($hydrateEventsRequestTransfer);
     }
 
     /**

@@ -7,9 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business;
 
-use Generated\Shared\Transfer\EventEntityRequestTransfer;
-use Generated\Shared\Transfer\EventEntityResponseTransfer;
 use Generated\Shared\Transfer\EventTriggerResponseTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
 
 interface EventBehaviorFacadeInterface
 {
@@ -118,15 +118,15 @@ interface EventBehaviorFacadeInterface
      * Specification:
      *    - Returns ids with timestamp in eventTransfers.
      *    - Returns field value with timestamp of the specified column in eventTransfers.
-     *    - Structure: EventEntityResponseTransfer.ids Key: id, Value: timestamp.
+     *    - Structure: HydrateEventsResponseTransfer.ids Key: id, Value: timestamp.
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
      *
-     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
      */
-    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer;
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer;
 
     /**
      * Specification:

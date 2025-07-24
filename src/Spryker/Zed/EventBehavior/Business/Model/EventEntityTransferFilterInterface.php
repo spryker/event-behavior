@@ -7,8 +7,8 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
-use Generated\Shared\Transfer\EventEntityRequestTransfer;
-use Generated\Shared\Transfer\EventEntityResponseTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
 
 interface EventEntityTransferFilterInterface
 {
@@ -60,9 +60,9 @@ interface EventEntityTransferFilterInterface
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
 
     /**
-     * @param \Generated\Shared\Transfer\EventEntityRequestTransfer $eventTransferRequestTransfer
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
      *
-     * @return \Generated\Shared\Transfer\EventEntityResponseTransfer
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
      */
-    public function getEventTransferValuesWithTimestamps(EventEntityRequestTransfer $eventTransferRequestTransfer): EventEntityResponseTransfer;
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer;
 }
