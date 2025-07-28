@@ -11,6 +11,7 @@ use Codeception\Test\Unit;
 use DateInterval;
 use DateTime;
 use Generated\Shared\Transfer\EventEntityTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange;
 use Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChangeQuery;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
@@ -40,6 +41,11 @@ class EventBehaviorFacadeTest extends Unit
      * @var string
      */
     protected const ID = 'id';
+
+    /**
+     * @var string
+     */
+    protected const TIMESTAMP = 'timestamp';
 
     /**
      * @var string
@@ -220,6 +226,46 @@ class EventBehaviorFacadeTest extends Unit
     /**
      * @return void
      */
+    public function testHydrateEventDataTransfer(): void
+    {
+        // Arrange
+        $hydrateEventsRequestTransfer = new HydrateEventsRequestTransfer();
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(1);
+        $eventEntityTransfer->setAdditionalValues(['property1' => 'value1']);
+        $eventEntityTransfer->setTimestamp(102);
+        $eventEntityTransfer->setAdditionalValues(['property2' => 'value3']);
+        $hydrateEventsRequestTransfer->addEventEntity($eventEntityTransfer);
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(2);
+        $eventEntityTransfer->setForeignKeys(['foreignKey' => 7]);
+        $eventEntityTransfer->setTimestamp(102);
+        $eventEntityTransfer->setAdditionalValues(['property2' => 'value1']);
+        $hydrateEventsRequestTransfer->addEventEntity($eventEntityTransfer);
+
+        $eventEntityTransfer = new EventEntityTransfer();
+        $eventEntityTransfer->setId(1);
+        $eventEntityTransfer->setForeignKeys(['foreignKey' => 5]);
+        $eventEntityTransfer->setTimestamp(106);
+        $eventEntityTransfer->setAdditionalValues(['property1' => 'value1', 'property2' => 'value2']);
+        $hydrateEventsRequestTransfer->addEventEntity($eventEntityTransfer);
+
+        $hydrateEventsRequestTransfer->setForeignKeyName('foreignKey');
+        $hydrateEventsRequestTransfer->setAdditionalValueName('property2');
+
+        $hydrateEventsResponseTransfer = $this->tester->getFacade()->hydrateEventDataTransfer($hydrateEventsRequestTransfer);
+
+        // Assert
+        $this->assertEquals($hydrateEventsResponseTransfer->getIdTimestampMap(), [1 => 106, 2 => 102]);
+        $this->assertEquals($hydrateEventsResponseTransfer->getForeignKeyTimestampMap(), [7 => 102, 5 => 106]);
+        $this->assertEquals($hydrateEventsResponseTransfer->getAdditionalValueTimestampMap(), ['value3' => 102, 'value1' => 102, 'value2' => 106]);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetGroupedEventTransferForeignKeysByForeignKey(): void
     {
         // Arrange
@@ -347,7 +393,7 @@ class EventBehaviorFacadeTest extends Unit
         $actualArray[EventBehavior::EVENT_CHANGE_ENTITY_ADDITIONAL_VALUES] = $actualArray[static::FIELD_ADDITIONAL_VALUES];
         unset($actualArray[static::FIELD_ADDITIONAL_VALUES]);
 
-        $this->assertEquals($actualArray, $this->createEventData($actualArray[static::ID]));
+        $this->assertEquals($actualArray, $this->createEventData($actualArray[static::ID], $actualArray[static::TIMESTAMP]));
     }
 
     /**
@@ -435,14 +481,16 @@ class EventBehaviorFacadeTest extends Unit
 
     /**
      * @param string $idEntity
+     * @param int $timestamp
      *
      * @return array
      */
-    protected function createEventData(string $idEntity = '123'): array
+    protected function createEventData(string $idEntity = '123', int $timestamp = 0): array
     {
         return [
             EventBehavior::EVENT_CHANGE_ENTITY_NAME => 'name',
             EventBehavior::EVENT_CHANGE_ENTITY_ID => $idEntity,
+            EventEntityTransfer::TIMESTAMP => $timestamp,
             EventBehavior::EVENT_CHANGE_ENTITY_FOREIGN_KEYS => [1, 2, 3],
             EventBehavior::EVENT_CHANGE_NAME => 'test',
             EventBehavior::EVENT_CHANGE_ENTITY_MODIFIED_COLUMNS => [],
