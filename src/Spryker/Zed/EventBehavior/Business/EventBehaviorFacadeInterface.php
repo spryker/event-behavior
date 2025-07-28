@@ -116,9 +116,8 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *    - Returns ids with timestamp in eventTransfers.
-     *    - Returns field value with timestamp of the specified column in eventTransfers.
-     *    - Structure: HydrateEventsResponseTransfer.ids Key: id, Value: timestamp.
+     *    - Returns fields with timestamp in eventTransfers.
+     *    - Structure: HydrateEventsResponseTransfer.*TimestampMap Key: id, Value: timestamp.
      *
      * @api
      *
