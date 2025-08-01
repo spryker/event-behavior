@@ -157,21 +157,21 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
     public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer
     {
         $hydrateEventsResponseTransfer = new HydrateEventsResponseTransfer();
-        $sortedEventTransfers = $hydrateEventsRequestTransfer->getEventEntities()->getArrayCopy();
+        $eventEntityTransfers = $hydrateEventsRequestTransfer->getEventEntities()->getArrayCopy();
 
-        if (count($sortedEventTransfers) === 0) {
+        if (count($eventEntityTransfers) === 0) {
             return $hydrateEventsResponseTransfer;
         }
-        usort($sortedEventTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
+        usort($eventEntityTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
 
-        $hydrateEventsResponseTransfer->setIdTimestampMap($this->getIdsTimestampMap($sortedEventTransfers));
+        $hydrateEventsResponseTransfer->setIdTimestampMap($this->getIdsTimestampMap($eventEntityTransfers));
 
         if ($hydrateEventsRequestTransfer->getAdditionalValueName()) {
-            $hydrateEventsResponseTransfer->setAdditionalValueTimestampMap($this->getAdditionalValueTimestampMap($sortedEventTransfers, $hydrateEventsRequestTransfer->getAdditionalValueName()));
+            $hydrateEventsResponseTransfer->setAdditionalValueTimestampMap($this->getAdditionalValueTimestampMap($eventEntityTransfers, $hydrateEventsRequestTransfer->getAdditionalValueName()));
         }
 
         if ($hydrateEventsRequestTransfer->getForeignKeyName()) {
-            $hydrateEventsResponseTransfer->setForeignKeyTimestampMap($this->getForeignKeyTimestampMap($sortedEventTransfers, $hydrateEventsRequestTransfer->getForeignKeyName()));
+            $hydrateEventsResponseTransfer->setForeignKeyTimestampMap($this->getForeignKeyTimestampMap($eventEntityTransfers, $hydrateEventsRequestTransfer->getForeignKeyName()));
         }
 
         return $hydrateEventsResponseTransfer;
@@ -200,10 +200,6 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      */
     protected function getAdditionalValueTimestampMap(array $eventTransfers, string $columnName): array
     {
-        if (!$columnName) {
-            return [];
-        }
-
         $additionalValues = [];
         foreach ($eventTransfers as $eventTransfer) {
             $additionalValuesOfEvent = $eventTransfer->getAdditionalValues();
@@ -225,10 +221,6 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
      */
     protected function getForeignKeyTimestampMap(array $eventTransfers, string $foreignKeyColumnName): array
     {
-        if (!$foreignKeyColumnName) {
-            return [];
-        }
-
         $foreignKeys = [];
         foreach ($eventTransfers as $eventTransfer) {
             if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {

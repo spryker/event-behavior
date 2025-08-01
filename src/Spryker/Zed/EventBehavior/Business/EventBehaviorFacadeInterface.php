@@ -116,14 +116,22 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *    - Returns fields with timestamp in eventTransfers.
-     *    - Structure: HydrateEventsResponseTransfer.*TimestampMap Key: id, Value: timestamp.
+     * - Extracts timestamp information for event entities passed in the request.
+     * - Always returns a map of entity IDs to their respective timestamps.
+     * - Optionally extracts additional values with timestamps for:
+     * - Foreign key values if `foreignKeyName` is provided.
+     * - Additional values if `additionalValueName` is provided.
+     * - Response structure (in HydrateEventsResponseTransfer):
+     * - `idTimestampMap`: [id => timestamp]
+     * - `foreignKeyTimestampMap`: [foreignKeyValue => timestamp] (if requested)
+     * - `additionalValueTimestampMap`: [additionalValue => timestamp] (if requested)
      *
      * @api
      *
      * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
      *
      * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
+     *
      */
     public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer;
 
