@@ -204,7 +204,9 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
     protected function triggerBulk(EventResourcePluginInterface $plugin, array $ids): void
     {
         $eventEntityTransfers = array_map(function ($id) {
-            return (new EventEntityTransfer())->setId($id);
+            return (new EventEntityTransfer())
+                ->setId($id)
+                ->setTimestamp(time());
         }, $ids);
 
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);

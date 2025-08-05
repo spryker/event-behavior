@@ -118,7 +118,9 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected function triggerBulk(EventResourceQueryContainerPluginInterface $plugin, array $ids): void
     {
         $eventEntityTransfers = array_map(function ($id) {
-            return (new EventEntityTransfer())->setId($id);
+            return (new EventEntityTransfer())
+                ->setId($id)
+                ->setTimestamp(time());
         }, $ids);
 
         $this->eventFacade->triggerBulk($plugin->getEventName(), $eventEntityTransfers);
