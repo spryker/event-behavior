@@ -7,6 +7,10 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Generated\Shared\Transfer\EventEntityTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
+
 class EventEntityTransferFilter implements EventEntityTransferFilterInterface
 {
     /**
@@ -143,6 +147,93 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
         }
 
         return array_unique($additionalValues);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
+     */
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer
+    {
+        $hydrateEventsResponseTransfer = new HydrateEventsResponseTransfer();
+        $eventEntityTransfers = $hydrateEventsRequestTransfer->getEventEntities()->getArrayCopy();
+
+        if (count($eventEntityTransfers) === 0) {
+            return $hydrateEventsResponseTransfer;
+        }
+        usort($eventEntityTransfers, fn (EventEntityTransfer $a, EventEntityTransfer $b) => $a->getTimestamp() <=> $b->getTimestamp());
+
+        $hydrateEventsResponseTransfer->setIdTimestampMap($this->getIdsTimestampMap($eventEntityTransfers));
+
+        if ($hydrateEventsRequestTransfer->getAdditionalValueName()) {
+            $hydrateEventsResponseTransfer->setAdditionalValueTimestampMap($this->getAdditionalValueTimestampMap($eventEntityTransfers, $hydrateEventsRequestTransfer->getAdditionalValueName()));
+        }
+
+        if ($hydrateEventsRequestTransfer->getForeignKeyName()) {
+            $hydrateEventsResponseTransfer->setForeignKeyTimestampMap($this->getForeignKeyTimestampMap($eventEntityTransfers, $hydrateEventsRequestTransfer->getForeignKeyName()));
+        }
+
+        return $hydrateEventsResponseTransfer;
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     *
+     * @return array<int, int>
+     */
+    protected function getIdsTimestampMap(array $eventTransfers): array
+    {
+        $ids = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $ids[(int)$eventTransfer->getId()] = (int)$eventTransfer->getTimestamp();
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $columnName
+     *
+     * @return array<int|string, int>
+     */
+    protected function getAdditionalValueTimestampMap(array $eventTransfers, string $columnName): array
+    {
+        $additionalValues = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            $additionalValuesOfEvent = $eventTransfer->getAdditionalValues();
+            if (!isset($additionalValuesOfEvent[$columnName])) {
+                continue;
+            }
+
+            $additionalValues[$additionalValuesOfEvent[$columnName]] = (int)$eventTransfer->getTimestamp();
+        }
+
+        return $additionalValues;
+    }
+
+    /**
+     * @param array<\Generated\Shared\Transfer\EventEntityTransfer> $eventTransfers
+     * @param string $foreignKeyColumnName
+     *
+     * @return array<int, int>
+     */
+    protected function getForeignKeyTimestampMap(array $eventTransfers, string $foreignKeyColumnName): array
+    {
+        $foreignKeys = [];
+        foreach ($eventTransfers as $eventTransfer) {
+            if (!isset($eventTransfer->getForeignKeys()[$foreignKeyColumnName])) {
+                continue;
+            }
+
+            $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName] ?? null;
+            if ($value !== null) {
+                $foreignKeys[(int)$value] = (int)$eventTransfer->getTimestamp();
+            }
+        }
+
+        return $foreignKeys;
     }
 
     /**

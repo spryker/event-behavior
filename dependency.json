@@ -1,4 +1,7 @@
 {
+    "include": {
+        "spryker/transfer": "Provides transfer objects definition with `::get*OrFail()` functionality."
+    },
     "include-dev": {
         "codeception/module-asserts": "Codeception module containing various assertions.",
         "phpunit/phpunit": "Need due to compatibility minimal version package with PHP 8."

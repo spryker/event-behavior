@@ -8,6 +8,8 @@
 namespace Spryker\Zed\EventBehavior\Business;
 
 use Generated\Shared\Transfer\EventTriggerResponseTransfer;
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
 
 interface EventBehaviorFacadeInterface
 {
@@ -101,7 +103,7 @@ interface EventBehaviorFacadeInterface
 
     /**
      * Specification:
-     *  - Returns field value of the specficed column in eventTransfers.
+     *  - Returns field value of the specified column in eventTransfers.
      *
      * @api
      *
@@ -111,6 +113,26 @@ interface EventBehaviorFacadeInterface
      * @return array
      */
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * Specification:
+     * - Extracts timestamp information for event entities passed in the request.
+     * - Always returns a map of entity IDs to their respective timestamps.
+     * - Optionally extracts additional values with timestamps for:
+     * - Foreign key values if `foreignKeyName` is provided.
+     * - Additional values if `additionalValueName` is provided.
+     * - Response structure (in HydrateEventsResponseTransfer):
+     * - `idTimestampMap`: [id => timestamp]
+     * - `foreignKeyTimestampMap`: [foreignKeyValue => timestamp] (if requested)
+     * - `additionalValueTimestampMap`: [additionalValue => timestamp] (if requested)
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
+     */
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer;
 
     /**
      * Specification:

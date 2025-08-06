@@ -7,6 +7,9 @@
 
 namespace Spryker\Zed\EventBehavior\Business\Model;
 
+use Generated\Shared\Transfer\HydrateEventsRequestTransfer;
+use Generated\Shared\Transfer\HydrateEventsResponseTransfer;
+
 interface EventEntityTransferFilterInterface
 {
     /**
@@ -55,4 +58,11 @@ interface EventEntityTransferFilterInterface
      * @return array
      */
     public function getEventTransfersAdditionalValues(array $eventTransfers, string $columnName): array;
+
+    /**
+     * @param \Generated\Shared\Transfer\HydrateEventsRequestTransfer $hydrateEventsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\HydrateEventsResponseTransfer
+     */
+    public function hydrateEventDataTransfer(HydrateEventsRequestTransfer $hydrateEventsRequestTransfer): HydrateEventsResponseTransfer;
 }
