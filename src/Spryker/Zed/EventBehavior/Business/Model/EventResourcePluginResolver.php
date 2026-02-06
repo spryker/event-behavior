@@ -178,8 +178,9 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
             if (!isset($eventResourcePlugins[$resource])) {
                 throw new EventResourceNotFoundException(
                     sprintf(
-                        'There is no resource with the name: %s.',
+                        'There is no resource with the name: %s. Available resources are: %s',
                         $resource,
+                        implode(', ', array_keys($eventResourcePlugins))
                     ),
                 );
             }
