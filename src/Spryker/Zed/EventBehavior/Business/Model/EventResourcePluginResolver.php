@@ -180,7 +180,7 @@ class EventResourcePluginResolver implements EventResourcePluginResolverInterfac
                     sprintf(
                         'There is no resource with the name: %s. Available resources are: %s',
                         $resource,
-                        implode(', ', array_keys($eventResourcePlugins))
+                        implode(', ', array_keys($eventResourcePlugins)),
                     ),
                 );
             }
