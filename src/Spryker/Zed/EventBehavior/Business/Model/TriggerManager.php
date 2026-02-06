@@ -157,7 +157,7 @@ class TriggerManager implements TriggerManagerInterface
             $deletedRows += $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
 
-        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $eventTriggerResponseTransfer->setTriggeredRows($deletedRows);
         $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
         $eventTriggerResponseTransfer->setEventCount($deletedRows);
 
@@ -190,7 +190,6 @@ class TriggerManager implements TriggerManagerInterface
 
     /**
      * @param string $processId
-     * @param int $offset
      * @param int $limit
      *
      * @return array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange>
