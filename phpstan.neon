@@ -2,15 +2,16 @@ parameters:
     level: 8
     paths:
         - src/
-    checkMissingIterableValueType: false
     excludePaths:
         - '*/templates/*'
-        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChange.php'
-        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChangeQuery.php'
+        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChange.php (?)'
+        - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChangeQuery.php (?)'
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
         - '#Call to (static method|method) .+ on an unknown class Generated\\.+#'
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
         - '#Parameter \#1 \$clause of method .+\\ModelCriteria::where\(\) expects array\|literal-string, non-falsy-string given.#'
+        -
+            identifier: missingType.iterableValue
     bootstrapFiles:
         - tests/bootstrap.php
