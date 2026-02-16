@@ -4,7 +4,7 @@ env:
     APPLICATION_ENV: 'development'
     APPLICATION_STORE: 'DE'
     PROJECT: 'EventBehavior '
-    DATABASE_VERSION: 10.2
+    DATABASE_VERSION: mariadb-10.11
     DATABASE_HOST: 127.0.0.1
     DATABASE_PORT: 3306
     DATABASE_NAME: eu-docker
@@ -34,19 +34,17 @@ jobs:
         ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: getong/mariadb-action@v1.1
+      - uses: shogo82148/actions-setup-mysql@v1
         with:
-          host port: ${{ env.DATABASE_PORT }}
-          container port: ${{ env.DATABASE_PORT }}
-          character set server: ${{ env.DATABASE_CHARACTER_SET }}
-          collation server: ${{ env.DATABASE_COLLATE }}
-          mariadb version: ${{ env.DATABASE_VERSION }}
-          mysql database: ${{ env.DATABASE_NAME }}
-          mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
-          mysql user: ${{ env.DATABASE_USERNAME }}
-          mysql password: ${{ env.DATABASE_PASSWORD }}
+          mysql-version: ${{ env.DATABASE_VERSION }}
+          root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+          user: ${{ env.DATABASE_USERNAME }}
+          password: ${{ env.DATABASE_PASSWORD }}
+
+      - name: Create database
+        run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -60,9 +58,9 @@ jobs:
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -95,19 +93,17 @@ jobs:
               ]
 
       steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v4
 
-          - uses: getong/mariadb-action@v1.1
+          - uses: shogo82148/actions-setup-mysql@v1
             with:
-                host port: ${{ env.DATABASE_PORT }}
-                container port: ${{ env.DATABASE_PORT }}
-                character set server: ${{ env.DATABASE_CHARACTER_SET }}
-                collation server: ${{ env.DATABASE_COLLATE }}
-                mariadb version: ${{ env.DATABASE_VERSION }}
-                mysql database: ${{ env.DATABASE_NAME }}
-                mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
-                mysql user: ${{ env.DATABASE_USERNAME }}
-                mysql password: ${{ env.DATABASE_PASSWORD }}
+                mysql-version: ${{ env.DATABASE_VERSION }}
+                root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                user: ${{ env.DATABASE_USERNAME }}
+                password: ${{ env.DATABASE_PASSWORD }}
+
+          - name: Create database
+            run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
           - name: Setup PHP
             uses: shivammathur/setup-php@v2
@@ -118,9 +114,9 @@ jobs:
           - name: Get Composer Cache Directory
             id: composer-cache
             run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
+                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-          - uses: actions/cache@v3
+          - uses: actions/cache@v4
             with:
                 path: ${{ steps.composer-cache.outputs.dir }}
                 key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
