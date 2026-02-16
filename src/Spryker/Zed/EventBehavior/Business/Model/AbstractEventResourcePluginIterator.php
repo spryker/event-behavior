@@ -88,7 +88,7 @@ abstract class AbstractEventResourcePluginIterator implements Iterator
      */
     public function valid(): bool
     {
-        return is_array($this->current) && $this->current !== [];
+        return is_array($this->current) && $this->current !== []; // @phpstan-ignore function.alreadyNarrowedType
     }
 
     /**

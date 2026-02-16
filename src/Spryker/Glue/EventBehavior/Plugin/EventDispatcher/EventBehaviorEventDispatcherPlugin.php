@@ -14,7 +14,6 @@ use Spryker\Shared\EventDispatcherExtension\Dependency\Plugin\EventDispatcherPlu
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * @method \Spryker\Glue\EventBehavior\EventBehaviorDependencyFactory getFactory()
  * @method \Spryker\Zed\EventBehavior\Business\EventBehaviorFacadeInterface getFacade()
  */
 class EventBehaviorEventDispatcherPlugin extends AbstractPlugin implements EventDispatcherPluginInterface

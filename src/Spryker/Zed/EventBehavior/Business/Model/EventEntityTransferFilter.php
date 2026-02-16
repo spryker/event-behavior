@@ -47,7 +47,7 @@ class EventEntityTransferFilter implements EventEntityTransferFilterInterface
             }
 
             $value = $eventTransfer->getForeignKeys()[$foreignKeyColumnName];
-            if ($value !== null) {
+            if ($value !== null) { // @phpstan-ignore notIdentical.alwaysTrue
                 $foreignKeys[] = $value;
             }
         }
