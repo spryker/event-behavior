@@ -4,7 +4,7 @@ env:
     APPLICATION_ENV: 'development'
     APPLICATION_STORE: 'DE'
     PROJECT: 'EventBehavior '
-    DATABASE_VERSION: 10.2
+    DATABASE_VERSION: mariadb-10.11
     DATABASE_HOST: 127.0.0.1
     DATABASE_PORT: 3306
     DATABASE_NAME: eu-docker
@@ -16,124 +16,121 @@ env:
     DATABASE_COLLATE: utf8_general_ci
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+    pull_request:
+    push:
+        branches:
+            - master
+    workflow_dispatch:
 
 jobs:
-  validation:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [
-            '8.3',
-            '8.4'
-        ]
+    validation:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    '8.3',
+                    '8.4'
+                ]
 
-    steps:
-      - uses: actions/checkout@v2
+        steps:
+            -   uses: actions/checkout@v4
 
-      - uses: getong/mariadb-action@v1.1
-        with:
-          host port: ${{ env.DATABASE_PORT }}
-          container port: ${{ env.DATABASE_PORT }}
-          character set server: ${{ env.DATABASE_CHARACTER_SET }}
-          collation server: ${{ env.DATABASE_COLLATE }}
-          mariadb version: ${{ env.DATABASE_VERSION }}
-          mysql database: ${{ env.DATABASE_NAME }}
-          mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
-          mysql user: ${{ env.DATABASE_USERNAME }}
-          mysql password: ${{ env.DATABASE_PASSWORD }}
+            -   uses: shogo82148/actions-setup-mysql@v1
+                with:
+                    mysql-version: ${{ env.DATABASE_VERSION }}
+                    root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                    user: ${{ env.DATABASE_USERNAME }}
+                    password: ${{ env.DATABASE_PASSWORD }}
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: mbstring, intl, pdo_mysql
+            -   name: Create database
+                run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: mbstring, intl, pdo_mysql
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+            -   name: Validate composer.json and composer.lock
+                run: composer validate
 
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Composer install
-        run: |
-          composer --version
-          composer install --optimize-autoloader
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-      - name: Run tests (failing right now)
-        run: composer test || true
+            -   name: Composer install
+                run: |
+                    composer --version
+                    composer install --optimize-autoloader
 
-      - name: PHPStan checks
-        run: |
-          composer stan-setup
-          composer stan
+            -   name: Run tests (failing right now)
+                run: composer test || true
 
-      - name: CodeStyle checks
-        run: composer cs-check
+            -   name: PHPStan checks
+                run: |
+                    composer stan-setup
+                    composer stan
 
-  prefer-lowest:
-      runs-on: ubuntu-latest
-      strategy:
-          fail-fast: false
-          matrix:
-              php-version: [
-                  '8.3'
-              ]
+            -   name: CodeStyle checks
+                run: composer cs-check
 
-      steps:
-          - uses: actions/checkout@v2
+    prefer-lowest:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    '8.3'
+                ]
 
-          - uses: getong/mariadb-action@v1.1
-            with:
-                host port: ${{ env.DATABASE_PORT }}
-                container port: ${{ env.DATABASE_PORT }}
-                character set server: ${{ env.DATABASE_CHARACTER_SET }}
-                collation server: ${{ env.DATABASE_COLLATE }}
-                mariadb version: ${{ env.DATABASE_VERSION }}
-                mysql database: ${{ env.DATABASE_NAME }}
-                mysql root password: ${{ env.DATABASE_ROOT_PASSWORD }}
-                mysql user: ${{ env.DATABASE_USERNAME }}
-                mysql password: ${{ env.DATABASE_PASSWORD }}
+        steps:
+            -   uses: actions/checkout@v4
 
-          - name: Setup PHP
-            uses: shivammathur/setup-php@v2
-            with:
-                php-version: ${{ matrix.php-version }}
-                extensions: mbstring, intl, pdo_mysql
+            -   uses: shogo82148/actions-setup-mysql@v1
+                with:
+                    mysql-version: ${{ env.DATABASE_VERSION }}
+                        root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                        user: ${{ env.DATABASE_USERNAME }}
+                        password: ${{ env.DATABASE_PASSWORD }}
 
-          - name: Get Composer Cache Directory
-            id: composer-cache
-            run: |
-                echo "::set-output name=dir::$(composer config cache-files-dir)"
+            -   name: Create database
+                run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
-          - uses: actions/cache@v3
-            with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                    ${{ runner.os }}-composer-
 
-          - name: Composer prefer-lowest
-            run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: mbstring, intl, pdo_mysql
 
-          - name: Run tests (failing right now)
-            run: composer test || true
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-          - name: PHPStan checks (failing right now due to failing tests)
-            run: |
-                composer stan-setup
-                composer stan || true
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   name: Composer prefer-lowest
+                run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
+
+            -   name: Run tests (failing right now)
+                run: composer test || true
+
+            -   name: PHPStan checks (failing right now due to failing tests)
+                run: |
+                    composer stan-setup
+                    composer stan || true
