@@ -98,8 +98,7 @@ class EventTriggerConsole extends Console
         if ($input->getOption(static::RESOURCE_IDS_OPTION)) {
             /** @var string $idsString */
             $idsString = $input->getOption(static::RESOURCE_IDS_OPTION);
-            /** @var array<int> $resourcesIds */
-            $resourcesIds = explode(',', $idsString);
+            $resourcesIds = array_map('intval', explode(',', $idsString));
         }
 
         $this->getFacade()->executeResolvedPluginsBySources($resources, $resourcesIds);
