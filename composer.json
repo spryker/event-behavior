@@ -17,7 +17,7 @@
     },
     "require-dev": {
         "codeception/module-asserts": "^3.0.0",
-        "phpunit/phpunit": "^9.0.0",
+        "phpunit/phpunit": "^12.1.0",
         "spryker/application": "*",
         "spryker/code-sniffer": "^0.17.1",
         "spryker/config": "^3.5.0",

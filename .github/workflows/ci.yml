@@ -16,120 +16,121 @@ env:
     DATABASE_COLLATE: utf8_general_ci
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+    pull_request:
+    push:
+        branches:
+            - master
+    workflow_dispatch:
 
 jobs:
-  validation:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [
-            '8.3',
-            '8.4'
-        ]
+    validation:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    '8.3',
+                    '8.4'
+                ]
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            -   uses: actions/checkout@v4
 
-      - uses: shogo82148/actions-setup-mysql@v1
-        with:
-          mysql-version: ${{ env.DATABASE_VERSION }}
-          root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
-          user: ${{ env.DATABASE_USERNAME }}
-          password: ${{ env.DATABASE_PASSWORD }}
+            -   uses: shogo82148/actions-setup-mysql@v1
+                with:
+                    mysql-version: ${{ env.DATABASE_VERSION }}
+                    root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                    user: ${{ env.DATABASE_USERNAME }}
+                    password: ${{ env.DATABASE_PASSWORD }}
 
-      - name: Create database
-        run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
+            -   name: Create database
+                run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-          extensions: mbstring, intl, pdo_mysql
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: mbstring, intl, pdo_mysql
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate
+            -   name: Validate composer.json and composer.lock
+                run: composer validate
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-      - name: Composer install
-        run: |
-          composer --version
-          composer install --optimize-autoloader
+            -   name: Composer install
+                run: |
+                    composer --version
+                    composer install --optimize-autoloader
 
-      - name: Run tests (failing right now)
-        run: composer test || true
+            -   name: Run tests (failing right now)
+                run: composer test || true
 
-      - name: PHPStan checks
-        run: |
-          composer stan-setup
-          composer stan
+            -   name: PHPStan checks
+                run: |
+                    composer stan-setup
+                    composer stan
 
-      - name: CodeStyle checks
-        run: composer cs-check
+            -   name: CodeStyle checks
+                run: composer cs-check
 
-  prefer-lowest:
-      runs-on: ubuntu-latest
-      strategy:
-          fail-fast: false
-          matrix:
-              php-version: [
-                  '8.3'
-              ]
+    prefer-lowest:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    '8.3'
+                ]
 
-      steps:
-          - uses: actions/checkout@v4
+        steps:
+            -   uses: actions/checkout@v4
 
-          - uses: shogo82148/actions-setup-mysql@v1
-            with:
-                mysql-version: ${{ env.DATABASE_VERSION }}
-                root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
-                user: ${{ env.DATABASE_USERNAME }}
-                password: ${{ env.DATABASE_PASSWORD }}
+            -   uses: shogo82148/actions-setup-mysql@v1
+                with:
+                    mysql-version: ${{ env.DATABASE_VERSION }}
+                        root-password: ${{ env.DATABASE_ROOT_PASSWORD }}
+                        user: ${{ env.DATABASE_USERNAME }}
+                        password: ${{ env.DATABASE_PASSWORD }}
 
-          - name: Create database
-            run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
+            -   name: Create database
+                run: mysql -h ${{ env.DATABASE_HOST }} -u root -p${{ env.DATABASE_ROOT_PASSWORD }} -e 'CREATE DATABASE IF NOT EXISTS `${{ env.DATABASE_NAME }}` CHARACTER SET ${{ env.DATABASE_CHARACTER_SET }} COLLATE ${{ env.DATABASE_COLLATE }};'
 
-          - name: Setup PHP
-            uses: shivammathur/setup-php@v2
-            with:
-                php-version: ${{ matrix.php-version }}
-                extensions: mbstring, intl, pdo_mysql
 
-          - name: Get Composer Cache Directory
-            id: composer-cache
-            run: |
-                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: mbstring, intl, pdo_mysql
 
-          - uses: actions/cache@v4
-            with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                    ${{ runner.os }}-composer-
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-          - name: Composer prefer-lowest
-            run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-          - name: Run tests (failing right now)
-            run: composer test || true
+            -   name: Composer prefer-lowest
+                run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
 
-          - name: PHPStan checks (failing right now due to failing tests)
-            run: |
-                composer stan-setup
-                composer stan || true
+            -   name: Run tests (failing right now)
+                run: composer test || true
+
+            -   name: PHPStan checks (failing right now due to failing tests)
+                run: |
+                    composer stan-setup
+                    composer stan || true
