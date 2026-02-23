@@ -22,10 +22,12 @@ use Spryker\Zed\EventBehavior\Persistence\EventBehaviorQueryContainerInterface;
 use Spryker\Zed\EventBehavior\Persistence\Propel\Behavior\EventBehavior;
 use Spryker\Zed\Kernel\Persistence\EntityManager\InstancePoolingTrait;
 use Spryker\Zed\Kernel\RequestIdentifier;
+use Spryker\Zed\Propel\Persistence\BatchProcessor\ActiveRecordBatchProcessorTrait;
 
 class TriggerManager implements TriggerManagerInterface
 {
     use InstancePoolingTrait;
+    use ActiveRecordBatchProcessorTrait;
 
     /**
      * @uses \Orm\Zed\EventBehavior\Persistence\Map\SpyEventBehaviorEntityChangeTableMap::TABLE_NAME
@@ -67,7 +69,7 @@ class TriggerManager implements TriggerManagerInterface
     /**
      * @var bool|null
      */
-    protected static $eventBehaviorTableExists;
+    protected static ?bool $eventBehaviorTableExists = null;
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
@@ -98,45 +100,24 @@ class TriggerManager implements TriggerManagerInterface
      */
     public function triggerRuntimeEvents()
     {
-        if (static::$eventBehaviorTableExists === false) {
-            return;
-        }
-
         if (!$this->config->getEventBehaviorTriggeringStatus()) {
             return;
         }
 
-        $processId = RequestIdentifier::getRequestId();
         if (!$this->eventBehaviorTableExists()) {
-            static::$eventBehaviorTableExists = false;
-
             return;
         }
 
-        $triggeredEvents = 0;
+        $processId = RequestIdentifier::getRequestId();
+
         $limit = $this->config->getTriggerChunkSize();
-        $primaryKeys = [];
-        $offset = 0;
-        $countEvents = 0;
 
         do {
-            $events = $this->getEventEntitiesByProcessId($processId, $offset, $limit);
-            static::$eventBehaviorTableExists = true;
+            $events = $this->getEventEntitiesByProcessId($processId, $limit);
             $currentCountEvents = count($events);
-            $countEvents += $currentCountEvents;
 
-            $triggeredEvents += $this->triggerEvents($events);
-            $primaryKeys = array_merge($primaryKeys, $this->getPrimaryKeys($events));
-            $offset += $limit;
+            $this->triggerEventsAndDelete($events);
         } while ($currentCountEvents === $limit);
-
-        if ($countEvents === $triggeredEvents && $triggeredEvents > 0) {
-            $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByProcessId($processId);
-
-            return;
-        }
-
-        $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
     }
 
     /**
@@ -149,7 +130,7 @@ class TriggerManager implements TriggerManagerInterface
         $eventTriggerResponseTransfer->setEventBehaviorTableExists(true);
         $eventTriggerResponseTransfer->setIsEventTriggeringActive(true);
 
-        if (static::$eventBehaviorTableExists === false) {
+        if ($this->eventBehaviorTableExists() === false) {
             $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
             $eventTriggerResponseTransfer->setEventBehaviorTableExists(false);
 
@@ -163,24 +144,9 @@ class TriggerManager implements TriggerManagerInterface
             return $eventTriggerResponseTransfer;
         }
 
-        if (!$this->eventBehaviorTableExists()) {
-            static::$eventBehaviorTableExists = false;
-            $eventTriggerResponseTransfer->setMessage('Event behavior table does not exist.');
-            $eventTriggerResponseTransfer->setEventBehaviorTableExists(false);
-
-            return $eventTriggerResponseTransfer;
-        }
-
         $requestId = RequestIdentifier::getRequestId();
 
         $eventTriggerResponseTransfer->setRequestId($requestId);
-
-        $events = $this->queryContainer->queryEntityChange($requestId)->find()->getData();
-        $eventTriggerResponseTransfer->setEventCount(count($events));
-
-        static::$eventBehaviorTableExists = true;
-
-        $triggeredRows = $this->triggerEvents($events);
 
         $deletedRows = 0;
         $limit = $this->config->getTriggerChunkSize();
@@ -191,8 +157,9 @@ class TriggerManager implements TriggerManagerInterface
             $deletedRows += $this->triggerEventsAndDelete($events);
         } while ($countEvents === $limit);
 
-        $eventTriggerResponseTransfer->setTriggeredRows($triggeredRows);
+        $eventTriggerResponseTransfer->setTriggeredRows($deletedRows);
         $eventTriggerResponseTransfer->setDeletedRows($deletedRows);
+        $eventTriggerResponseTransfer->setEventCount($deletedRows);
 
         $eventTriggerResponseTransfer->setIsSuccessful(true);
 
@@ -223,12 +190,11 @@ class TriggerManager implements TriggerManagerInterface
 
     /**
      * @param string $processId
-     * @param int $offset
      * @param int $limit
      *
      * @return array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange>
      */
-    protected function getEventEntitiesByProcessId(string $processId, int $offset, int $limit): array
+    protected function getEventEntitiesByProcessId(string $processId, int $limit): array
     {
         $instancePoolingDisabled = false;
         if ($this->isInstancePoolingEnabled()) {
@@ -236,7 +202,7 @@ class TriggerManager implements TriggerManagerInterface
             $instancePoolingDisabled = true;
         }
 
-        $events = $this->queryContainer->queryEntityChange($processId)->setOffset($offset)->limit($limit)->find()->getData();
+        $events = $this->queryContainer->queryEntityChange($processId)->limit($limit)->find()->getData();
 
         if ($instancePoolingDisabled) {
             $this->enableInstancePooling();
@@ -252,18 +218,33 @@ class TriggerManager implements TriggerManagerInterface
     /**
      * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
      *
+     * @return void
+     */
+    protected function deleteteEventEntities(array $events): void
+    {
+        foreach ($events as $event) {
+            $this->remove($event);
+        }
+
+        $this->commit();
+    }
+
+    /**
+     * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
+     *
      * @return int
      */
     protected function triggerEventsAndDelete(array $events): int
     {
-        $primaryKeys = $this->getPrimaryKeys($events);
-        $triggeredRows = $this->triggerEvents($events);
-
-        if ($triggeredRows !== 0 && count($events) === $triggeredRows) {
-            return $this->eventBehaviorEntityManager->deleteEventBehaviorEntityByPrimaryKeys($primaryKeys);
+        if (!$events) {
+            return 0;
         }
 
-        return 0;
+        $triggeredRows = $this->triggerEvents($events);
+
+        $this->deleteteEventEntities($events);
+
+        return $triggeredRows;
     }
 
     /**
@@ -316,27 +297,12 @@ class TriggerManager implements TriggerManagerInterface
      */
     protected function eventBehaviorTableExists(): bool
     {
-        return class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
-            && class_exists(SpyEventBehaviorEntityChangeQuery::class)
-            && $this->propelFacade->tableExists(static::TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE);
-    }
-
-    /**
-     * @param array<\Orm\Zed\EventBehavior\Persistence\SpyEventBehaviorEntityChange> $events
-     *
-     * @return array<int>
-     */
-    protected function getPrimaryKeys(array $events): array
-    {
-        $keys = [];
-
-        foreach ($events as $event) {
-            /** @var int $idEventBehaviorEntityChange */
-            $idEventBehaviorEntityChange = $event->getIdEventBehaviorEntityChange();
-
-            $keys[] = $idEventBehaviorEntityChange;
+        if (static::$eventBehaviorTableExists === null) {
+            static::$eventBehaviorTableExists = class_exists(BaseSpyEventBehaviorEntityChangeQuery::class)
+                && class_exists(SpyEventBehaviorEntityChangeQuery::class)
+                && $this->propelFacade->tableExists(static::TABLE_NAME_EVENT_BEHAVIOR_ENTITY_CHANGE);
         }
 
-        return $keys;
+        return static::$eventBehaviorTableExists;
     }
 }
