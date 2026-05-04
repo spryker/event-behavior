@@ -42,7 +42,7 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         ?int $chunkSize = null,
-        int $chunkSleepSeconds = 3
+        int $chunkSleepSeconds = null,
     ) {
         $this->eventFacade = $eventFacade;
         $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
