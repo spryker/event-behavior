@@ -11,6 +11,7 @@ use Generated\Shared\Transfer\EventEntityTransfer;
 use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
+use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
 {
@@ -41,12 +42,11 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        ?int $chunkSize = null,
-        int $chunkSleepSeconds = null,
+        EventBehaviorConfig $config
     ) {
         $this->eventFacade = $eventFacade;
-        $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
-        $this->chunkSleepSeconds = $chunkSleepSeconds;
+        $this->chunkSize = $config->getChunkSize() ?? static::DEFAULT_CHUNK_SIZE;
+        $this->chunkSleepSeconds = $config->getTriggerChunkSleepSeconds();
     }
 
     /**
