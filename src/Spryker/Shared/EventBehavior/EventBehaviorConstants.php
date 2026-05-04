@@ -62,4 +62,15 @@ interface EventBehaviorConstants
      * @var string
      */
     public const MAX_EVENT_MESSAGE_DATA_SIZE = 'EVENT_BEHAVIOR:MAX_EVENT_MESSAGE_DATA_SIZE';
+
+    /**
+     * Specification:
+     * - Sleep duration in seconds between publish:trigger-events iterator chunks.
+     * - Set to 0 to disable throttling.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const TRIGGER_CHUNK_SLEEP_SECONDS = 'EVENT_BEHAVIOR:TRIGGER_CHUNK_SLEEP_SECONDS';
 }
