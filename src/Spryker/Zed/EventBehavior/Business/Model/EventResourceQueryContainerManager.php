@@ -11,6 +11,7 @@ use Generated\Shared\Transfer\EventEntityTransfer;
 use Iterator;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
+use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
 {
@@ -30,15 +31,22 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected $chunkSize;
 
     /**
+     * @var int
+     */
+    protected $chunkSleepSeconds;
+
+    /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
      * @param int|null $chunkSize
+     * @param int $chunkSleepSeconds
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
-        ?int $chunkSize = null
+        EventBehaviorConfig $config
     ) {
         $this->eventFacade = $eventFacade;
-        $this->chunkSize = $chunkSize ?? static::DEFAULT_CHUNK_SIZE;
+        $this->chunkSize = $config->getChunkSize() ?? static::DEFAULT_CHUNK_SIZE;
+        $this->chunkSleepSeconds = $config->getTriggerChunkSleepSeconds();
     }
 
     /**
@@ -94,9 +102,27 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected function processEventsByPluginItreator(EventResourceQueryContainerPluginInterface $plugin): void
     {
-        foreach ($this->createEventResourceQueryContainerPluginIterator($plugin) as $ids) {
+        $iterator = $this->createEventResourceQueryContainerPluginIterator($plugin);
+        $iterator->rewind();
+
+        while ($iterator->valid()) {
+            $ids = $iterator->current();
             $this->triggerBulk($plugin, $ids);
+
+            $iterator->next();
+            if ($iterator->valid()) {
+                $this->wait();
+            }
         }
+    }
+
+    protected function wait(): void
+    {
+        if ($this->chunkSleepSeconds <= 0) {
+            return;
+        }
+
+        sleep($this->chunkSleepSeconds);
     }
 
     /**
