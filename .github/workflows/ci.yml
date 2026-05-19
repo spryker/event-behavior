@@ -67,14 +67,14 @@ jobs:
             -   uses: actions/cache@v3
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    key: ${{ runner.os }}-composer-lock-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
 
             -   name: Composer install
                 run: |
                     composer --version
-                    composer install
+                    composer install --optimize-autoloader
 
             -   name: Run tests
                 run: composer test
