@@ -1,5 +1,10 @@
 <?php
 
+// Suppress E_DEPRECATED to prevent Spryker's error handler from converting PHP 8.3+
+// deprecations (ReflectionProperty::setValue single arg, static trait access) into exceptions.
+// Remove once spryker/container and spryker/testify provide fixes.
+error_reporting(error_reporting() & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+
 use Spryker\Shared\Config\Config;
 
 if (!defined('MODULE_ROOT_DIR')) {
