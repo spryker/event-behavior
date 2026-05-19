@@ -11,6 +11,7 @@ use Codeception\Test\Unit;
 use Spryker\Zed\EventBehavior\Business\Model\EventResourceQueryContainerManager;
 use Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface;
 use Spryker\Zed\EventBehavior\Dependency\Plugin\EventResourceQueryContainerPluginInterface;
+use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 
 /**
  * Auto-generated group annotations
@@ -36,7 +37,7 @@ class EventResourceQueryContainerManagerTest extends Unit
         // Assert
         $eventResourceQueryContainerPlugin->expects($this->once())
             ->method('queryData')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         // Act
         $this->createEventResourceQueryContainerManager()
@@ -52,7 +53,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     {
         return new EventResourceQueryContainerManager(
             $this->createEventFacadeMockBridge(),
-            1,
+            new EventBehaviorConfig(),
         );
     }
 
@@ -63,7 +64,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     {
         return $this->getMockBuilder(EventBehaviorToEventInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'trigger',
                 'triggerBulk',
                 'triggerByListenerName',
@@ -78,7 +79,7 @@ class EventResourceQueryContainerManagerTest extends Unit
     {
         return $this->getMockBuilder(EventResourceQueryContainerPluginInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'queryData',
                 'getResourceName',
                 'getEventName',
