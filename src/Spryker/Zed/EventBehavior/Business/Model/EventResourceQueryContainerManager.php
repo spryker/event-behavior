@@ -30,6 +30,10 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
      */
     protected $chunkSleepSeconds;
 
+    /**
+     * @param EventBehaviorToEventInterface $eventFacade
+     * @param EventBehaviorConfig $config
+     */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         EventBehaviorConfig $config
