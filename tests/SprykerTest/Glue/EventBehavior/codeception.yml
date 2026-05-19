@@ -21,4 +21,4 @@ suites:
                 - \SprykerTest\Shared\Testify\Helper\LocatorHelper
                 - \SprykerTest\Shared\Testify\Helper\DependencyHelper
                 - \SprykerTest\Glue\Testify\Helper\FactoryHelper
-                - \SprykerTest\EventBehavior\Helper\ContainerHelper
+                - \SprykerTest\Service\Container\Helper\ContainerHelper
