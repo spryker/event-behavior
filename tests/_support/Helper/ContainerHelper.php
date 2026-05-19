@@ -18,6 +18,9 @@ use SprykerTest\Service\Container\Helper\ContainerHelper as SprykerContainerHelp
  */
 class ContainerHelper extends SprykerContainerHelper
 {
+    /**
+     * @return void
+     */
     protected function resetStaticProperties(): void
     {
         $staticProperties = [
@@ -34,6 +37,9 @@ class ContainerHelper extends SprykerContainerHelper
         }
     }
 
+    /**
+     * @return void
+     */
     protected function resetContainerDelegator(): void
     {
         // Use $autoload=false to avoid triggering class loading that can fail

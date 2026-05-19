@@ -106,6 +106,9 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
         }
     }
 
+    /**
+     * @return void
+     */
     protected function wait(): void
     {
         if ($this->chunkSleepSeconds <= 0) {
