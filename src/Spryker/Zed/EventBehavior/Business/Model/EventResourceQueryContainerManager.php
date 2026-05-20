@@ -31,8 +31,8 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
     protected $chunkSleepSeconds;
 
     /**
-     * @param EventBehaviorToEventInterface $eventFacade
-     * @param EventBehaviorConfig $config
+     * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
+     * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
