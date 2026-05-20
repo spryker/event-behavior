@@ -22,7 +22,7 @@
         "spryker/code-sniffer": "^0.17.1",
         "spryker/config": "^3.5.0",
         "spryker/console": "^3.2.0 || ^4.0.0",
-        "spryker/container": "test-dev as 1.10.0",
+        "spryker/container": "dev-test as 1.10.0",
         "spryker/error-handler": "*",
         "spryker/event-dispatcher": "^1.0.0",
         "spryker/log": "*",
