@@ -16,11 +16,6 @@ use Spryker\Zed\EventBehavior\EventBehaviorConfig;
 class EventResourceQueryContainerManager implements EventResourceManagerInterface
 {
     /**
-     * @var int
-     */
-    protected const DEFAULT_CHUNK_SIZE = 100;
-
-    /**
      * @var \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface
      */
     protected $eventFacade;
@@ -37,15 +32,14 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
 
     /**
      * @param \Spryker\Zed\EventBehavior\Dependency\Facade\EventBehaviorToEventInterface $eventFacade
-     * @param int|null $chunkSize
-     * @param int $chunkSleepSeconds
+     * @param \Spryker\Zed\EventBehavior\EventBehaviorConfig $config
      */
     public function __construct(
         EventBehaviorToEventInterface $eventFacade,
         EventBehaviorConfig $config
     ) {
         $this->eventFacade = $eventFacade;
-        $this->chunkSize = $config->getChunkSize() ?? static::DEFAULT_CHUNK_SIZE;
+        $this->chunkSize = $config->getChunkSize();
         $this->chunkSleepSeconds = $config->getTriggerChunkSleepSeconds();
     }
 
@@ -116,6 +110,9 @@ class EventResourceQueryContainerManager implements EventResourceManagerInterfac
         }
     }
 
+    /**
+     * @return void
+     */
     protected function wait(): void
     {
         if ($this->chunkSleepSeconds <= 0) {

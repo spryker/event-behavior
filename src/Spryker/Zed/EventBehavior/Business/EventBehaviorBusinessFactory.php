@@ -59,7 +59,7 @@ class EventBehaviorBusinessFactory extends AbstractBusinessFactory
     {
         return new EventResourceQueryContainerManager(
             $this->getEventFacade(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
