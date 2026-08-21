@@ -751,7 +751,7 @@ protected function getPhpType(\$xmlValue, \$column)
     if (in_array(strtoupper(\$columnType), ['INTEGER', 'TINYINT', 'SMALLINT'])) {
         \$xmlValue = (int) \$xmlValue;
     } else if (in_array(strtoupper(\$columnType), ['REAL', 'FLOAT', 'DOUBLE', 'BINARY', 'VARBINARY', 'LONGVARBINARY'])) {
-        \$xmlValue = (double) \$xmlValue;
+        \$xmlValue = (float) \$xmlValue;
     } else if (strtoupper(\$columnType) === 'ARRAY') {
         \$xmlValue = (array) \$xmlValue;
     } else if (strtoupper(\$columnType) === 'BOOLEAN') {

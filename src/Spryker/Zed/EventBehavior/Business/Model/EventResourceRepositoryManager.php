@@ -171,11 +171,15 @@ class EventResourceRepositoryManager implements EventResourceManagerInterface
      */
     protected function getEventEntitiesIds($plugin, $chunkOfEventEntitiesTransfers): array
     {
+        $idColumnName = $this->getIdColumnName($plugin);
+        if ($idColumnName === null) {
+            return [];
+        }
+
         $eventEntitiesIds = [];
 
         foreach ($chunkOfEventEntitiesTransfers as $entitiesTransfer) {
             $entitiesTransferArray = $entitiesTransfer->modifiedToArray();
-            $idColumnName = $this->getIdColumnName($plugin);
             $eventEntitiesIds[] = $entitiesTransferArray[$idColumnName];
         }
 
