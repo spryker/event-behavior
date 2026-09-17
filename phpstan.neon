@@ -8,9 +8,9 @@ parameters:
         - 'src/Spryker/Zed/EventBehavior/Persistence/Propel/AbstractSpyEventBehaviorEntityChangeQuery.php (?)'
     ignoreErrors:
         - '#Parameter \#1 \$plugins of method .+EventResourceQueryContainerManager::processResourceEvents\(\) expects .+ given.#'
-        - '#Call to (static method|method) .+ on an unknown class Generated\\.+#'
         - '#Cannot call method offset\(\) on .+ModelCriteria\|null#'
         - '#Parameter \#1 \$clause of method .+\\ModelCriteria::where\(\) expects array\|literal-string, non-falsy-string given.#'
+        - '#Call to method \w+\(\) on an unknown class Generated\\Zed\\Ide\\AutoCompletion\.#'
         -
             identifier: missingType.iterableValue
     bootstrapFiles:

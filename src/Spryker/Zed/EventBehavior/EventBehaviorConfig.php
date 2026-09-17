@@ -27,6 +27,8 @@ class EventBehaviorConfig extends AbstractBundleConfig
      */
     protected const DEFUALT_TRIGGER_CHUNK_SIZE = 1000;
 
+    protected const int DEFAULT_TRIGGER_CHUNK_SLEEP_SECONDS = 5;
+
     /**
      * @var bool
      */
@@ -124,5 +126,15 @@ class EventBehaviorConfig extends AbstractBundleConfig
     public function getMaxEventMessageDataSize(): int
     {
         return $this->get(EventBehaviorConstants::MAX_EVENT_MESSAGE_DATA_SIZE, 256);
+    }
+
+    /**
+     * @api
+     *
+     * @return int
+     */
+    public function getTriggerChunkSleepSeconds(): int
+    {
+        return $this->get(EventBehaviorConstants::TRIGGER_CHUNK_SLEEP_SECONDS, static::DEFAULT_TRIGGER_CHUNK_SLEEP_SECONDS);
     }
 }
