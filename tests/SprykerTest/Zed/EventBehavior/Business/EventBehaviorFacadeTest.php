@@ -95,15 +95,13 @@ class EventBehaviorFacadeTest extends Unit
         $eventFacadeMock = $this->createEventFacadeMockBridge();
 
         // Assert
-        $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
-            $this->returnCallback(
-                function ($eventName, array $eventTransfers): void {
-                    $this->assertCount(1, $eventTransfers);
-                    foreach ($eventTransfers as $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
-                    }
-                },
-            ),
+        $eventFacadeMock->expects($this->once())->method('triggerBulk')->willReturnCallback(
+            function ($eventName, array $eventTransfers): void {
+                $this->assertCount(1, $eventTransfers);
+                foreach ($eventTransfers as $eventTransfer) {
+                    $this->assertTriggeredEvent($eventName, $eventTransfer);
+                }
+            },
         );
         $this->tester->setDependency(EventBehaviorDependencyProvider::FACADE_EVENT, $eventFacadeMock);
         $this->setDependencyUtilEncodingService($this->exactly(2));
@@ -123,15 +121,13 @@ class EventBehaviorFacadeTest extends Unit
         $eventFacadeMock = $this->createEventFacadeMockBridge();
 
         // Assert
-        $eventFacadeMock->expects($this->once())->method('triggerBulk')->will(
-            $this->returnCallback(
-                function ($eventName, array $eventTransfers): void {
-                    $this->assertCount(2, $eventTransfers);
-                    foreach ($eventTransfers as $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
-                    }
-                },
-            ),
+        $eventFacadeMock->expects($this->once())->method('triggerBulk')->willReturnCallback(
+            function ($eventName, array $eventTransfers): void {
+                $this->assertCount(2, $eventTransfers);
+                foreach ($eventTransfers as $eventTransfer) {
+                    $this->assertTriggeredEvent($eventName, $eventTransfer);
+                }
+            },
         );
         $this->tester->setDependency(EventBehaviorDependencyProvider::FACADE_EVENT, $eventFacadeMock);
         $this->setDependencyUtilEncodingService($this->exactly(2));
@@ -152,14 +148,12 @@ class EventBehaviorFacadeTest extends Unit
 
         // Assert
         $storageMock = $this->createEventFacadeMockBridge();
-        $storageMock->expects($this->once())->method('triggerBulk')->will(
-            $this->returnCallback(
-                function ($eventName, array $eventTransfers): void {
-                    foreach ($eventTransfers as $eventTransfer) {
-                        $this->assertTriggeredEvent($eventName, $eventTransfer);
-                    }
-                },
-            ),
+        $storageMock->expects($this->once())->method('triggerBulk')->willReturnCallback(
+            function ($eventName, array $eventTransfers): void {
+                foreach ($eventTransfers as $eventTransfer) {
+                    $this->assertTriggeredEvent($eventName, $eventTransfer);
+                }
+            },
         );
         $this->tester->setDependency(EventBehaviorDependencyProvider::FACADE_EVENT, $storageMock);
         $this->setDependencyUtilEncodingService($this->once());
@@ -179,12 +173,10 @@ class EventBehaviorFacadeTest extends Unit
         // Assert
         $storageMock = $this->createEventFacadeMockBridge();
         if (count($this->getEventTriggerResourcePlugins())) {
-            $storageMock->expects($this->any())->method('trigger')->will(
-                $this->returnCallback(
-                    function ($eventName): void {
-                        $this->assertTriggeredResourceEvent($eventName);
-                    },
-                ),
+            $storageMock->expects($this->any())->method('trigger')->willReturnCallback(
+                function ($eventName): void {
+                    $this->assertTriggeredResourceEvent($eventName);
+                },
             );
         } else {
             $storageMock->expects($this->never())->method('trigger');
@@ -426,7 +418,7 @@ class EventBehaviorFacadeTest extends Unit
     {
         return $this->getMockBuilder(EventBehaviorToEventInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'trigger',
                 'triggerBulk',
                 'triggerByListenerName',
@@ -441,7 +433,7 @@ class EventBehaviorFacadeTest extends Unit
     {
         return $this->getMockBuilder(EventBehaviorToUtilEncodingInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'encodeJson',
                 'decodeJson',
                 'decodeFromFormat',
@@ -509,9 +501,9 @@ class EventBehaviorFacadeTest extends Unit
         $utilEncodingMock = $this->createUtilEncodingServiceBridge();
         $utilEncodingMock->expects($invokedCount)
             ->method('decodeJson')
-            ->will($this->returnCallback(function ($data) {
+            ->willReturnCallback(function ($data) {
                 return json_decode($data, true);
-            }));
+            });
 
         $this->tester->setDependency(EventBehaviorDependencyProvider::SERVICE_UTIL_ENCODING, $utilEncodingMock);
     }
