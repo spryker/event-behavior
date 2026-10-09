@@ -28,14 +28,14 @@
         "spryker/log": "*",
         "spryker/monolog": "*",
         "spryker/queue": "*",
-        "spryker/silex": "^2.0.0",
+        "spryker/silex": "^2.0.0 || ^3.0.0",
         "spryker/testify": "^3.58.0"
     },
     "suggest": {
         "spryker/console": "If you want to execute console commands",
         "spryker/container": "If you want to use the EventBehaviorEventDispatcherPlugin",
         "spryker/event-dispatcher": "If you want to use the EventBehaviorEventDispatcherPlugin",
-        "spryker/silex": "^2.0.0"
+        "spryker/silex": "^2.0.0 || ^3.0.0"
     },
     "autoload": {
         "psr-4": {
