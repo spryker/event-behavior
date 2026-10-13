@@ -7,12 +7,12 @@
 
 namespace Spryker\Zed\EventBehavior\Persistence\Propel\Behavior;
 
-use Laminas\Filter\Word\UnderscoreToCamelCase;
 use LogicException;
 use Propel\Generator\Model\Behavior;
 use Propel\Generator\Model\Table;
 use Propel\Generator\Util\PhpParser;
 use Propel\Runtime\Exception\PropelException;
+use Spryker\Shared\Kernel\Filter\Word\UnderscoreToCamelCase;
 use Spryker\Zed\Kernel\BundleConfigResolverAwareTrait;
 
 /**
